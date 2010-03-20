@@ -18,6 +18,7 @@
 import os
 import logging
 import gtk
+import pango
 
 from sugar.activity import activity
 from sugar.datastore import datastore
@@ -26,8 +27,8 @@ from gettext import gettext as _
 import gobject
 
 COLUMN_TITLE = 0
-COLUMN_PATH = 1
-COLUMN_OLD_NAME = 1
+COLUMN_MIME = 1
+COLUMN_JOBJECT = 2
 
 _logger = logging.getLogger('get-ia-books-activity')
 
@@ -41,7 +42,7 @@ class SugarCommander(activity.Activity):
         canvas.props.show_tabs = True
         canvas.show()
         
-        self.ls_journal = gtk.ListStore(gobject.TYPE_STRING,  gobject.TYPE_PYOBJECT)
+        self.ls_journal = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING,   gobject.TYPE_PYOBJECT)
         tv_journal = gtk.TreeView(self.ls_journal)
         tv_journal.set_rules_hint(True)
         tv_journal.set_search_column(COLUMN_TITLE)
@@ -53,14 +54,24 @@ class SugarCommander(activity.Activity):
         self.col_journal.set_sort_column_id(COLUMN_TITLE)
         tv_journal.append_column(self.col_journal)
         
+        self.col_mime = gtk.TreeViewColumn(_('MIME'), renderer, text=COLUMN_MIME)
+        self.col_mime.set_sort_column_id(COLUMN_MIME)
+        tv_journal.append_column(self.col_mime)
+        
         self.list_scroller_journal = gtk.ScrolledWindow(hadjustment=None, vadjustment=None)
         self.list_scroller_journal.set_policy(gtk.POLICY_NEVER, gtk.POLICY_AUTOMATIC)
         self.list_scroller_journal.add(tv_journal)
         
         self.load_journal_table()
 
+        label_attributes = pango.AttrList()
+        label_attributes.insert(pango.AttrSize(14000, 0, -1))
+        label_attributes.insert(pango.AttrForeground(65535, 65535, 65535, 0, -1))
+
         tab1_label = gtk.Label(_("Journal"))
+        tab1_label.set_attributes(label_attributes)
         tab1_label.show()
+        tv_journal.show()
         self.list_scroller_journal.show()
         canvas.append_page(self.list_scroller_journal,  tab1_label)
  
@@ -68,11 +79,13 @@ class SugarCommander(activity.Activity):
             action=gtk.FILE_CHOOSER_ACTION_OPEN, backend=None)
         self._filechooser.set_current_folder("/media")
         self.copy_button = gtk.Button(_("Copy File To The Journal"))
+        self.copy_button.connect('clicked',  self.create_journal_entry)
         self.copy_button.show()
         self._filechooser.set_extra_widget(self.copy_button)
-        label = gtk.Label(_("Files"))
-        label.show()
-        canvas.append_page(self._filechooser,  label)
+        tab2_label = gtk.Label(_("Files"))
+        tab2_label.set_attributes(label_attributes)
+        tab2_label.show()
+        canvas.append_page(self._filechooser,  tab2_label)
         self.set_canvas(canvas)
         self.show_all()
         
@@ -93,7 +106,7 @@ class SugarCommander(activity.Activity):
         sel = selection.get_selected()
         if sel:
             model, iter = sel
-            jobject = model.get_value(iter,COLUMN_PATH)
+            jobject = model.get_value(iter,COLUMN_JOBJECT)
             fname = jobject.get_file_path()
             self.selected_journal_entry = jobject
             self.selected_title = model.get_value(iter,COLUMN_TITLE)
@@ -105,27 +118,48 @@ class SugarCommander(activity.Activity):
             iter = self.ls_journal.append()
             title = ds_objects[i].metadata['title']
             self.ls_journal.set(iter, COLUMN_TITLE, title)
+            mime = ds_objects[i].metadata['mime_type']
+            self.ls_journal.set(iter, COLUMN_MIME, mime)
+            self.ls_journal.set(iter, COLUMN_JOBJECT, ds_objects[i])
  
         self.ls_journal.set_sort_column_id(COLUMN_TITLE,  gtk.SORT_ASCENDING)
 
-    def create_journal_entry(self,  filepath):
+    def create_journal_entry(self,  widget,  data=None):
+        filename = self._filechooser.get_filename()
         journal_entry = datastore.create()
-        journal_title = self.selected_title
+        journal_title = filename
         journal_entry.metadata['title'] = journal_title
         journal_entry.metadata['title_set_by_user'] = '1'
         journal_entry.metadata['keep'] = '0'
-        if format == '.djvu':
+        if filename.endswith('.djvu'):
             journal_entry.metadata['mime_type'] = 'image/vnd.djvu'
-        if format == '.pdf' or format == '_bw.pdf':
+        if filename.endswith('.pdf'):
             journal_entry.metadata['mime_type'] = 'application/pdf'
+        if filename.endswith('.jpg') or filename.endswith('.jpeg')  \
+            or filename.endswith('.JPG')  or filename.endswith('.JPEG') :
+            journal_entry.metadata['mime_type'] = 'image/jpeg'
+        if filename.endswith('.gif') or filename.endswith('.GIF'):
+            journal_entry.metadata['mime_type'] = 'image/gif'
+        if filename.endswith('.tiff') or filename.endswith('.TIFF'):
+            journal_entry.metadata['mime_type'] = 'image/tiff'
+        if filename.endswith('.png') or filename.endswith('.PNG'):
+            journal_entry.metadata['mime_type'] = 'image/png'
+        if filename.endswith('.zip') or filename.endswith('.ZIP'):
+            journal_entry.metadata['mime_type'] = 'application/zip'
+        if filename.endswith('.cbz') or filename.endswith('.CBZ'):
+            journal_entry.metadata['mime_type'] = 'application/x-cbz'
+        if filename.endswith('.cbr') or filename.endswith('.CBR'):
+            journal_entry.metadata['mime_type'] = 'application/x-cbr'
+        if filename.endswith('.rtf') or filename.endswith('.RTF'):
+            journal_entry.metadata['mime_type'] = 'application/rtf'
+        if filename.endswith('.txt') or filename.endswith('.TXT'):
+            journal_entry.metadata['mime_type'] = 'text/plain'
         journal_entry.metadata['buddies'] = ''
         journal_entry.metadata['preview'] = ''
-        journal_entry.metadata['icon-color'] = profile.get_color().to_string()
-        textbuffer = self.textview.get_buffer()
-        journal_entry.metadata['description'] = textbuffer.get_text(textbuffer.get_start_iter(),  textbuffer.get_end_iter())
-        journal_entry.file_path = file_path
+        journal_entry.file_path = filename
         datastore.write(journal_entry)
-        self._alert(_('Success'), self.selected_title + _(' added to Journal.'))
+        self.load_journal_table()
+        self._alert(_('Success'), filename + _(' added to Journal.'))
 
     def truncate(self,  str,  length):
         if len(str) > length:
