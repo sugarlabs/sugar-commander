@@ -25,6 +25,10 @@ from sugar.graphics.alert import NotifyAlert
 from gettext import gettext as _
 import gobject
 
+COLUMN_TITLE = 0
+COLUMN_PATH = 1
+COLUMN_OLD_NAME = 1
+
 _logger = logging.getLogger('get-ia-books-activity')
 
 class SugarCommander(activity.Activity):
@@ -32,6 +36,46 @@ class SugarCommander(activity.Activity):
         "The entry point to the Activity"
         activity.Activity.__init__(self, handle,  False)
  
+        canvas = gtk.Notebook()
+        canvas.props.show_border = True
+        canvas.props.show_tabs = True
+        canvas.show()
+        
+        self.ls_journal = gtk.ListStore(gobject.TYPE_STRING,  gobject.TYPE_PYOBJECT)
+        tv_journal = gtk.TreeView(self.ls_journal)
+        tv_journal.set_rules_hint(True)
+        tv_journal.set_search_column(COLUMN_TITLE)
+        selection_journal = tv_journal.get_selection()
+        selection_journal.set_mode(gtk.SELECTION_SINGLE)
+        selection_journal.connect("changed", self.selection_journal_cb)
+        renderer = gtk.CellRendererText()
+        self.col_journal = gtk.TreeViewColumn(_('Title'), renderer, text=COLUMN_TITLE)
+        self.col_journal.set_sort_column_id(COLUMN_TITLE)
+        tv_journal.append_column(self.col_journal)
+        
+        self.list_scroller_journal = gtk.ScrolledWindow(hadjustment=None, vadjustment=None)
+        self.list_scroller_journal.set_policy(gtk.POLICY_NEVER, gtk.POLICY_AUTOMATIC)
+        self.list_scroller_journal.add(tv_journal)
+        
+        self.load_journal_table()
+
+        tab1_label = gtk.Label(_("Journal"))
+        tab1_label.show()
+        self.list_scroller_journal.show()
+        canvas.append_page(self.list_scroller_journal,  tab1_label)
+ 
+        self._filechooser = gtk.FileChooserWidget(\
+            action=gtk.FILE_CHOOSER_ACTION_OPEN, backend=None)
+        self._filechooser.set_current_folder("/media")
+        self.copy_button = gtk.Button(_("Copy File To The Journal"))
+        self.copy_button.show()
+        self._filechooser.set_extra_widget(self.copy_button)
+        label = gtk.Label(_("Files"))
+        label.show()
+        canvas.append_page(self._filechooser,  label)
+        self.set_canvas(canvas)
+        self.show_all()
+        
         toolbox = activity.ActivityToolbox(self)
         activity_toolbar = toolbox.get_activity_toolbar()
         activity_toolbar.keep.props.visible = False
@@ -42,6 +86,27 @@ class SugarCommander(activity.Activity):
     def close(self,  skip_save=False):
         "Override the close method so we don't try to create a Journal entry."
         activity.Activity.close(self,  True)
+
+    def selection_journal_cb(self, selection):
+        tv = selection.get_tree_view()
+        model = tv.get_model()
+        sel = selection.get_selected()
+        if sel:
+            model, iter = sel
+            jobject = model.get_value(iter,COLUMN_PATH)
+            fname = jobject.get_file_path()
+            self.selected_journal_entry = jobject
+            self.selected_title = model.get_value(iter,COLUMN_TITLE)
+
+    def load_journal_table(self):
+        ds_objects, num_objects = datastore.find({})
+        self.ls_journal.clear()
+        for i in xrange (0, num_objects, 1):
+            iter = self.ls_journal.append()
+            title = ds_objects[i].metadata['title']
+            self.ls_journal.set(iter, COLUMN_TITLE, title)
+ 
+        self.ls_journal.set_sort_column_id(COLUMN_TITLE,  gtk.SORT_ASCENDING)
 
     def create_journal_entry(self,  filepath):
         journal_entry = datastore.create()
