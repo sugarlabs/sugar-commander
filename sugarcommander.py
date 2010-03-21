@@ -15,14 +15,15 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-import os
 import logging
 import gtk
 import pango
+import StringIO
 
 from sugar.activity import activity
 from sugar.datastore import datastore
 from sugar.graphics.alert import NotifyAlert
+from sugar.graphics import style
 from gettext import gettext as _
 import gobject
 
@@ -75,12 +76,10 @@ class SugarCommander(activity.Activity):
         self.list_scroller_journal.show()
         
         entry_table = gtk.Table(rows=3, columns=3, homogeneous=False)
-        entry_table.set_row_spacings(5)
         self.image = gtk.Image()
         entry_table.attach(self.image, 0, 1, 0, 3, xoptions=gtk.EXPAND|gtk.FILL, yoptions=gtk.EXPAND|gtk.FILL, xpadding=10, ypadding=10)
 
         title_label = gtk.Label(_("Title"))
-        title_label.set_justify(gtk.JUSTIFY_RIGHT)
         entry_table.attach(title_label, 1, 2, 0, 1, xoptions=gtk.SHRINK, yoptions=gtk.SHRINK, xpadding=10, ypadding=10)
         title_label.show()
       
@@ -89,7 +88,6 @@ class SugarCommander(activity.Activity):
         self.title_entry.show()
     
         description_label = gtk.Label(_("Description"))
-        description_label.set_justify(gtk.JUSTIFY_RIGHT)
         entry_table.attach(description_label, 1, 2, 1, 2, xoptions=gtk.SHRINK, yoptions=gtk.SHRINK, xpadding=10, ypadding=10)
         description_label.show()
         
@@ -99,7 +97,6 @@ class SugarCommander(activity.Activity):
         self.description_textview.show()
 
         tags_label = gtk.Label(_("Tags"))
-        tags_label.set_justify(gtk.JUSTIFY_RIGHT)
         entry_table.attach(tags_label, 1, 2, 2, 3, xoptions=gtk.SHRINK, yoptions=gtk.SHRINK, xpadding=10, ypadding=10)
         tags_label.show()
         
@@ -111,7 +108,7 @@ class SugarCommander(activity.Activity):
         entry_table.show()
 
         self.scroller_entry = gtk.ScrolledWindow(hadjustment=None, vadjustment=None)
-        self.scroller_entry.set_policy(gtk.POLICY_NEVER, gtk.POLICY_ALWAYS)
+        self.scroller_entry.set_policy(gtk.POLICY_NEVER, gtk.POLICY_AUTOMATIC)
         self.scroller_entry.add_with_viewport(entry_table)
         self.scroller_entry.show()
 
@@ -154,9 +151,32 @@ class SugarCommander(activity.Activity):
         if sel:
             model, iter = sel
             jobject = model.get_value(iter,COLUMN_JOBJECT)
-            fname = jobject.get_file_path()
             self.selected_journal_entry = jobject
-            self.selected_title = model.get_value(iter,COLUMN_TITLE)
+            self.title_entry.set_text(jobject.metadata['title'])
+            description_textbuffer = self.description_textview.get_buffer()
+            description_textbuffer.set_text(jobject.metadata['description'])
+            tags_textbuffer = self.tags_textview.get_buffer()
+            tags_textbuffer.set_text(jobject.metadata['tags'])
+            self.create_preview(jobject)
+
+    def create_preview(self,  jobject):
+        width = style.zoom(320)
+        height = style.zoom(240)
+
+        if jobject.metadata.has_key('preview') and \
+                len(jobject.metadata['preview']) > 4:
+            
+            if jobject.metadata['preview'][1:4] == 'PNG':
+                preview_data = jobject.metadata['preview']
+            else:
+                import base64
+                preview_data = base64.b64decode(jobject.metadata['preview'])
+
+            png_file = StringIO.StringIO(preview_data)
+            pixbuf = gtk.gdk.pixbuf_new_from_data(png_file)
+            scaled_buf = pixbuf.scale_simple(width, height, gtk.gdk.INTERP_BILINEAR)
+            self.image.set_from_pixbuf(scaled_buf)
+            self.image.show()
 
     def load_journal_table(self):
         ds_objects, num_objects = datastore.find({})
@@ -225,4 +245,3 @@ class SugarCommander(activity.Activity):
 
     def _alert_cancel_cb(self, alert, response_id):
         self.remove_alert(alert)
-        self.textview.grab_focus()
