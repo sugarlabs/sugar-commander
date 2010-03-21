@@ -16,6 +16,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 import logging
+import os
 import gtk
 import pango
 import StringIO
@@ -154,14 +155,22 @@ class SugarCommander(activity.Activity):
             self.selected_journal_entry = jobject
             self.title_entry.set_text(jobject.metadata['title'])
             description_textbuffer = self.description_textview.get_buffer()
-            description_textbuffer.set_text(jobject.metadata['description'])
+            if jobject.metadata.has_key('description'):
+                description_textbuffer.set_text(jobject.metadata['description'])
+            else:
+                description_textbuffer.set_text('')
             tags_textbuffer = self.tags_textview.get_buffer()
-            tags_textbuffer.set_text(jobject.metadata['tags'])
-            self.create_preview(jobject)
+            if jobject.metadata.has_key('tags'):
+                tags_textbuffer.set_text(jobject.metadata['tags'])
+            else:
+                tags_textbuffer.set_text('')
+            self.create_preview(jobject.object_id)
 
-    def create_preview(self,  jobject):
+    def create_preview(self,  object_id):
         width = style.zoom(320)
         height = style.zoom(240)
+        
+        jobject = datastore.get(object_id)
 
         if jobject.metadata.has_key('preview') and \
                 len(jobject.metadata['preview']) > 4:
@@ -172,8 +181,14 @@ class SugarCommander(activity.Activity):
                 import base64
                 preview_data = base64.b64decode(jobject.metadata['preview'])
 
-            png_file = StringIO.StringIO(preview_data)
-            pixbuf = gtk.gdk.pixbuf_new_from_data(png_file)
+            # png_file = StringIO.StringIO(preview_data)
+            fname = os.path.join(self.get_activity_root(), 'instance',  'png_file.png')
+            f = open(fname, 'w')
+            try:
+                f.write(preview_data)
+            finally:
+                f.close()
+            pixbuf = gtk.gdk.pixbuf_new_from_file(fname)
             scaled_buf = pixbuf.scale_simple(width, height, gtk.gdk.INTERP_BILINEAR)
             self.image.set_from_pixbuf(scaled_buf)
             self.image.show()
