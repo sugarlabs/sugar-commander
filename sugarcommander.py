@@ -78,7 +78,7 @@ class SugarCommander(activity.Activity):
         
         entry_table = gtk.Table(rows=3, columns=3, homogeneous=False)
         self.image = gtk.Image()
-        entry_table.attach(self.image, 0, 1, 0, 3, xoptions=gtk.EXPAND|gtk.FILL, yoptions=gtk.EXPAND|gtk.FILL, xpadding=10, ypadding=10)
+        entry_table.attach(self.image, 0, 1, 1, 3, xoptions=gtk.EXPAND|gtk.FILL, yoptions=gtk.EXPAND|gtk.FILL, xpadding=10, ypadding=10)
 
         title_label = gtk.Label(_("Title"))
         entry_table.attach(title_label, 1, 2, 0, 1, xoptions=gtk.SHRINK, yoptions=gtk.SHRINK, xpadding=10, ypadding=10)
@@ -181,7 +181,6 @@ class SugarCommander(activity.Activity):
                 import base64
                 preview_data = base64.b64decode(jobject.metadata['preview'])
 
-            # png_file = StringIO.StringIO(preview_data)
             fname = os.path.join(self.get_activity_root(), 'instance',  'png_file.png')
             f = open(fname, 'w')
             try:
@@ -189,8 +188,12 @@ class SugarCommander(activity.Activity):
             finally:
                 f.close()
             pixbuf = gtk.gdk.pixbuf_new_from_file(fname)
+            os.remove(fname)
             scaled_buf = pixbuf.scale_simple(width, height, gtk.gdk.INTERP_BILINEAR)
             self.image.set_from_pixbuf(scaled_buf)
+            self.image.show()
+        else:
+            self.image.clear()
             self.image.show()
 
     def load_journal_table(self):
