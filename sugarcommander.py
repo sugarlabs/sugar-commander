@@ -75,13 +75,44 @@ class SugarCommander(activity.Activity):
         self.list_scroller_journal.show()
         
         entry_table = gtk.Table(rows=3, columns=3, homogeneous=False)
+        entry_table.set_row_spacings(5)
         self.image = gtk.Image()
-        entry_table.attach(self.image, 0, 1, 0, 2, xoptions=EXPAND|FILL, yoptions=EXPAND|FILL, xpadding=0, ypadding=0)
+        entry_table.attach(self.image, 0, 1, 0, 3, xoptions=gtk.EXPAND|gtk.FILL, yoptions=gtk.EXPAND|gtk.FILL, xpadding=10, ypadding=10)
 
+        title_label = gtk.Label(_("Title"))
+        title_label.set_justify(gtk.JUSTIFY_RIGHT)
+        entry_table.attach(title_label, 1, 2, 0, 1, xoptions=gtk.SHRINK, yoptions=gtk.SHRINK, xpadding=10, ypadding=10)
+        title_label.show()
+      
+        self.title_entry = gtk.Entry(max=0)
+        entry_table.attach(self.title_entry, 2, 3, 0, 1, xoptions=gtk.FILL, yoptions=gtk.SHRINK, xpadding=10, ypadding=10)
+        self.title_entry.show()
+    
+        description_label = gtk.Label(_("Description"))
+        description_label.set_justify(gtk.JUSTIFY_RIGHT)
+        entry_table.attach(description_label, 1, 2, 1, 2, xoptions=gtk.SHRINK, yoptions=gtk.SHRINK, xpadding=10, ypadding=10)
+        description_label.show()
+        
+        self.description_textview = gtk.TextView()
+        self.description_textview.set_wrap_mode(gtk.WRAP_WORD)
+        entry_table.attach(self.description_textview, 2, 3, 1, 2, xoptions=gtk.EXPAND|gtk.FILL, yoptions=gtk.EXPAND|gtk.FILL, xpadding=10, ypadding=10)
+        self.description_textview.show()
+
+        tags_label = gtk.Label(_("Tags"))
+        tags_label.set_justify(gtk.JUSTIFY_RIGHT)
+        entry_table.attach(tags_label, 1, 2, 2, 3, xoptions=gtk.SHRINK, yoptions=gtk.SHRINK, xpadding=10, ypadding=10)
+        tags_label.show()
+        
+        self.tags_textview = gtk.TextView()
+        self.tags_textview.set_wrap_mode(gtk.WRAP_WORD)
+        entry_table.attach(self.tags_textview, 2, 3, 2, 3, xoptions=gtk.EXPAND|gtk.FILL, yoptions=gtk.EXPAND|gtk.FILL, xpadding=10, ypadding=10)
+        self.tags_textview.show()
+
+        entry_table.show()
 
         self.scroller_entry = gtk.ScrolledWindow(hadjustment=None, vadjustment=None)
-        self.scroller_entry.set_policy(gtk.POLICY_NEVER, gtk.POLICY_AUTOMATIC)
-        self.scroller_entry.add(entry_table)
+        self.scroller_entry.set_policy(gtk.POLICY_NEVER, gtk.POLICY_ALWAYS)
+        self.scroller_entry.add_with_viewport(entry_table)
         self.scroller_entry.show()
 
         vbox = gtk.VBox()
