@@ -62,7 +62,7 @@ class SugarCommander(activity.Activity):
         self.list_scroller_journal.set_policy(gtk.POLICY_NEVER, gtk.POLICY_AUTOMATIC)
         self.list_scroller_journal.add(tv_journal)
         
-        self.load_journal_table()
+        first_jobject = self.load_journal_table()
 
         label_attributes = pango.AttrList()
         label_attributes.insert(pango.AttrSize(14000, 0, -1))
@@ -73,7 +73,22 @@ class SugarCommander(activity.Activity):
         tab1_label.show()
         tv_journal.show()
         self.list_scroller_journal.show()
-        canvas.append_page(self.list_scroller_journal,  tab1_label)
+        
+        entry_table = gtk.Table(rows=3, columns=3, homogeneous=False)
+        self.image = gtk.Image()
+        entry_table.attach(self.image, 0, 1, 0, 2, xoptions=EXPAND|FILL, yoptions=EXPAND|FILL, xpadding=0, ypadding=0)
+
+
+        self.scroller_entry = gtk.ScrolledWindow(hadjustment=None, vadjustment=None)
+        self.scroller_entry.set_policy(gtk.POLICY_NEVER, gtk.POLICY_AUTOMATIC)
+        self.scroller_entry.add(entry_table)
+        self.scroller_entry.show()
+
+        vbox = gtk.VBox()
+        vbox.pack_start(self.scroller_entry)
+        vbox.pack_end(self.list_scroller_journal)
+
+        canvas.append_page(vbox,  tab1_label)
  
         self._filechooser = gtk.FileChooserWidget(\
             action=gtk.FILE_CHOOSER_ACTION_OPEN, backend=None)
@@ -86,6 +101,7 @@ class SugarCommander(activity.Activity):
         tab2_label.set_attributes(label_attributes)
         tab2_label.show()
         canvas.append_page(self._filechooser,  tab2_label)
+
         self.set_canvas(canvas)
         self.show_all()
         
@@ -123,6 +139,7 @@ class SugarCommander(activity.Activity):
             self.ls_journal.set(iter, COLUMN_JOBJECT, ds_objects[i])
  
         self.ls_journal.set_sort_column_id(COLUMN_TITLE,  gtk.SORT_ASCENDING)
+        return ds_objects[0]
 
     def create_journal_entry(self,  widget,  data=None):
         filename = self._filechooser.get_filename()
