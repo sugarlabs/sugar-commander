@@ -251,17 +251,28 @@ class SugarCommander(activity.Activity):
             self.image.show()
 
     def load_journal_table(self):
+        ds_mounts = datastore.mounts()
+        mountpoint_id = None
+        if len(ds_mounts) == 1 and ds_mounts[0]['id'] == 1:
+            pass
+        else:
+            for mountpoint in ds_mounts:
+                id = mountpoint['id'] 
+                uri = mountpoint['uri']
+                if uri.startswith('/home'):
+                    mountpoint_id = id
+        
         ds_objects, num_objects = datastore.find({})
         self.ls_journal.clear()
         for i in xrange (0, num_objects, 1):
-            iter = self.ls_journal.append()
-            title = ds_objects[i].metadata['title']
-            self.ls_journal.set(iter, COLUMN_TITLE, title)
-            mime = ds_objects[i].metadata['mime_type']
             mount = ds_objects[i].metadata['mountpoint']
-            print title,  mount
-            self.ls_journal.set(iter, COLUMN_MIME, mime)
-            self.ls_journal.set(iter, COLUMN_JOBJECT, ds_objects[i])
+            if mountpoint_id is None or mountpoint_id == mount:
+                iter = self.ls_journal.append()
+                title = ds_objects[i].metadata['title']
+                self.ls_journal.set(iter, COLUMN_TITLE, title)
+                mime = ds_objects[i].metadata['mime_type']
+                self.ls_journal.set(iter, COLUMN_MIME, mime)
+                self.ls_journal.set(iter, COLUMN_JOBJECT, ds_objects[i])
  
         self.ls_journal.set_sort_column_id(COLUMN_TITLE,  gtk.SORT_ASCENDING)
         v_adjustment = self.list_scroller_journal.get_vadjustment()
