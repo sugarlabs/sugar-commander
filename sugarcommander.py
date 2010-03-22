@@ -64,7 +64,7 @@ class SugarCommander(activity.Activity):
         self.list_scroller_journal.set_policy(gtk.POLICY_NEVER, gtk.POLICY_AUTOMATIC)
         self.list_scroller_journal.add(tv_journal)
         
-        first_jobject = self.load_journal_table()
+        self.load_journal_table()
 
         label_attributes = pango.AttrList()
         label_attributes.insert(pango.AttrSize(14000, 0, -1))
@@ -78,7 +78,7 @@ class SugarCommander(activity.Activity):
         
         entry_table = gtk.Table(rows=3, columns=3, homogeneous=False)
         self.image = gtk.Image()
-        entry_table.attach(self.image, 0, 1, 1, 3, xoptions=gtk.EXPAND|gtk.FILL, yoptions=gtk.EXPAND|gtk.FILL, xpadding=10, ypadding=10)
+        entry_table.attach(self.image, 0, 1, 1, 3, xoptions=gtk.FILL, yoptions=gtk.FILL, xpadding=10, ypadding=10)
 
         title_label = gtk.Label(_("Title"))
         entry_table.attach(title_label, 1, 2, 0, 1, xoptions=gtk.SHRINK, yoptions=gtk.SHRINK, xpadding=10, ypadding=10)
@@ -86,6 +86,7 @@ class SugarCommander(activity.Activity):
       
         self.title_entry = gtk.Entry(max=0)
         entry_table.attach(self.title_entry, 2, 3, 0, 1, xoptions=gtk.FILL, yoptions=gtk.SHRINK, xpadding=10, ypadding=10)
+        self.title_entry.connect('focus-out-event',  self._title_focus_out_event_cb)
         self.title_entry.show()
     
         description_label = gtk.Label(_("Description"))
@@ -95,6 +96,8 @@ class SugarCommander(activity.Activity):
         self.description_textview = gtk.TextView()
         self.description_textview.set_wrap_mode(gtk.WRAP_WORD)
         entry_table.attach(self.description_textview, 2, 3, 1, 2, xoptions=gtk.EXPAND|gtk.FILL, yoptions=gtk.EXPAND|gtk.FILL, xpadding=10, ypadding=10)
+        self.description_textview.props.accepts_tab = False
+        self.description_textview.connect('focus-out-event', self._description_focus_out_event_cb)
         self.description_textview.show()
 
         tags_label = gtk.Label(_("Tags"))
@@ -104,6 +107,8 @@ class SugarCommander(activity.Activity):
         self.tags_textview = gtk.TextView()
         self.tags_textview.set_wrap_mode(gtk.WRAP_WORD)
         entry_table.attach(self.tags_textview, 2, 3, 2, 3, xoptions=gtk.EXPAND|gtk.FILL, yoptions=gtk.EXPAND|gtk.FILL, xpadding=10, ypadding=10)
+        self.tags_textview.props.accepts_tab = False
+        self.tags_textview.connect('focus-out-event',  self._tags_focus_out_event_cb)
         self.tags_textview.show()
 
         entry_table.show()
@@ -140,6 +145,55 @@ class SugarCommander(activity.Activity):
         activity_toolbar.share.props.visible = False
         self.set_toolbox(toolbox)
         toolbox.show()
+        self.selected_journal_entry = None
+
+    def _title_focus_out_event_cb(self, entry, event):
+        self._update_entry()
+
+    def _description_focus_out_event_cb(self, text_view, event):
+        self._update_entry()
+
+    def _tags_focus_out_event_cb(self, text_view, event):
+        self._update_entry()
+
+    def _update_entry(self):
+        needs_update = False
+        needs_reload = False
+        
+        if self.selected_journal_entry is None:
+            return
+
+        old_title = self.selected_journal_entry.metadata.get('title', None)
+        if old_title != self.title_entry.props.text:
+            self.selected_journal_entry.metadata['title'] = self.title_entry.props.text
+            self.selected_journal_entry.metadata['title_set_by_user'] = '1'
+            needs_update = True
+            needs_reload = True
+
+        old_tags = self.selected_journal_entry.metadata.get('tags', None)
+        new_tags = self.tags_textview.props.buffer.props.text
+        if old_tags != new_tags:
+            self.selected_journal_entry.metadata['tags'] = new_tags
+            needs_update = True
+
+        old_description = self.selected_journal_entry.metadata.get('description', None)
+        new_description = self.description_textview.props.buffer.props.text
+        if old_description != new_description:
+            self.selected_journal_entry.metadata['description'] = new_description
+            needs_update = True
+
+        if needs_update:
+            datastore.write(self.selected_journal_entry, update_mtime=False,
+                            reply_handler=self._datastore_write_cb,
+                            error_handler=self._datastore_write_error_cb)
+        if needs_reload:
+            self.load_journal_table()
+    
+    def _datastore_write_cb(self):
+        pass
+
+    def _datastore_write_error_cb(self, error):
+        logging.error('ExpandedEntry._datastore_write_error_cb: %r' % error)
 
     def close(self,  skip_save=False):
         "Override the close method so we don't try to create a Journal entry."
@@ -204,10 +258,14 @@ class SugarCommander(activity.Activity):
             title = ds_objects[i].metadata['title']
             self.ls_journal.set(iter, COLUMN_TITLE, title)
             mime = ds_objects[i].metadata['mime_type']
+            mount = ds_objects[i].metadata['mountpoint']
+            print title,  mount
             self.ls_journal.set(iter, COLUMN_MIME, mime)
             self.ls_journal.set(iter, COLUMN_JOBJECT, ds_objects[i])
  
         self.ls_journal.set_sort_column_id(COLUMN_TITLE,  gtk.SORT_ASCENDING)
+        v_adjustment = self.list_scroller_journal.get_vadjustment()
+        v_adjustment.value = 0
         return ds_objects[0]
 
     def create_journal_entry(self,  widget,  data=None):
@@ -245,14 +303,8 @@ class SugarCommander(activity.Activity):
         journal_entry.file_path = filename
         datastore.write(journal_entry)
         self.load_journal_table()
-        self._alert(_('Success'), filename + _(' added to Journal.'))
-
-    def truncate(self,  str,  length):
-        if len(str) > length:
-            return str[0:length-1] + '...'
-        else:
-            return str
-    
+        self._alert(_('Success'),  _('%s added to Journal.') % filename)
+   
     def _alert(self, title, text=None):
         alert = NotifyAlert(timeout=20)
         alert.props.title = title
