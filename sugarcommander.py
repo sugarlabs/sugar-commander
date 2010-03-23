@@ -76,9 +76,9 @@ class SugarCommander(activity.Activity):
         tv_journal.show()
         self.list_scroller_journal.show()
         
-        entry_table = gtk.Table(rows=3, columns=3, homogeneous=False)
+        entry_table = gtk.Table(rows=4, columns=3, homogeneous=False)
         self.image = gtk.Image()
-        entry_table.attach(self.image, 0, 1, 1, 3, xoptions=gtk.FILL, yoptions=gtk.FILL, xpadding=10, ypadding=10)
+        entry_table.attach(self.image, 0, 1, 0, 3, xoptions=gtk.FILL, yoptions=gtk.FILL, xpadding=10, ypadding=10)
 
         title_label = gtk.Label(_("Title"))
         entry_table.attach(title_label, 1, 2, 0, 1, xoptions=gtk.SHRINK, yoptions=gtk.SHRINK, xpadding=10, ypadding=10)
@@ -110,6 +110,14 @@ class SugarCommander(activity.Activity):
         self.tags_textview.props.accepts_tab = False
         self.tags_textview.connect('focus-out-event',  self._tags_focus_out_event_cb)
         self.tags_textview.show()
+        
+        self.btn_save = gtk.Button(_("Save"))
+        entry_table.attach(self.btn_save,  1, 2, 3, 4,  xoptions=gtk.SHRINK,  yoptions=gtk.SHRINK,  xpadding=10,  ypadding=10)
+        self.btn_save.show()
+
+        self.btn_delete = gtk.Button(_("Delete"))
+        entry_table.attach(self.btn_delete,  2, 3, 3, 4,  xoptions=gtk.SHRINK,  yoptions=gtk.SHRINK,  xpadding=10,  ypadding=10)
+        self.btn_delete.show()
 
         entry_table.show()
 
@@ -264,8 +272,10 @@ class SugarCommander(activity.Activity):
         
         ds_objects, num_objects = datastore.find({})
         self.ls_journal.clear()
+        mount = ''
         for i in xrange (0, num_objects, 1):
-            mount = ds_objects[i].metadata['mountpoint']
+            if ds_objects[i].metadata.has_key('mountpoint'):
+                mount = ds_objects[i].metadata['mountpoint']
             if mountpoint_id is None or mountpoint_id == mount:
                 iter = self.ls_journal.append()
                 title = ds_objects[i].metadata['title']
