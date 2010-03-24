@@ -19,7 +19,7 @@ import logging
 import os
 import gtk
 import pango
-import StringIO
+import mimetypes
 
 from sugar.activity import activity
 from sugar.datastore import datastore
@@ -52,6 +52,9 @@ class SugarCommander(activity.Activity):
         selection_journal.set_mode(gtk.SELECTION_SINGLE)
         selection_journal.connect("changed", self.selection_journal_cb)
         renderer = gtk.CellRendererText()
+        renderer.set_property('wrap-mode', gtk.WRAP_WORD)
+        renderer.set_property('wrap-width', 500)
+        renderer.set_property('width', 500)
         self.col_journal = gtk.TreeViewColumn(_('Title'), renderer, text=COLUMN_TITLE)
         self.col_journal.set_sort_column_id(COLUMN_TITLE)
         tv_journal.append_column(self.col_journal)
@@ -61,7 +64,7 @@ class SugarCommander(activity.Activity):
         tv_journal.append_column(self.col_mime)
         
         self.list_scroller_journal = gtk.ScrolledWindow(hadjustment=None, vadjustment=None)
-        self.list_scroller_journal.set_policy(gtk.POLICY_NEVER, gtk.POLICY_AUTOMATIC)
+        self.list_scroller_journal.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
         self.list_scroller_journal.add(tv_journal)
         
         self.load_journal_table()
@@ -76,58 +79,75 @@ class SugarCommander(activity.Activity):
         tv_journal.show()
         self.list_scroller_journal.show()
         
-        entry_table = gtk.Table(rows=4, columns=3, homogeneous=False)
+        column_table = gtk.Table(rows=1,  columns=2,  homogeneous = False)
+        
+        image_table = gtk.Table(rows=2,  columns=2,  homogeneous=False)
         self.image = gtk.Image()
-        entry_table.attach(self.image, 0, 1, 0, 3, xoptions=gtk.FILL, yoptions=gtk.FILL, xpadding=10, ypadding=10)
+        image_table.attach(self.image, 0, 2, 0, 1, xoptions=gtk.FILL|gtk.SHRINK, yoptions=gtk.FILL|gtk.SHRINK, xpadding=10, ypadding=10)
+
+        self.btn_save = gtk.Button(_("Save"))
+        image_table.attach(self.btn_save,  0, 1, 1, 2,  xoptions=gtk.SHRINK,  yoptions=gtk.SHRINK,  xpadding=10,  ypadding=10)
+        self.btn_save.show()
+
+        self.btn_delete = gtk.Button(_("Delete"))
+        image_table.attach(self.btn_delete,  1, 2, 1, 2,  xoptions=gtk.SHRINK,  yoptions=gtk.SHRINK,  xpadding=10,  ypadding=10)
+        self.btn_delete.show()
+
+        column_table.attach(image_table,  0, 1, 0, 1,  xoptions=gtk.FILL|gtk.SHRINK,  yoptions=gtk.SHRINK,  xpadding=10,  ypadding=10)
+
+        entry_table = gtk.Table(rows=3, columns=2, homogeneous=False)
 
         title_label = gtk.Label(_("Title"))
-        entry_table.attach(title_label, 1, 2, 0, 1, xoptions=gtk.SHRINK, yoptions=gtk.SHRINK, xpadding=10, ypadding=10)
+        entry_table.attach(title_label, 0, 1, 0, 1, xoptions=gtk.SHRINK, \
+                           yoptions=gtk.SHRINK, xpadding=10, ypadding=10)
         title_label.show()
       
         self.title_entry = gtk.Entry(max=0)
-        entry_table.attach(self.title_entry, 2, 3, 0, 1, xoptions=gtk.FILL, yoptions=gtk.SHRINK, xpadding=10, ypadding=10)
+        entry_table.attach(self.title_entry, 1, 2, 0, 1, xoptions=gtk.FILL|gtk.SHRINK, \
+                           yoptions=gtk.SHRINK, xpadding=10, ypadding=10)
         self.title_entry.connect('focus-out-event',  self._title_focus_out_event_cb)
         self.title_entry.show()
     
         description_label = gtk.Label(_("Description"))
-        entry_table.attach(description_label, 1, 2, 1, 2, xoptions=gtk.SHRINK, yoptions=gtk.SHRINK, xpadding=10, ypadding=10)
+        entry_table.attach(description_label, 0, 1, 1, 2, xoptions=gtk.SHRINK, \
+                           yoptions=gtk.SHRINK, xpadding=10, ypadding=10)
         description_label.show()
         
         self.description_textview = gtk.TextView()
         self.description_textview.set_wrap_mode(gtk.WRAP_WORD)
-        entry_table.attach(self.description_textview, 2, 3, 1, 2, xoptions=gtk.EXPAND|gtk.FILL, yoptions=gtk.EXPAND|gtk.FILL, xpadding=10, ypadding=10)
+        entry_table.attach(self.description_textview, 1, 2, 1, 2, xoptions=gtk.EXPAND|gtk.FILL|gtk.SHRINK, \
+                           yoptions=gtk.EXPAND|gtk.FILL|gtk.SHRINK, xpadding=10, ypadding=10)
         self.description_textview.props.accepts_tab = False
         self.description_textview.connect('focus-out-event', self._description_focus_out_event_cb)
         self.description_textview.show()
 
         tags_label = gtk.Label(_("Tags"))
-        entry_table.attach(tags_label, 1, 2, 2, 3, xoptions=gtk.SHRINK, yoptions=gtk.SHRINK, xpadding=10, ypadding=10)
+        entry_table.attach(tags_label, 0, 1, 2, 3, xoptions=gtk.SHRINK, \
+                           yoptions=gtk.SHRINK, xpadding=10, ypadding=10)
         tags_label.show()
         
         self.tags_textview = gtk.TextView()
         self.tags_textview.set_wrap_mode(gtk.WRAP_WORD)
-        entry_table.attach(self.tags_textview, 2, 3, 2, 3, xoptions=gtk.EXPAND|gtk.FILL, yoptions=gtk.EXPAND|gtk.FILL, xpadding=10, ypadding=10)
+        entry_table.attach(self.tags_textview, 1, 2, 2, 3, xoptions=gtk.FILL, \
+                           yoptions=gtk.EXPAND|gtk.FILL, xpadding=10, ypadding=10)
         self.tags_textview.props.accepts_tab = False
         self.tags_textview.connect('focus-out-event',  self._tags_focus_out_event_cb)
         self.tags_textview.show()
         
-        self.btn_save = gtk.Button(_("Save"))
-        entry_table.attach(self.btn_save,  1, 2, 3, 4,  xoptions=gtk.SHRINK,  yoptions=gtk.SHRINK,  xpadding=10,  ypadding=10)
-        self.btn_save.show()
-
-        self.btn_delete = gtk.Button(_("Delete"))
-        entry_table.attach(self.btn_delete,  2, 3, 3, 4,  xoptions=gtk.SHRINK,  yoptions=gtk.SHRINK,  xpadding=10,  ypadding=10)
-        self.btn_delete.show()
-
         entry_table.show()
 
         self.scroller_entry = gtk.ScrolledWindow(hadjustment=None, vadjustment=None)
         self.scroller_entry.set_policy(gtk.POLICY_NEVER, gtk.POLICY_AUTOMATIC)
         self.scroller_entry.add_with_viewport(entry_table)
         self.scroller_entry.show()
+        
+        column_table.attach(self.scroller_entry,  1, 2, 0, 1,  xoptions=gtk.FILL|gtk.EXPAND|gtk.SHRINK,  \
+                            yoptions=gtk.FILL|gtk.EXPAND|gtk.SHRINK,  xpadding=10,  ypadding=10)
+        image_table.show()
+        column_table.show()
 
-        vbox = gtk.VBox()
-        vbox.pack_start(self.scroller_entry)
+        vbox = gtk.VBox(homogeneous=True,  spacing=5)
+        vbox.pack_start(column_table)
         vbox.pack_end(self.list_scroller_journal)
 
         canvas.append_page(vbox,  tab1_label)
@@ -296,29 +316,9 @@ class SugarCommander(activity.Activity):
         journal_entry.metadata['title'] = journal_title
         journal_entry.metadata['title_set_by_user'] = '1'
         journal_entry.metadata['keep'] = '0'
-        if filename.endswith('.djvu'):
-            journal_entry.metadata['mime_type'] = 'image/vnd.djvu'
-        if filename.endswith('.pdf'):
-            journal_entry.metadata['mime_type'] = 'application/pdf'
-        if filename.endswith('.jpg') or filename.endswith('.jpeg')  \
-            or filename.endswith('.JPG')  or filename.endswith('.JPEG') :
-            journal_entry.metadata['mime_type'] = 'image/jpeg'
-        if filename.endswith('.gif') or filename.endswith('.GIF'):
-            journal_entry.metadata['mime_type'] = 'image/gif'
-        if filename.endswith('.tiff') or filename.endswith('.TIFF'):
-            journal_entry.metadata['mime_type'] = 'image/tiff'
-        if filename.endswith('.png') or filename.endswith('.PNG'):
-            journal_entry.metadata['mime_type'] = 'image/png'
-        if filename.endswith('.zip') or filename.endswith('.ZIP'):
-            journal_entry.metadata['mime_type'] = 'application/zip'
-        if filename.endswith('.cbz') or filename.endswith('.CBZ'):
-            journal_entry.metadata['mime_type'] = 'application/x-cbz'
-        if filename.endswith('.cbr') or filename.endswith('.CBR'):
-            journal_entry.metadata['mime_type'] = 'application/x-cbr'
-        if filename.endswith('.rtf') or filename.endswith('.RTF'):
-            journal_entry.metadata['mime_type'] = 'application/rtf'
-        if filename.endswith('.txt') or filename.endswith('.TXT'):
-            journal_entry.metadata['mime_type'] = 'text/plain'
+        file_mimetype = mimetypes.guess_type(filename)
+        if not file_mimetype[0] is None:
+            journal_entry.metadata['mime_type'] = file_mimetype[0]
         journal_entry.metadata['buddies'] = ''
         journal_entry.metadata['preview'] = ''
         journal_entry.file_path = filename
