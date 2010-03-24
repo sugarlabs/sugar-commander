@@ -67,8 +67,6 @@ class SugarCommander(activity.Activity):
         self.list_scroller_journal.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
         self.list_scroller_journal.add(tv_journal)
         
-        self.load_journal_table()
-
         label_attributes = pango.AttrList()
         label_attributes.insert(pango.AttrSize(14000, 0, -1))
         label_attributes.insert(pango.AttrForeground(65535, 65535, 65535, 0, -1))
@@ -86,11 +84,15 @@ class SugarCommander(activity.Activity):
         image_table.attach(self.image, 0, 2, 0, 1, xoptions=gtk.FILL|gtk.SHRINK, yoptions=gtk.FILL|gtk.SHRINK, xpadding=10, ypadding=10)
 
         self.btn_save = gtk.Button(_("Save"))
+        self.btn_save.connect('button_press_event',  self.save_button_press_event_cb)
         image_table.attach(self.btn_save,  0, 1, 1, 2,  xoptions=gtk.SHRINK,  yoptions=gtk.SHRINK,  xpadding=10,  ypadding=10)
+        self.btn_save.props.sensitive = False
         self.btn_save.show()
 
         self.btn_delete = gtk.Button(_("Delete"))
+        self.btn_delete.connect('button_press_event',  self.delete_button_press_event_cb)
         image_table.attach(self.btn_delete,  1, 2, 1, 2,  xoptions=gtk.SHRINK,  yoptions=gtk.SHRINK,  xpadding=10,  ypadding=10)
+        self.btn_delete.props.sensitive = False
         self.btn_delete.show()
 
         column_table.attach(image_table,  0, 1, 0, 1,  xoptions=gtk.FILL|gtk.SHRINK,  yoptions=gtk.SHRINK,  xpadding=10,  ypadding=10)
@@ -105,7 +107,7 @@ class SugarCommander(activity.Activity):
         self.title_entry = gtk.Entry(max=0)
         entry_table.attach(self.title_entry, 1, 2, 0, 1, xoptions=gtk.FILL|gtk.SHRINK, \
                            yoptions=gtk.SHRINK, xpadding=10, ypadding=10)
-        self.title_entry.connect('focus-out-event',  self._title_focus_out_event_cb)
+        self.title_entry.connect('key_press_event',  self.key_press_event_cb)
         self.title_entry.show()
     
         description_label = gtk.Label(_("Description"))
@@ -118,7 +120,7 @@ class SugarCommander(activity.Activity):
         entry_table.attach(self.description_textview, 1, 2, 1, 2, xoptions=gtk.EXPAND|gtk.FILL|gtk.SHRINK, \
                            yoptions=gtk.EXPAND|gtk.FILL|gtk.SHRINK, xpadding=10, ypadding=10)
         self.description_textview.props.accepts_tab = False
-        self.description_textview.connect('focus-out-event', self._description_focus_out_event_cb)
+        self.description_textview.connect('key_press_event', self.key_press_event_cb)
         self.description_textview.show()
 
         tags_label = gtk.Label(_("Tags"))
@@ -131,7 +133,7 @@ class SugarCommander(activity.Activity):
         entry_table.attach(self.tags_textview, 1, 2, 2, 3, xoptions=gtk.FILL, \
                            yoptions=gtk.EXPAND|gtk.FILL, xpadding=10, ypadding=10)
         self.tags_textview.props.accepts_tab = False
-        self.tags_textview.connect('focus-out-event',  self._tags_focus_out_event_cb)
+        self.tags_textview.connect('key_press_event',  self.key_press_event_cb)
         self.tags_textview.show()
         
         entry_table.show()
@@ -173,18 +175,22 @@ class SugarCommander(activity.Activity):
         activity_toolbar.share.props.visible = False
         self.set_toolbox(toolbox)
         toolbox.show()
+
+        self.load_journal_table()
+
         self.selected_journal_entry = None
 
-    def _title_focus_out_event_cb(self, entry, event):
-        self._update_entry()
+    def key_press_event_cb(self, entry, event):
+        self.btn_save.props.sensitive = True
 
-    def _description_focus_out_event_cb(self, text_view, event):
-        self._update_entry()
+    def save_button_press_event_cb(self, entry, event):
+        self.update_entry()
 
-    def _tags_focus_out_event_cb(self, text_view, event):
-        self._update_entry()
+    def delete_button_press_event_cb(self, entry, event):
+        datastore.delete(self.selected_journal_entry.object_id)
+        self.load_journal_table()
 
-    def _update_entry(self):
+    def update_entry(self):
         needs_update = False
         needs_reload = False
         
@@ -216,18 +222,21 @@ class SugarCommander(activity.Activity):
                             error_handler=self._datastore_write_error_cb)
         if needs_reload:
             self.load_journal_table()
+
+        self.btn_save.props.sensitive = False
     
     def _datastore_write_cb(self):
         pass
 
     def _datastore_write_error_cb(self, error):
-        logging.error('ExpandedEntry._datastore_write_error_cb: %r' % error)
+        logging.error('sugarcommander._datastore_write_error_cb: %r' % error)
 
     def close(self,  skip_save=False):
         "Override the close method so we don't try to create a Journal entry."
         activity.Activity.close(self,  True)
 
     def selection_journal_cb(self, selection):
+        self.btn_delete.props.sensitive = True
         tv = selection.get_tree_view()
         model = tv.get_model()
         sel = selection.get_selected()
@@ -279,6 +288,8 @@ class SugarCommander(activity.Activity):
             self.image.show()
 
     def load_journal_table(self):
+        self.btn_save.props.sensitive = False
+        self.btn_delete.props.sensitive = False
         ds_mounts = datastore.mounts()
         mountpoint_id = None
         if len(ds_mounts) == 1 and ds_mounts[0]['id'] == 1:
