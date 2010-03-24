@@ -188,6 +188,13 @@ class SugarCommander(activity.Activity):
 
     def delete_button_press_event_cb(self, entry, event):
         datastore.delete(self.selected_journal_entry.object_id)
+        self.title_entry.set_text('')
+        description_textbuffer = self.description_textview.get_buffer()
+        description_textbuffer.set_text('')
+        tags_textbuffer = self.tags_textview.get_buffer()
+        tags_textbuffer.set_text('')
+        self.image.clear()
+        self.image.show()
         self.load_journal_table()
 
     def update_entry(self):
