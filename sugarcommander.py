@@ -320,7 +320,7 @@ class SugarCommander(activity.Activity):
         if mountpoint_id is not None:
             query['mountpoints'] = [ mountpoint_id ]
         ds_objects, num_objects = datastore.find(query, properties=['uid', \
-            'title', 'preview', 'description',  'tags', 'mtime',  'mime_type'])
+            'title', 'description',  'tags', 'mtime',  'mime_type'])
 
         self.ls_journal.clear()
         mount = ''
