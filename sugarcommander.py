@@ -287,15 +287,11 @@ class SugarCommander(activity.Activity):
                 import base64
                 preview_data = base64.b64decode(jobject.metadata['preview'])
 
-            fname = os.path.join(self.get_activity_root(), 'instance',  'png_file.png')
-            f = open(fname, 'w')
-            try:
-                f.write(preview_data)
-            finally:
-                f.close()
-            pixbuf = gtk.gdk.pixbuf_new_from_file(fname)
-            os.remove(fname)
-            scaled_buf = pixbuf.scale_simple(width, height, gtk.gdk.INTERP_BILINEAR)
+            loader = gtk.gdk.PixbufLoader()
+            loader.set_size(width, height)
+            loader.write(preview_data)
+            scaled_buf = loader.get_pixbuf()
+            loader.close()
             self.image.set_from_pixbuf(scaled_buf)
             self.image.show()
         else:
