@@ -44,7 +44,8 @@ class SugarCommander(activity.Activity):
         canvas.props.show_tabs = True
         canvas.show()
         
-        self.ls_journal = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING,   gobject.TYPE_PYOBJECT)
+        self.ls_journal = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING,\
+                                           gobject.TYPE_PYOBJECT)
         tv_journal = gtk.TreeView(self.ls_journal)
         tv_journal.set_rules_hint(True)
         tv_journal.set_search_column(COLUMN_TITLE)
@@ -81,21 +82,26 @@ class SugarCommander(activity.Activity):
         
         image_table = gtk.Table(rows=2,  columns=2,  homogeneous=False)
         self.image = gtk.Image()
-        image_table.attach(self.image, 0, 2, 0, 1, xoptions=gtk.FILL|gtk.SHRINK, yoptions=gtk.FILL|gtk.SHRINK, xpadding=10, ypadding=10)
+        image_table.attach(self.image, 0, 2, 0, 1, xoptions=gtk.FILL|gtk.SHRINK, \
+                           yoptions=gtk.FILL|gtk.SHRINK, xpadding=10, ypadding=10)
 
         self.btn_save = gtk.Button(_("Save"))
         self.btn_save.connect('button_press_event',  self.save_button_press_event_cb)
-        image_table.attach(self.btn_save,  0, 1, 1, 2,  xoptions=gtk.SHRINK,  yoptions=gtk.SHRINK,  xpadding=10,  ypadding=10)
+        image_table.attach(self.btn_save,  0, 1, 1, 2,  xoptions=gtk.SHRINK,\
+                             yoptions=gtk.SHRINK,  xpadding=10,  ypadding=10)
         self.btn_save.props.sensitive = False
         self.btn_save.show()
 
         self.btn_delete = gtk.Button(_("Delete"))
-        self.btn_delete.connect('button_press_event',  self.delete_button_press_event_cb)
-        image_table.attach(self.btn_delete,  1, 2, 1, 2,  xoptions=gtk.SHRINK,  yoptions=gtk.SHRINK,  xpadding=10,  ypadding=10)
+        self.btn_delete.connect('button_press_event',  \
+                                self.delete_button_press_event_cb)
+        image_table.attach(self.btn_delete,  1, 2, 1, 2,  xoptions=gtk.SHRINK,\
+                            yoptions=gtk.SHRINK,  xpadding=10,  ypadding=10)
         self.btn_delete.props.sensitive = False
         self.btn_delete.show()
 
-        column_table.attach(image_table,  0, 1, 0, 1,  xoptions=gtk.FILL|gtk.SHRINK,  yoptions=gtk.SHRINK,  xpadding=10,  ypadding=10)
+        column_table.attach(image_table,  0, 1, 0, 1,  xoptions=gtk.FILL|gtk.SHRINK,\
+                              yoptions=gtk.SHRINK,  xpadding=10,  ypadding=10)
 
         entry_table = gtk.Table(rows=3, columns=2, homogeneous=False)
 
@@ -117,7 +123,8 @@ class SugarCommander(activity.Activity):
         
         self.description_textview = gtk.TextView()
         self.description_textview.set_wrap_mode(gtk.WRAP_WORD)
-        entry_table.attach(self.description_textview, 1, 2, 1, 2, xoptions=gtk.EXPAND|gtk.FILL|gtk.SHRINK, \
+        entry_table.attach(self.description_textview, 1, 2, 1, 2, \
+                           xoptions=gtk.EXPAND|gtk.FILL|gtk.SHRINK, \
                            yoptions=gtk.EXPAND|gtk.FILL|gtk.SHRINK, xpadding=10, ypadding=10)
         self.description_textview.props.accepts_tab = False
         self.description_textview.connect('key_press_event', self.key_press_event_cb)
@@ -143,7 +150,8 @@ class SugarCommander(activity.Activity):
         self.scroller_entry.add_with_viewport(entry_table)
         self.scroller_entry.show()
         
-        column_table.attach(self.scroller_entry,  1, 2, 0, 1,  xoptions=gtk.FILL|gtk.EXPAND|gtk.SHRINK,  \
+        column_table.attach(self.scroller_entry,  1, 2, 0, 1,  \
+                            xoptions=gtk.FILL|gtk.EXPAND|gtk.SHRINK,  \
                             yoptions=gtk.FILL|gtk.EXPAND|gtk.SHRINK,  xpadding=10,  ypadding=10)
         image_table.show()
         column_table.show()
@@ -300,27 +308,29 @@ class SugarCommander(activity.Activity):
         ds_mounts = datastore.mounts()
         mountpoint_id = None
         if len(ds_mounts) == 1 and ds_mounts[0]['id'] == 1:
-            pass
+               pass
         else:
             for mountpoint in ds_mounts:
                 id = mountpoint['id'] 
                 uri = mountpoint['uri']
                 if uri.startswith('/home'):
                     mountpoint_id = id
-        
-        ds_objects, num_objects = datastore.find({})
+
+        query = {}
+        if mountpoint_id is not None:
+            query['mountpoints'] = [ mountpoint_id ]
+        ds_objects, num_objects = datastore.find(query, properties=['uid', \
+            'title', 'preview', 'description',  'tags', 'mtime',  'mime_type'])
+
         self.ls_journal.clear()
         mount = ''
         for i in xrange (0, num_objects, 1):
-            if ds_objects[i].metadata.has_key('mountpoint'):
-                mount = ds_objects[i].metadata['mountpoint']
-            if mountpoint_id is None or mountpoint_id == mount:
-                iter = self.ls_journal.append()
-                title = ds_objects[i].metadata['title']
-                self.ls_journal.set(iter, COLUMN_TITLE, title)
-                mime = ds_objects[i].metadata['mime_type']
-                self.ls_journal.set(iter, COLUMN_MIME, mime)
-                self.ls_journal.set(iter, COLUMN_JOBJECT, ds_objects[i])
+            iter = self.ls_journal.append()
+            title = ds_objects[i].metadata['title']
+            self.ls_journal.set(iter, COLUMN_TITLE, title)
+            mime = ds_objects[i].metadata['mime_type']
+            self.ls_journal.set(iter, COLUMN_MIME, mime)
+            self.ls_journal.set(iter, COLUMN_JOBJECT, ds_objects[i])
  
         self.ls_journal.set_sort_column_id(COLUMN_TITLE,  gtk.SORT_ASCENDING)
         v_adjustment = self.list_scroller_journal.get_vadjustment()
