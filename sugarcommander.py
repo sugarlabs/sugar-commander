@@ -32,6 +32,11 @@ COLUMN_TITLE = 0
 COLUMN_MIME = 1
 COLUMN_JOBJECT = 2
 
+DS_DBUS_SERVICE = 'org.laptop.sugar.DataStore'
+DS_DBUS_INTERFACE = 'org.laptop.sugar.DataStore'
+DS_DBUS_PATH = '/org/laptop/sugar/DataStore'
+import dbus
+
 _logger = logging.getLogger('get-ia-books-activity')
 
 class SugarCommander(activity.Activity):
@@ -44,8 +49,9 @@ class SugarCommander(activity.Activity):
         canvas.props.show_tabs = True
         canvas.show()
         
-        self.ls_journal = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING,\
-                                           gobject.TYPE_PYOBJECT)
+        self.ls_journal = gtk.ListStore(gobject.TYPE_STRING, \
+                gobject.TYPE_STRING,\
+                gobject.TYPE_PYOBJECT)
         tv_journal = gtk.TreeView(self.ls_journal)
         tv_journal.set_rules_hint(True)
         tv_journal.set_search_column(COLUMN_TITLE)
@@ -56,16 +62,20 @@ class SugarCommander(activity.Activity):
         renderer.set_property('wrap-mode', gtk.WRAP_WORD)
         renderer.set_property('wrap-width', 500)
         renderer.set_property('width', 500)
-        self.col_journal = gtk.TreeViewColumn(_('Title'), renderer, text=COLUMN_TITLE)
+        self.col_journal = gtk.TreeViewColumn(_('Title'), renderer, \
+                                              text=COLUMN_TITLE)
         self.col_journal.set_sort_column_id(COLUMN_TITLE)
         tv_journal.append_column(self.col_journal)
         
-        self.col_mime = gtk.TreeViewColumn(_('MIME'), renderer, text=COLUMN_MIME)
+        self.col_mime = gtk.TreeViewColumn(_('MIME'), renderer, \
+                                           text=COLUMN_MIME)
         self.col_mime.set_sort_column_id(COLUMN_MIME)
         tv_journal.append_column(self.col_mime)
         
-        self.list_scroller_journal = gtk.ScrolledWindow(hadjustment=None, vadjustment=None)
-        self.list_scroller_journal.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
+        self.list_scroller_journal = gtk.ScrolledWindow(\
+                        hadjustment=None, vadjustment=None)
+        self.list_scroller_journal.set_policy(\
+                    gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
         self.list_scroller_journal.add(tv_journal)
         
         label_attributes = pango.AttrList()
@@ -125,9 +135,11 @@ class SugarCommander(activity.Activity):
         self.description_textview.set_wrap_mode(gtk.WRAP_WORD)
         entry_table.attach(self.description_textview, 1, 2, 1, 2, \
                            xoptions=gtk.EXPAND|gtk.FILL|gtk.SHRINK, \
-                           yoptions=gtk.EXPAND|gtk.FILL|gtk.SHRINK, xpadding=10, ypadding=10)
+                           yoptions=gtk.EXPAND|gtk.FILL|gtk.SHRINK, \
+                           xpadding=10, ypadding=10)
         self.description_textview.props.accepts_tab = False
-        self.description_textview.connect('key_press_event', self.key_press_event_cb)
+        self.description_textview.connect('key_press_event', \
+                                          self.key_press_event_cb)
         self.description_textview.show()
 
         tags_label = gtk.Label(_("Tags"))
@@ -145,14 +157,16 @@ class SugarCommander(activity.Activity):
         
         entry_table.show()
 
-        self.scroller_entry = gtk.ScrolledWindow(hadjustment=None, vadjustment=None)
+        self.scroller_entry = gtk.ScrolledWindow(\
+                                                 hadjustment=None, vadjustment=None)
         self.scroller_entry.set_policy(gtk.POLICY_NEVER, gtk.POLICY_AUTOMATIC)
         self.scroller_entry.add_with_viewport(entry_table)
         self.scroller_entry.show()
         
         column_table.attach(self.scroller_entry,  1, 2, 0, 1,  \
                             xoptions=gtk.FILL|gtk.EXPAND|gtk.SHRINK,  \
-                            yoptions=gtk.FILL|gtk.EXPAND|gtk.SHRINK,  xpadding=10,  ypadding=10)
+                            yoptions=gtk.FILL|gtk.EXPAND|gtk.SHRINK, \
+                            xpadding=10,  ypadding=10)
         image_table.show()
         column_table.show()
 
@@ -186,6 +200,13 @@ class SugarCommander(activity.Activity):
 
         self.load_journal_table()
 
+        bus = dbus.SessionBus()
+        remote_object = bus.get_object(DS_DBUS_SERVICE, DS_DBUS_PATH)
+        _datastore = dbus.Interface(remote_object, DS_DBUS_INTERFACE)
+        _datastore.connect_to_signal('Created', self._datastore_created_cb)
+        _datastore.connect_to_signal('Updated', self._datastore_updated_cb)
+        _datastore.connect_to_signal('Deleted', self._datastore_deleted_cb)
+
         self.selected_journal_entry = None
 
     def key_press_event_cb(self, entry, event):
@@ -196,15 +217,29 @@ class SugarCommander(activity.Activity):
 
     def delete_button_press_event_cb(self, entry, event):
         datastore.delete(self.selected_journal_entry.object_id)
-        self.title_entry.set_text('')
-        description_textbuffer = self.description_textview.get_buffer()
-        description_textbuffer.set_text('')
-        tags_textbuffer = self.tags_textview.get_buffer()
-        tags_textbuffer.set_text('')
-        self.image.clear()
-        self.image.show()
-        self.load_journal_table()
 
+    def _datastore_created_cb(self, uid):
+        self.load_journal_table()
+        
+    def _datastore_updated_cb(self,  uid):
+        pass
+        
+    def _datastore_deleted_cb(self,  uid):
+        self.load_journal_table()
+        object_id = self.selected_journal_entry.object_id
+        try:
+            jobject = datastore.get(object_id)
+        except:
+            self.title_entry.set_text('')
+            description_textbuffer = self.description_textview.get_buffer()
+            description_textbuffer.set_text('')
+            tags_textbuffer = self.tags_textview.get_buffer()
+            tags_textbuffer.set_text('')
+            self.btn_save.props.sensitive = False
+            self.btn_delete.props.sensitive = False
+            self.image.clear()
+            self.image.show()
+        
     def update_entry(self):
         needs_update = False
         needs_reload = False
@@ -258,6 +293,7 @@ class SugarCommander(activity.Activity):
         if sel:
             model, iter = sel
             jobject = model.get_value(iter,COLUMN_JOBJECT)
+            jobject = datastore.get(jobject.object_id)
             self.selected_journal_entry = jobject
             self.title_entry.set_text(jobject.metadata['title'])
             description_textbuffer = self.description_textview.get_buffer()
@@ -316,7 +352,7 @@ class SugarCommander(activity.Activity):
         if mountpoint_id is not None:
             query['mountpoints'] = [ mountpoint_id ]
         ds_objects, num_objects = datastore.find(query, properties=['uid', \
-            'title', 'description',  'tags', 'mtime',  'mime_type'])
+            'title',  'mime_type'])
 
         self.ls_journal.clear()
         mount = ''
@@ -347,7 +383,6 @@ class SugarCommander(activity.Activity):
         journal_entry.metadata['preview'] = ''
         journal_entry.file_path = filename
         datastore.write(journal_entry)
-        self.load_journal_table()
         self._alert(_('Success'),  _('%s added to Journal.') % filename)
    
     def _alert(self, title, text=None):
