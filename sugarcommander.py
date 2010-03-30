@@ -49,8 +49,8 @@ class SugarCommander(activity.Activity):
         canvas.props.show_tabs = True
         canvas.show()
         
-        self.ls_journal = gtk.ListStore(gobject.TYPE_STRING, \
-                gobject.TYPE_STRING,\
+        self.ls_journal = gtk.ListStore(gobject.TYPE_STRING, 
+                gobject.TYPE_STRING,
                 gobject.TYPE_PYOBJECT)
         tv_journal = gtk.TreeView(self.ls_journal)
         tv_journal.set_rules_hint(True)
@@ -62,19 +62,19 @@ class SugarCommander(activity.Activity):
         renderer.set_property('wrap-mode', gtk.WRAP_WORD)
         renderer.set_property('wrap-width', 500)
         renderer.set_property('width', 500)
-        self.col_journal = gtk.TreeViewColumn(_('Title'), renderer, \
+        self.col_journal = gtk.TreeViewColumn(_('Title'), renderer, 
                                               text=COLUMN_TITLE)
         self.col_journal.set_sort_column_id(COLUMN_TITLE)
         tv_journal.append_column(self.col_journal)
         
-        self.col_mime = gtk.TreeViewColumn(_('MIME'), renderer, \
+        self.col_mime = gtk.TreeViewColumn(_('MIME'), renderer, 
                                            text=COLUMN_MIME)
         self.col_mime.set_sort_column_id(COLUMN_MIME)
         tv_journal.append_column(self.col_mime)
         
-        self.list_scroller_journal = gtk.ScrolledWindow(\
+        self.list_scroller_journal = gtk.ScrolledWindow(
                         hadjustment=None, vadjustment=None)
-        self.list_scroller_journal.set_policy(\
+        self.list_scroller_journal.set_policy(
                     gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
         self.list_scroller_journal.add(tv_journal)
         
@@ -92,64 +92,64 @@ class SugarCommander(activity.Activity):
         
         image_table = gtk.Table(rows=2,  columns=2,  homogeneous=False)
         self.image = gtk.Image()
-        image_table.attach(self.image, 0, 2, 0, 1, xoptions=gtk.FILL|gtk.SHRINK, \
+        image_table.attach(self.image, 0, 2, 0, 1, xoptions=gtk.FILL|gtk.SHRINK, 
                            yoptions=gtk.FILL|gtk.SHRINK, xpadding=10, ypadding=10)
 
         self.btn_save = gtk.Button(_("Save"))
         self.btn_save.connect('button_press_event',  self.save_button_press_event_cb)
-        image_table.attach(self.btn_save,  0, 1, 1, 2,  xoptions=gtk.SHRINK,\
+        image_table.attach(self.btn_save,  0, 1, 1, 2,  xoptions=gtk.SHRINK,
                              yoptions=gtk.SHRINK,  xpadding=10,  ypadding=10)
         self.btn_save.props.sensitive = False
         self.btn_save.show()
 
         self.btn_delete = gtk.Button(_("Delete"))
-        self.btn_delete.connect('button_press_event',  \
+        self.btn_delete.connect('button_press_event',  
                                 self.delete_button_press_event_cb)
-        image_table.attach(self.btn_delete,  1, 2, 1, 2,  xoptions=gtk.SHRINK,\
+        image_table.attach(self.btn_delete,  1, 2, 1, 2,  xoptions=gtk.SHRINK,
                             yoptions=gtk.SHRINK,  xpadding=10,  ypadding=10)
         self.btn_delete.props.sensitive = False
         self.btn_delete.show()
 
-        column_table.attach(image_table,  0, 1, 0, 1,  xoptions=gtk.FILL|gtk.SHRINK,\
+        column_table.attach(image_table,  0, 1, 0, 1,  xoptions=gtk.FILL|gtk.SHRINK,
                               yoptions=gtk.SHRINK,  xpadding=10,  ypadding=10)
 
         entry_table = gtk.Table(rows=3, columns=2, homogeneous=False)
 
         title_label = gtk.Label(_("Title"))
-        entry_table.attach(title_label, 0, 1, 0, 1, xoptions=gtk.SHRINK, \
+        entry_table.attach(title_label, 0, 1, 0, 1, xoptions=gtk.SHRINK, 
                            yoptions=gtk.SHRINK, xpadding=10, ypadding=10)
         title_label.show()
       
         self.title_entry = gtk.Entry(max=0)
-        entry_table.attach(self.title_entry, 1, 2, 0, 1, xoptions=gtk.FILL|gtk.SHRINK, \
+        entry_table.attach(self.title_entry, 1, 2, 0, 1, xoptions=gtk.FILL|gtk.SHRINK, 
                            yoptions=gtk.SHRINK, xpadding=10, ypadding=10)
         self.title_entry.connect('key_press_event',  self.key_press_event_cb)
         self.title_entry.show()
     
         description_label = gtk.Label(_("Description"))
-        entry_table.attach(description_label, 0, 1, 1, 2, xoptions=gtk.SHRINK, \
+        entry_table.attach(description_label, 0, 1, 1, 2, xoptions=gtk.SHRINK, 
                            yoptions=gtk.SHRINK, xpadding=10, ypadding=10)
         description_label.show()
         
         self.description_textview = gtk.TextView()
         self.description_textview.set_wrap_mode(gtk.WRAP_WORD)
-        entry_table.attach(self.description_textview, 1, 2, 1, 2, \
-                           xoptions=gtk.EXPAND|gtk.FILL|gtk.SHRINK, \
-                           yoptions=gtk.EXPAND|gtk.FILL|gtk.SHRINK, \
+        entry_table.attach(self.description_textview, 1, 2, 1, 2, 
+                           xoptions=gtk.EXPAND|gtk.FILL|gtk.SHRINK, 
+                           yoptions=gtk.EXPAND|gtk.FILL|gtk.SHRINK, 
                            xpadding=10, ypadding=10)
         self.description_textview.props.accepts_tab = False
-        self.description_textview.connect('key_press_event', \
+        self.description_textview.connect('key_press_event', 
                                           self.key_press_event_cb)
         self.description_textview.show()
 
         tags_label = gtk.Label(_("Tags"))
-        entry_table.attach(tags_label, 0, 1, 2, 3, xoptions=gtk.SHRINK, \
+        entry_table.attach(tags_label, 0, 1, 2, 3, xoptions=gtk.SHRINK, 
                            yoptions=gtk.SHRINK, xpadding=10, ypadding=10)
         tags_label.show()
         
         self.tags_textview = gtk.TextView()
         self.tags_textview.set_wrap_mode(gtk.WRAP_WORD)
-        entry_table.attach(self.tags_textview, 1, 2, 2, 3, xoptions=gtk.FILL, \
+        entry_table.attach(self.tags_textview, 1, 2, 2, 3, xoptions=gtk.FILL, 
                            yoptions=gtk.EXPAND|gtk.FILL, xpadding=10, ypadding=10)
         self.tags_textview.props.accepts_tab = False
         self.tags_textview.connect('key_press_event',  self.key_press_event_cb)
@@ -157,15 +157,15 @@ class SugarCommander(activity.Activity):
         
         entry_table.show()
 
-        self.scroller_entry = gtk.ScrolledWindow(\
+        self.scroller_entry = gtk.ScrolledWindow(
                                                  hadjustment=None, vadjustment=None)
         self.scroller_entry.set_policy(gtk.POLICY_NEVER, gtk.POLICY_AUTOMATIC)
         self.scroller_entry.add_with_viewport(entry_table)
         self.scroller_entry.show()
         
-        column_table.attach(self.scroller_entry,  1, 2, 0, 1,  \
-                            xoptions=gtk.FILL|gtk.EXPAND|gtk.SHRINK,  \
-                            yoptions=gtk.FILL|gtk.EXPAND|gtk.SHRINK, \
+        column_table.attach(self.scroller_entry,  1, 2, 0, 1,  
+                            xoptions=gtk.FILL|gtk.EXPAND|gtk.SHRINK,  
+                            yoptions=gtk.FILL|gtk.EXPAND|gtk.SHRINK, 
                             xpadding=10,  ypadding=10)
         image_table.show()
         column_table.show()
@@ -176,7 +176,7 @@ class SugarCommander(activity.Activity):
 
         canvas.append_page(vbox,  tab1_label)
  
-        self._filechooser = gtk.FileChooserWidget(\
+        self._filechooser = gtk.FileChooserWidget(
             action=gtk.FILE_CHOOSER_ACTION_OPEN, backend=None)
         self._filechooser.set_current_folder("/media")
         self.copy_button = gtk.Button(_("Copy File To The Journal"))
@@ -222,7 +222,10 @@ class SugarCommander(activity.Activity):
         self.load_journal_table()
         
     def _datastore_updated_cb(self,  uid):
-        pass
+        self.load_journal_table()
+        object_id = self.selected_journal_entry.object_id
+        jobject = datastore.get(object_id)
+        self.set_form_fields(jobject)
         
     def _datastore_deleted_cb(self,  uid):
         self.load_journal_table()
@@ -247,27 +250,30 @@ class SugarCommander(activity.Activity):
         if self.selected_journal_entry is None:
             return
 
-        old_title = self.selected_journal_entry.metadata.get('title', None)
+        object_id = self.selected_journal_entry.object_id
+        jobject = datastore.get(object_id)
+        
+        old_title = jobject.metadata.get('title', None)
         if old_title != self.title_entry.props.text:
-            self.selected_journal_entry.metadata['title'] = self.title_entry.props.text
-            self.selected_journal_entry.metadata['title_set_by_user'] = '1'
+            jobject.metadata['title'] = self.title_entry.props.text
+            jobject.metadata['title_set_by_user'] = '1'
             needs_update = True
             needs_reload = True
 
-        old_tags = self.selected_journal_entry.metadata.get('tags', None)
+        old_tags = jobject.metadata.get('tags', None)
         new_tags = self.tags_textview.props.buffer.props.text
         if old_tags != new_tags:
-            self.selected_journal_entry.metadata['tags'] = new_tags
+            jobject.metadata['tags'] = new_tags
             needs_update = True
 
-        old_description = self.selected_journal_entry.metadata.get('description', None)
+        old_description = jobject.metadata.get('description', None)
         new_description = self.description_textview.props.buffer.props.text
         if old_description != new_description:
-            self.selected_journal_entry.metadata['description'] = new_description
+            jobject.metadata['description'] = new_description
             needs_update = True
 
         if needs_update:
-            datastore.write(self.selected_journal_entry, update_mtime=False,
+            datastore.write(jobject, update_mtime=False,
                             reply_handler=self._datastore_write_cb,
                             error_handler=self._datastore_write_error_cb)
         if needs_reload:
@@ -295,18 +301,21 @@ class SugarCommander(activity.Activity):
             jobject = model.get_value(iter,COLUMN_JOBJECT)
             jobject = datastore.get(jobject.object_id)
             self.selected_journal_entry = jobject
-            self.title_entry.set_text(jobject.metadata['title'])
-            description_textbuffer = self.description_textview.get_buffer()
-            if jobject.metadata.has_key('description'):
-                description_textbuffer.set_text(jobject.metadata['description'])
-            else:
-                description_textbuffer.set_text('')
-            tags_textbuffer = self.tags_textview.get_buffer()
-            if jobject.metadata.has_key('tags'):
-                tags_textbuffer.set_text(jobject.metadata['tags'])
-            else:
-                tags_textbuffer.set_text('')
-            self.create_preview(jobject.object_id)
+            self.set_form_fields(jobject)
+
+    def set_form_fields(self, jobject):
+        self.title_entry.set_text(jobject.metadata['title'])
+        description_textbuffer = self.description_textview.get_buffer()
+        if jobject.metadata.has_key('description'):
+            description_textbuffer.set_text(jobject.metadata['description'])
+        else:
+            description_textbuffer.set_text('')
+        tags_textbuffer = self.tags_textview.get_buffer()
+        if jobject.metadata.has_key('tags'):
+            tags_textbuffer.set_text(jobject.metadata['tags'])
+        else:
+            tags_textbuffer.set_text('')
+        self.create_preview(jobject.object_id)
 
     def create_preview(self,  object_id):
         width = style.zoom(320)
@@ -351,7 +360,7 @@ class SugarCommander(activity.Activity):
         query = {}
         if mountpoint_id is not None:
             query['mountpoints'] = [ mountpoint_id ]
-        ds_objects, num_objects = datastore.find(query, properties=['uid', \
+        ds_objects, num_objects = datastore.find(query, properties=['uid', 
             'title',  'mime_type'])
 
         self.ls_journal.clear()
