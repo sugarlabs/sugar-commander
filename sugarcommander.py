@@ -19,7 +19,7 @@ import logging
 import os
 import gtk
 import pango
-import mimetypes
+from sugar import mime
 
 from sugar.activity import activity
 from sugar.datastore import datastore
@@ -385,9 +385,9 @@ class SugarCommander(activity.Activity):
         journal_entry.metadata['title'] = journal_title
         journal_entry.metadata['title_set_by_user'] = '1'
         journal_entry.metadata['keep'] = '0'
-        file_mimetype = mimetypes.guess_type(filename)
-        if not file_mimetype[0] is None:
-            journal_entry.metadata['mime_type'] = file_mimetype[0]
+        file_mimetype = mime.get_for_file(filename)
+        if not file_mimetype is None:
+            journal_entry.metadata['mime_type'] = file_mimetype
         journal_entry.metadata['buddies'] = ''
         journal_entry.metadata['preview'] = ''
         journal_entry.file_path = filename
