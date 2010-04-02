@@ -19,6 +19,8 @@ import logging
 import os
 import gtk
 import pango
+import pygame
+from decimal import *
 from sugar import mime
 
 from sugar.activity import activity
@@ -324,6 +326,13 @@ class SugarCommander(activity.Activity):
         jobject = datastore.get(object_id)
 
         if jobject.metadata.has_key('preview') and \
+                jobject.metadata['preview'] == '' \
+                and jobject.metadata['mime_type'] == 'image/jpeg':
+                    filename = jobject.get_file_path()
+                    self.show_image(filename)
+                    return
+
+        if jobject.metadata.has_key('preview') and \
                 len(jobject.metadata['preview']) > 4:
             
             if jobject.metadata['preview'][1:4] == 'PNG':
@@ -404,3 +413,32 @@ class SugarCommander(activity.Activity):
 
     def _alert_cancel_cb(self, alert, response_id):
         self.remove_alert(alert)
+
+    def show_image(self, filename):
+        "display a resized image in a preview"
+        TOOLBOX_HEIGHT = 40
+        width = style.zoom(320)
+        height = style.zoom(240)
+        # get the size of the image.
+        im = pygame.image.load(filename)
+        image_width, image_height = im.get_size()
+        getcontext().prec = 7
+        s_a_ratio = Decimal(height) / Decimal(width)
+        i_a_ratio = Decimal(image_height) / Decimal(image_width)
+        new_width = image_width
+        new_height = image_height
+        new_width = width
+        new_height = image_height * width
+        if image_width > 1:
+            new_height /= image_width
+
+        if new_height > width:
+            new_height *= width
+            if new_width > 1:
+                new_height /= new_width
+            new_width = width
+        
+        pixbuf = gtk.gdk.pixbuf_new_from_file(filename)
+        scaled_buf = pixbuf.scale_simple(new_width, new_height, gtk.gdk.INTERP_BILINEAR)
+        self.image.set_from_pixbuf(scaled_buf)
+        self.image.show()
