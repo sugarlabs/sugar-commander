@@ -21,8 +21,9 @@ import gtk
 import pango
 import pygame
 from decimal import *
+import zipfile
+from zipfile import BadZipfile
 from sugar import mime
-
 from sugar.activity import activity
 from sugar.datastore import datastore
 from sugar.graphics.alert import NotifyAlert
@@ -326,10 +327,14 @@ class SugarCommander(activity.Activity):
         jobject = datastore.get(object_id)
 
         if jobject.metadata.has_key('preview') and \
-                jobject.metadata['preview'] == '' \
-                and jobject.metadata['mime_type'] == 'image/jpeg':
+                jobject.metadata['preview'] == '':
+            if jobject.metadata['mime_type'] .startswith('image/'):
                     filename = jobject.get_file_path()
                     self.show_image(filename)
+                    return
+            if jobject.metadata['mime_type']  == 'application/x-cbz':
+                    filename = jobject.get_file_path()
+                    self.extract_image(filename)
                     return
 
         if jobject.metadata.has_key('preview') and \
@@ -439,6 +444,45 @@ class SugarCommander(activity.Activity):
             new_width = width
         
         pixbuf = gtk.gdk.pixbuf_new_from_file(filename)
-        scaled_buf = pixbuf.scale_simple(new_width, new_height, gtk.gdk.INTERP_BILINEAR)
+        scaled_buf = pixbuf.scale_simple(new_width, new_height, 
+                                         gtk.gdk.INTERP_BILINEAR)
         self.image.set_from_pixbuf(scaled_buf)
         self.image.show()
+        
+    def extract_image(self,  filename):
+        zf = zipfile.ZipFile(filename, 'r')
+        image_files = zf.namelist()
+        image_files.sort()
+        if len(image_files) > 0:
+            if self.save_extracted_file(zf, image_files[0]) == True:
+                fname = os.path.join(self.get_activity_root(), 'instance',  
+                                     self.make_new_filename(image_files[0]))
+                self.show_image(fname)
+                os.remove(fname)
+
+    def save_extracted_file(self, zipfile, filename):
+        "Extract the file to a temp directory for viewing"
+        try:
+            filebytes = zipfile.read(filename)
+        except BadZipfile, err:
+            print 'Error opening the zip file: %s' % (err)
+            # self._alert('Error', 'Error opening the zip file')
+            return False
+        except KeyError,  err:
+            self._alert('Key Error', 'Zipfile key not found: '  
+                        + str(filename))
+            return
+        outfn = self.make_new_filename(filename)
+        if (outfn == ''):
+            return False
+        fname = os.path.join(self.get_activity_root(), 'instance',  outfn)
+        f = open(fname, 'w')
+        try:
+            f.write(filebytes)
+        finally:
+            f.close
+        return True
+
+    def make_new_filename(self, filename):
+        partition_tuple = filename.rpartition('/')
+        return partition_tuple[2]
