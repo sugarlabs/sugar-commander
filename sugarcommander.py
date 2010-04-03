@@ -325,14 +325,15 @@ class SugarCommander(activity.Activity):
         height = style.zoom(240)
         
         jobject = datastore.get(object_id)
-
-        if jobject.metadata.has_key('preview') and \
-                jobject.metadata['preview'] == '':
-            if jobject.metadata['mime_type'] .startswith('image/'):
+        
+        if jobject.metadata.has_key('preview'):
+            preview = jobject.metadata['preview']
+            if preview is None or preview == '' or preview == 'None':
+                if jobject.metadata['mime_type'] .startswith('image/'):
                     filename = jobject.get_file_path()
                     self.show_image(filename)
                     return
-            if jobject.metadata['mime_type']  == 'application/x-cbz':
+                if jobject.metadata['mime_type']  == 'application/x-cbz':
                     filename = jobject.get_file_path()
                     self.extract_image(filename)
                     return
