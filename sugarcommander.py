@@ -30,6 +30,7 @@ from sugar.graphics.alert import NotifyAlert
 from sugar.graphics import style
 from gettext import gettext as _
 import gobject
+import dbus
 
 COLUMN_TITLE = 0
 COLUMN_MIME = 1
@@ -40,7 +41,7 @@ DS_DBUS_INTERFACE = 'org.laptop.sugar.DataStore'
 DS_DBUS_PATH = '/org/laptop/sugar/DataStore'
 import dbus
 
-_logger = logging.getLogger('get-ia-books-activity')
+_logger = logging.getLogger('sugar-commander')
 
 class SugarCommander(activity.Activity):
     def __init__(self, handle, create_jobject=True):
@@ -326,17 +327,17 @@ class SugarCommander(activity.Activity):
         
         jobject = datastore.get(object_id)
         
-        if jobject.metadata.has_key('preview'):
-            preview = jobject.metadata['preview']
-            if preview is None or preview == '' or preview == 'None':
-                if jobject.metadata['mime_type'] .startswith('image/'):
-                    filename = jobject.get_file_path()
-                    self.show_image(filename)
-                    return
-                if jobject.metadata['mime_type']  == 'application/x-cbz':
-                    filename = jobject.get_file_path()
-                    self.extract_image(filename)
-                    return
+#        if jobject.metadata.has_key('preview'):
+#            preview = jobject.metadata['preview']
+#            if preview is None or preview == '' or preview == 'None':
+#                if jobject.metadata['mime_type'] .startswith('image/'):
+#                    filename = jobject.get_file_path()
+#                    self.show_image(filename)
+#                    return
+#                if jobject.metadata['mime_type']  == 'application/x-cbz':
+#                    filename = jobject.get_file_path()
+#                    self.extract_image(filename)
+#                    return
 
         if jobject.metadata.has_key('preview') and \
                 len(jobject.metadata['preview']) > 4:
@@ -404,7 +405,12 @@ class SugarCommander(activity.Activity):
         if not file_mimetype is None:
             journal_entry.metadata['mime_type'] = file_mimetype
         journal_entry.metadata['buddies'] = ''
-        journal_entry.metadata['preview'] = ''
+        preview = self.create_preview_metadata(filename)
+        if not preview  == '':
+            journal_entry.metadata['preview'] =  dbus.ByteArray(preview)
+        else:
+            journal_entry.metadata['preview'] =  ''
+            
         journal_entry.file_path = filename
         datastore.write(journal_entry)
         self._alert(_('Success'),  _('%s added to Journal.') % filename)
@@ -422,7 +428,11 @@ class SugarCommander(activity.Activity):
 
     def show_image(self, filename):
         "display a resized image in a preview"
-        TOOLBOX_HEIGHT = 40
+        scaled_buf = self.create_image_pixbuf(filename)
+        self.image.set_from_pixbuf(scaled_buf)
+        self.image.show()
+
+    def create_image_pixbuf(self, filename):
         width = style.zoom(320)
         height = style.zoom(240)
         # get the size of the image.
@@ -443,12 +453,11 @@ class SugarCommander(activity.Activity):
             if new_width > 1:
                 new_height /= new_width
             new_width = width
-        
+
         pixbuf = gtk.gdk.pixbuf_new_from_file(filename)
         scaled_buf = pixbuf.scale_simple(new_width, new_height, 
                                          gtk.gdk.INTERP_BILINEAR)
-        self.image.set_from_pixbuf(scaled_buf)
-        self.image.show()
+        return scaled_buf
         
     def extract_image(self,  filename):
         zf = zipfile.ZipFile(filename, 'r')
@@ -487,3 +496,20 @@ class SugarCommander(activity.Activity):
     def make_new_filename(self, filename):
         partition_tuple = filename.rpartition('/')
         return partition_tuple[2]
+
+    def create_preview_metadata(self,  filename):
+
+        file_mimetype = mime.get_for_file(filename)
+        if not file_mimetype.startswith('image/'):
+            return ''
+            
+        scaled_pixbuf = self.create_image_pixbuf(filename)
+        preview_data = []
+
+        def save_func(buf, data):
+            data.append(buf)
+
+        scaled_pixbuf.save_to_callback(save_func, 'png', user_data=preview_data)
+        preview_data = ''.join(preview_data)
+
+        return preview_data
