@@ -219,7 +219,7 @@ class SugarCommander(activity.Activity):
     def update_preview_cb(self,  file_chooser, preview):
         filename = file_chooser.get_preview_filename()
         try:
-            pixbuf = gtk.gdk.pixbuf_new_from_file_at_size(filename, 128, 128)
+            pixbuf = gtk.gdk.pixbuf_new_from_file_at_size(filename, style.zoom(320), style.zoom(240))
             preview.set_from_pixbuf(pixbuf)
             have_preview = True
         except:
@@ -363,7 +363,7 @@ class SugarCommander(activity.Activity):
                 preview_data = base64.b64decode(jobject.metadata['preview'])
 
             loader = gtk.gdk.PixbufLoader()
-            loader.set_size(width, height)
+            # loader.set_size(width, height)
             loader.write(preview_data)
             scaled_buf = loader.get_pixbuf()
             loader.close()
@@ -447,31 +447,32 @@ class SugarCommander(activity.Activity):
         self.image.show()
 
     def create_image_pixbuf(self, filename):
-        width = style.zoom(320)
-        height = style.zoom(240)
-        # get the size of the image.
-        im = pygame.image.load(filename)
-        image_width, image_height = im.get_size()
-        getcontext().prec = 7
-        s_a_ratio = Decimal(height) / Decimal(width)
-        i_a_ratio = Decimal(image_height) / Decimal(image_width)
-        new_width = image_width
-        new_height = image_height
-        new_width = width
-        new_height = image_height * width
-        if image_width > 1:
-            new_height /= image_width
-
-        if new_height > width:
-            new_height *= width
-            if new_width > 1:
-                new_height /= new_width
-            new_width = width
-
-        pixbuf = gtk.gdk.pixbuf_new_from_file(filename)
-        scaled_buf = pixbuf.scale_simple(new_width, new_height, 
-                                         gtk.gdk.INTERP_BILINEAR)
-        return scaled_buf
+#        width = style.zoom(320)
+#        height = style.zoom(240)
+#        # get the size of the image.
+#        im = pygame.image.load(filename)
+#        image_width, image_height = im.get_size()
+#        getcontext().prec = 7
+#        s_a_ratio = Decimal(height) / Decimal(width)
+#        i_a_ratio = Decimal(image_height) / Decimal(image_width)
+#        new_width = image_width
+#        new_height = image_height
+#        new_width = width
+#        new_height = image_height * width
+#        if image_width > 1:
+#            new_height /= image_width
+#
+#        if new_height > width:
+#            new_height *= width
+#            if new_width > 1:
+#                new_height /= new_width
+#            new_width = width
+#
+#        pixbuf = gtk.gdk.pixbuf_new_from_file(filename)
+#        scaled_buf = pixbuf.scale_simple(new_width, new_height, 
+#                                         gtk.gdk.INTERP_BILINEAR)
+#        return scaled_buf
+        return gtk.gdk.pixbuf_new_from_file_at_size(filename, style.zoom(320), style.zoom(240))
         
     def extract_image(self,  filename):
         zf = zipfile.ZipFile(filename, 'r')
