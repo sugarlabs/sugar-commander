@@ -187,6 +187,9 @@ class SugarCommander(activity.Activity):
         self.copy_button.connect('clicked',  self.create_journal_entry)
         self.copy_button.show()
         self._filechooser.set_extra_widget(self.copy_button)
+        preview = gtk.Image()
+        self._filechooser.set_preview_widget(preview)
+        self._filechooser.connect("update-preview", self.update_preview_cb, preview)
         tab2_label = gtk.Label(_("Files"))
         tab2_label.set_attributes(label_attributes)
         tab2_label.show()
@@ -212,6 +215,17 @@ class SugarCommander(activity.Activity):
         _datastore.connect_to_signal('Deleted', self._datastore_deleted_cb)
 
         self.selected_journal_entry = None
+
+    def update_preview_cb(self,  file_chooser, preview):
+        filename = file_chooser.get_preview_filename()
+        try:
+            pixbuf = gtk.gdk.pixbuf_new_from_file_at_size(filename, 128, 128)
+            preview.set_from_pixbuf(pixbuf)
+            have_preview = True
+        except:
+            have_preview = False
+        file_chooser.set_preview_widget_active(have_preview)
+        return
 
     def key_press_event_cb(self, entry, event):
         self.btn_save.props.sensitive = True
@@ -327,17 +341,17 @@ class SugarCommander(activity.Activity):
         
         jobject = datastore.get(object_id)
         
-#        if jobject.metadata.has_key('preview'):
-#            preview = jobject.metadata['preview']
-#            if preview is None or preview == '' or preview == 'None':
-#                if jobject.metadata['mime_type'] .startswith('image/'):
-#                    filename = jobject.get_file_path()
-#                    self.show_image(filename)
-#                    return
-#                if jobject.metadata['mime_type']  == 'application/x-cbz':
-#                    filename = jobject.get_file_path()
-#                    self.extract_image(filename)
-#                    return
+        if jobject.metadata.has_key('preview'):
+            preview = jobject.metadata['preview']
+            if preview is None or preview == '' or preview == 'None':
+                if jobject.metadata['mime_type'] .startswith('image/'):
+                    filename = jobject.get_file_path()
+                    self.show_image(filename)
+                    return
+                if jobject.metadata['mime_type']  == 'application/x-cbz':
+                    filename = jobject.get_file_path()
+                    self.extract_image(filename)
+                    return
 
         if jobject.metadata.has_key('preview') and \
                 len(jobject.metadata['preview']) > 4:
