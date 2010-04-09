@@ -100,7 +100,8 @@ class SugarCommander(activity.Activity):
                            yoptions=gtk.FILL|gtk.SHRINK, xpadding=10, ypadding=10)
 
         self.btn_save = gtk.Button(_("Save"))
-        self.btn_save.connect('button_press_event',  self.save_button_press_event_cb)
+        self.btn_save.connect('button_press_event',  
+                              self.save_button_press_event_cb)
         image_table.attach(self.btn_save,  0, 1, 1, 2,  xoptions=gtk.SHRINK,
                              yoptions=gtk.SHRINK,  xpadding=10,  ypadding=10)
         self.btn_save.props.sensitive = False
@@ -114,25 +115,33 @@ class SugarCommander(activity.Activity):
         self.btn_delete.props.sensitive = False
         self.btn_delete.show()
 
-        column_table.attach(image_table,  0, 1, 0, 1,  xoptions=gtk.FILL|gtk.SHRINK,
+        column_table.attach(image_table,  0, 1, 0, 1,  
+                            xoptions=gtk.FILL|gtk.SHRINK,
                               yoptions=gtk.SHRINK,  xpadding=10,  ypadding=10)
 
-        entry_table = gtk.Table(rows=3, columns=2, homogeneous=False)
+        entry_table = gtk.Table(rows=3, columns=2, 
+                                homogeneous=False)
 
         title_label = gtk.Label(_("Title"))
-        entry_table.attach(title_label, 0, 1, 0, 1, xoptions=gtk.SHRINK, 
-                           yoptions=gtk.SHRINK, xpadding=10, ypadding=10)
+        entry_table.attach(title_label, 0, 1, 0, 1, 
+                           xoptions=gtk.SHRINK, 
+                           yoptions=gtk.SHRINK, 
+                           xpadding=10, ypadding=10)
         title_label.show()
       
         self.title_entry = gtk.Entry(max=0)
-        entry_table.attach(self.title_entry, 1, 2, 0, 1, xoptions=gtk.FILL|gtk.SHRINK, 
+        entry_table.attach(self.title_entry, 1, 2, 0, 1, 
+                           xoptions=gtk.FILL|gtk.SHRINK, 
                            yoptions=gtk.SHRINK, xpadding=10, ypadding=10)
-        self.title_entry.connect('key_press_event',  self.key_press_event_cb)
+        self.title_entry.connect('key_press_event',  
+                                 self.key_press_event_cb)
         self.title_entry.show()
     
         description_label = gtk.Label(_("Description"))
-        entry_table.attach(description_label, 0, 1, 1, 2, xoptions=gtk.SHRINK, 
-                           yoptions=gtk.SHRINK, xpadding=10, ypadding=10)
+        entry_table.attach(description_label, 0, 1, 1, 2, 
+                           xoptions=gtk.SHRINK, 
+                           yoptions=gtk.SHRINK, 
+                           xpadding=10, ypadding=10)
         description_label.show()
         
         self.description_textview = gtk.TextView()
@@ -147,16 +156,21 @@ class SugarCommander(activity.Activity):
         self.description_textview.show()
 
         tags_label = gtk.Label(_("Tags"))
-        entry_table.attach(tags_label, 0, 1, 2, 3, xoptions=gtk.SHRINK, 
-                           yoptions=gtk.SHRINK, xpadding=10, ypadding=10)
+        entry_table.attach(tags_label, 0, 1, 2, 3, 
+                           xoptions=gtk.SHRINK, 
+                           yoptions=gtk.SHRINK, 
+                           xpadding=10, ypadding=10)
         tags_label.show()
         
         self.tags_textview = gtk.TextView()
         self.tags_textview.set_wrap_mode(gtk.WRAP_WORD)
-        entry_table.attach(self.tags_textview, 1, 2, 2, 3, xoptions=gtk.FILL, 
-                           yoptions=gtk.EXPAND|gtk.FILL, xpadding=10, ypadding=10)
+        entry_table.attach(self.tags_textview, 1, 2, 2, 3, 
+                           xoptions=gtk.FILL, 
+                           yoptions=gtk.EXPAND|gtk.FILL, 
+                           xpadding=10, ypadding=10)
         self.tags_textview.props.accepts_tab = False
-        self.tags_textview.connect('key_press_event',  self.key_press_event_cb)
+        self.tags_textview.connect('key_press_event', 
+                                    self.key_press_event_cb)
         self.tags_textview.show()
         
         entry_table.show()
@@ -189,7 +203,8 @@ class SugarCommander(activity.Activity):
         self._filechooser.set_extra_widget(self.copy_button)
         preview = gtk.Image()
         self._filechooser.set_preview_widget(preview)
-        self._filechooser.connect("update-preview", self.update_preview_cb, preview)
+        self._filechooser.connect("update-preview", 
+                                  self.update_preview_cb, preview)
         tab2_label = gtk.Label(_("Files"))
         tab2_label.set_attributes(label_attributes)
         tab2_label.show()
@@ -218,11 +233,20 @@ class SugarCommander(activity.Activity):
 
     def update_preview_cb(self,  file_chooser, preview):
         filename = file_chooser.get_preview_filename()
-        try:
-            pixbuf = gtk.gdk.pixbuf_new_from_file_at_size(filename, style.zoom(320), style.zoom(240))
+        file_mimetype = mime.get_for_file(filename)
+        if file_mimetype.startswith('image/'):
+            pixbuf = gtk.gdk.pixbuf_new_from_file_at_size(filename, 
+                                                          style.zoom(320), style.zoom(240))
             preview.set_from_pixbuf(pixbuf)
             have_preview = True
-        except:
+        elif file_mimetype  == 'application/x-cbz':
+            fname = self.extract_image(filename)
+            pixbuf = gtk.gdk.pixbuf_new_from_file_at_size(fname, 
+                                                          style.zoom(320), style.zoom(240))
+            preview.set_from_pixbuf(pixbuf)
+            have_preview = True
+            os.remove(fname)
+        else:
             have_preview = False
         file_chooser.set_preview_widget_active(have_preview)
         return
@@ -336,9 +360,6 @@ class SugarCommander(activity.Activity):
         self.create_preview(jobject.object_id)
 
     def create_preview(self,  object_id):
-        width = style.zoom(320)
-        height = style.zoom(240)
-        
         jobject = datastore.get(object_id)
         
         if jobject.metadata.has_key('preview'):
@@ -350,7 +371,9 @@ class SugarCommander(activity.Activity):
                     return
                 if jobject.metadata['mime_type']  == 'application/x-cbz':
                     filename = jobject.get_file_path()
-                    self.extract_image(filename)
+                    fname = self.extract_image(filename)
+                    self.show_image(fname)
+                    os.remove(fname)
                     return
 
         if jobject.metadata.has_key('preview') and \
@@ -363,7 +386,6 @@ class SugarCommander(activity.Activity):
                 preview_data = base64.b64decode(jobject.metadata['preview'])
 
             loader = gtk.gdk.PixbufLoader()
-            # loader.set_size(width, height)
             loader.write(preview_data)
             scaled_buf = loader.get_pixbuf()
             loader.close()
@@ -411,15 +433,21 @@ class SugarCommander(activity.Activity):
     def create_journal_entry(self,  widget,  data=None):
         filename = self._filechooser.get_filename()
         journal_entry = datastore.create()
-        journal_title = filename
-        journal_entry.metadata['title'] = journal_title
+        journal_entry.metadata['title'] = self.make_new_filename(filename)
         journal_entry.metadata['title_set_by_user'] = '1'
         journal_entry.metadata['keep'] = '0'
         file_mimetype = mime.get_for_file(filename)
         if not file_mimetype is None:
             journal_entry.metadata['mime_type'] = file_mimetype
         journal_entry.metadata['buddies'] = ''
-        preview = self.create_preview_metadata(filename)
+        if file_mimetype.startswith('image/'):
+            preview = self.create_preview_metadata(filename)
+        elif file_mimetype  == 'application/x-cbz':
+            fname = self.extract_image(filename)
+            preview = self.create_preview_metadata(fname)
+            os.remove(fname)
+        else:
+            preview = ''
         if not preview  == '':
             journal_entry.metadata['preview'] =  dbus.ByteArray(preview)
         else:
@@ -427,7 +455,8 @@ class SugarCommander(activity.Activity):
             
         journal_entry.file_path = filename
         datastore.write(journal_entry)
-        self._alert(_('Success'),  _('%s added to Journal.') % filename)
+        self._alert(_('Success'),  _('%s added to Journal.') 
+                    % self.make_new_filename(filename))
    
     def _alert(self, title, text=None):
         alert = NotifyAlert(timeout=20)
@@ -442,38 +471,11 @@ class SugarCommander(activity.Activity):
 
     def show_image(self, filename):
         "display a resized image in a preview"
-        scaled_buf = self.create_image_pixbuf(filename)
+        scaled_buf = gtk.gdk.pixbuf_new_from_file_at_size(filename, 
+                                                          style.zoom(320), style.zoom(240))
         self.image.set_from_pixbuf(scaled_buf)
         self.image.show()
 
-    def create_image_pixbuf(self, filename):
-#        width = style.zoom(320)
-#        height = style.zoom(240)
-#        # get the size of the image.
-#        im = pygame.image.load(filename)
-#        image_width, image_height = im.get_size()
-#        getcontext().prec = 7
-#        s_a_ratio = Decimal(height) / Decimal(width)
-#        i_a_ratio = Decimal(image_height) / Decimal(image_width)
-#        new_width = image_width
-#        new_height = image_height
-#        new_width = width
-#        new_height = image_height * width
-#        if image_width > 1:
-#            new_height /= image_width
-#
-#        if new_height > width:
-#            new_height *= width
-#            if new_width > 1:
-#                new_height /= new_width
-#            new_width = width
-#
-#        pixbuf = gtk.gdk.pixbuf_new_from_file(filename)
-#        scaled_buf = pixbuf.scale_simple(new_width, new_height, 
-#                                         gtk.gdk.INTERP_BILINEAR)
-#        return scaled_buf
-        return gtk.gdk.pixbuf_new_from_file_at_size(filename, style.zoom(320), style.zoom(240))
-        
     def extract_image(self,  filename):
         zf = zipfile.ZipFile(filename, 'r')
         image_files = zf.namelist()
@@ -482,8 +484,7 @@ class SugarCommander(activity.Activity):
             if self.save_extracted_file(zf, image_files[0]) == True:
                 fname = os.path.join(self.get_activity_root(), 'instance',  
                                      self.make_new_filename(image_files[0]))
-                self.show_image(fname)
-                os.remove(fname)
+                return fname
 
     def save_extracted_file(self, zipfile, filename):
         "Extract the file to a temp directory for viewing"
@@ -491,7 +492,6 @@ class SugarCommander(activity.Activity):
             filebytes = zipfile.read(filename)
         except BadZipfile, err:
             print 'Error opening the zip file: %s' % (err)
-            # self._alert('Error', 'Error opening the zip file')
             return False
         except KeyError,  err:
             self._alert('Key Error', 'Zipfile key not found: '  
@@ -518,13 +518,15 @@ class SugarCommander(activity.Activity):
         if not file_mimetype.startswith('image/'):
             return ''
             
-        scaled_pixbuf = self.create_image_pixbuf(filename)
+        scaled_pixbuf = gtk.gdk.pixbuf_new_from_file_at_size(filename,
+                                                              style.zoom(320), style.zoom(240))
         preview_data = []
 
         def save_func(buf, data):
             data.append(buf)
 
-        scaled_pixbuf.save_to_callback(save_func, 'png', user_data=preview_data)
+        scaled_pixbuf.save_to_callback(save_func, 'png', 
+                                       user_data=preview_data)
         preview_data = ''.join(preview_data)
 
         return preview_data
