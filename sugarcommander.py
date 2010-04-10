@@ -466,12 +466,12 @@ class SugarCommander(activity.Activity):
         alert = NotifyAlert(timeout=20)
         alert.props.title = title
         alert.props.msg = text
-        self.addalert(alert)
+        self.add_alert(alert)
         alert.connect('response', self.alert_cancel_cb)
         alert.show()
 
     def alert_cancel_cb(self, alert, response_id):
-        self.removealert(alert)
+        self.remove_alert(alert)
 
     def show_image(self, filename):
         "display a resized image in a preview"
