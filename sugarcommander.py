@@ -19,10 +19,7 @@ import logging
 import os
 import gtk
 import pango
-import pygame
-from decimal import *
 import zipfile
-from zipfile import BadZipfile
 from sugar import mime
 from sugar.activity import activity
 from sugar.datastore import datastore
@@ -39,7 +36,6 @@ COLUMN_JOBJECT = 2
 DS_DBUS_SERVICE = 'org.laptop.sugar.DataStore'
 DS_DBUS_INTERFACE = 'org.laptop.sugar.DataStore'
 DS_DBUS_PATH = '/org/laptop/sugar/DataStore'
-import dbus
 
 _logger = logging.getLogger('sugar-commander')
 
@@ -47,7 +43,9 @@ class SugarCommander(activity.Activity):
     def __init__(self, handle, create_jobject=True):
         "The entry point to the Activity"
         activity.Activity.__init__(self, handle,  False)
- 
+        self.selected_journal_entry = None
+        self.selected_path = None
+        
         canvas = gtk.Notebook()
         canvas.props.show_border = True
         canvas.props.show_tabs = True
@@ -59,9 +57,9 @@ class SugarCommander(activity.Activity):
         tv_journal = gtk.TreeView(self.ls_journal)
         tv_journal.set_rules_hint(True)
         tv_journal.set_search_column(COLUMN_TITLE)
-        selection_journal = tv_journal.get_selection()
-        selection_journal.set_mode(gtk.SELECTION_SINGLE)
-        selection_journal.connect("changed", self.selection_journal_cb)
+        self.selection_journal = tv_journal.get_selection()
+        self.selection_journal.set_mode(gtk.SELECTION_BROWSE)
+        self.selection_journal.connect("changed", self.selection_journal_cb)
         renderer = gtk.CellRendererText()
         renderer.set_property('wrap-mode', gtk.WRAP_WORD)
         renderer.set_property('wrap-width', 500)
@@ -275,15 +273,18 @@ class SugarCommander(activity.Activity):
         try:
             jobject = datastore.get(object_id)
         except:
-            self.title_entry.set_text('')
-            description_textbuffer = self.description_textview.get_buffer()
-            description_textbuffer.set_text('')
-            tags_textbuffer = self.tags_textview.get_buffer()
-            tags_textbuffer.set_text('')
-            self.btn_save.props.sensitive = False
-            self.btn_delete.props.sensitive = False
-            self.image.clear()
-            self.image.show()
+            if not self.selected_path is None:
+                self.selection_journal.select_path(self.selected_path)
+            else:
+                self.title_entry.set_text('')
+                description_textbuffer = self.description_textview.get_buffer()
+                description_textbuffer.set_text('')
+                tags_textbuffer = self.tags_textview.get_buffer()
+                tags_textbuffer.set_text('')
+                self.btn_save.props.sensitive = False
+                self.btn_delete.props.sensitive = False
+                self.image.clear()
+                self.image.show()
         
     def update_entry(self):
         needs_update = False
@@ -344,6 +345,7 @@ class SugarCommander(activity.Activity):
             jobject = datastore.get(jobject.object_id)
             self.selected_journal_entry = jobject
             self.set_form_fields(jobject)
+            self.selected_path = model.get_path(iter)
 
     def set_form_fields(self, jobject):
         self.title_entry.set_text(jobject.metadata['title'])
@@ -416,7 +418,6 @@ class SugarCommander(activity.Activity):
             'title',  'mime_type'])
 
         self.ls_journal.clear()
-        mount = ''
         for i in xrange (0, num_objects, 1):
             iter = self.ls_journal.append()
             title = ds_objects[i].metadata['title']
@@ -424,7 +425,10 @@ class SugarCommander(activity.Activity):
             mime = ds_objects[i].metadata['mime_type']
             self.ls_journal.set(iter, COLUMN_MIME, mime)
             self.ls_journal.set(iter, COLUMN_JOBJECT, ds_objects[i])
- 
+            if not self.selected_journal_entry is None and \
+                self.selected_journal_entry.object_id == ds_objects[i].object_id:
+                self.selection_journal.select_iter(iter)
+
         self.ls_journal.set_sort_column_id(COLUMN_TITLE,  gtk.SORT_ASCENDING)
         v_adjustment = self.list_scroller_journal.get_vadjustment()
         v_adjustment.value = 0
@@ -481,7 +485,7 @@ class SugarCommander(activity.Activity):
         image_files = zf.namelist()
         image_files.sort()
         if len(image_files) > 0:
-            if self.save_extracted_file(zf, image_files[0]) == True:
+            if self.save_extracted_file(zf, image_files[0]):
                 fname = os.path.join(self.get_activity_root(), 'instance',  
                                      self.make_new_filename(image_files[0]))
                 return fname
@@ -490,7 +494,7 @@ class SugarCommander(activity.Activity):
         "Extract the file to a temp directory for viewing"
         try:
             filebytes = zipfile.read(filename)
-        except BadZipfile, err:
+        except zipfile.BadZipfile, err:
             print 'Error opening the zip file: %s' % (err)
             return False
         except KeyError,  err:
@@ -505,7 +509,7 @@ class SugarCommander(activity.Activity):
         try:
             f.write(filebytes)
         finally:
-            f.close
+            f.close()
         return True
 
     def make_new_filename(self, filename):
