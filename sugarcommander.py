@@ -223,9 +223,9 @@ class SugarCommander(activity.Activity):
         bus = dbus.SessionBus()
         remote_object = bus.get_object(DS_DBUS_SERVICE, DS_DBUS_PATH)
         _datastore = dbus.Interface(remote_object, DS_DBUS_INTERFACE)
-        _datastore.connect_to_signal('Created', self._datastore_created_cb)
-        _datastore.connect_to_signal('Updated', self._datastore_updated_cb)
-        _datastore.connect_to_signal('Deleted', self._datastore_deleted_cb)
+        _datastore.connect_to_signal('Created', self.datastore_created_cb)
+        _datastore.connect_to_signal('Updated', self.datastore_updated_cb)
+        _datastore.connect_to_signal('Deleted', self.datastore_deleted_cb)
 
         self.selected_journal_entry = None
 
@@ -258,16 +258,16 @@ class SugarCommander(activity.Activity):
     def delete_button_press_event_cb(self, entry, event):
         datastore.delete(self.selected_journal_entry.object_id)
 
-    def _datastore_created_cb(self, uid):
+    def datastore_created_cb(self, uid):
         self.load_journal_table()
         
-    def _datastore_updated_cb(self,  uid):
+    def datastore_updated_cb(self,  uid):
         self.load_journal_table()
         object_id = self.selected_journal_entry.object_id
         jobject = datastore.get(object_id)
         self.set_form_fields(jobject)
         
-    def _datastore_deleted_cb(self,  uid):
+    def datastore_deleted_cb(self,  uid):
         self.load_journal_table()
         object_id = self.selected_journal_entry.object_id
         try:
@@ -317,18 +317,18 @@ class SugarCommander(activity.Activity):
 
         if needs_update:
             datastore.write(jobject, update_mtime=False,
-                            reply_handler=self._datastore_write_cb,
-                            error_handler=self._datastore_write_error_cb)
+                            reply_handler=self.datastore_write_cb,
+                            error_handler=self.datastore_write_error_cb)
         if needs_reload:
             self.load_journal_table()
 
         self.btn_save.props.sensitive = False
     
-    def _datastore_write_cb(self):
+    def datastore_write_cb(self):
         pass
 
-    def _datastore_write_error_cb(self, error):
-        logging.error('sugarcommander._datastore_write_error_cb: %r' % error)
+    def datastore_write_error_cb(self, error):
+        logging.error('sugarcommander.datastore_write_error_cb: %r' % error)
 
     def close(self,  skip_save=False):
         "Override the close method so we don't try to create a Journal entry."
@@ -459,19 +459,19 @@ class SugarCommander(activity.Activity):
             
         journal_entry.file_path = filename
         datastore.write(journal_entry)
-        self._alert(_('Success'),  _('%s added to Journal.') 
+        self.alert(_('Success'),  _('%s added to Journal.') 
                     % self.make_new_filename(filename))
    
-    def _alert(self, title, text=None):
+    def alert(self, title, text=None):
         alert = NotifyAlert(timeout=20)
         alert.props.title = title
         alert.props.msg = text
-        self.add_alert(alert)
-        alert.connect('response', self._alert_cancel_cb)
+        self.addalert(alert)
+        alert.connect('response', self.alert_cancel_cb)
         alert.show()
 
-    def _alert_cancel_cb(self, alert, response_id):
-        self.remove_alert(alert)
+    def alert_cancel_cb(self, alert, response_id):
+        self.removealert(alert)
 
     def show_image(self, filename):
         "display a resized image in a preview"
@@ -498,7 +498,7 @@ class SugarCommander(activity.Activity):
             print 'Error opening the zip file: %s' % (err)
             return False
         except KeyError,  err:
-            self._alert('Key Error', 'Zipfile key not found: '  
+            self.alert('Key Error', 'Zipfile key not found: '  
                         + str(filename))
             return
         outfn = self.make_new_filename(filename)
