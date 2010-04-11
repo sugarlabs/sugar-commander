@@ -302,7 +302,6 @@ class SugarCommander(activity.Activity):
         
     def update_entry(self):
         needs_update = False
-        needs_reload = False
         
         if self.selected_journal_entry is None:
             return
@@ -315,7 +314,6 @@ class SugarCommander(activity.Activity):
             jobject.metadata['title'] = self.title_entry.props.text
             jobject.metadata['title_set_by_user'] = '1'
             needs_update = True
-            needs_reload = True
 
         old_tags = jobject.metadata.get('tags', None)
         new_tags = self.tags_textview.props.buffer.props.text
@@ -333,9 +331,6 @@ class SugarCommander(activity.Activity):
             datastore.write(jobject, update_mtime=False,
                             reply_handler=self.datastore_write_cb,
                             error_handler=self.datastore_write_error_cb)
-        if needs_reload:
-            self.load_journal_table()
-
         self.btn_save.props.sensitive = False
     
     def datastore_write_cb(self):
