@@ -262,29 +262,43 @@ class SugarCommander(activity.Activity):
         self.load_journal_table()
         
     def datastore_updated_cb(self,  uid):
-        self.load_journal_table()
+        iter = self.ls_journal.get_iter_first()
+        for row in self.ls_journal:
+            jobject = row[COLUMN_JOBJECT]
+            if jobject.object_id == uid:
+                title = jobject.metadata['title']
+                self.ls_journal.set(iter, COLUMN_TITLE, title)
+                mime = jobject.metadata['mime_type']
+                self.ls_journal.set(iter, COLUMN_MIME, mime)
+                break
+            iter = self.ls_journal.iter_next(iter)
         object_id = self.selected_journal_entry.object_id
-        jobject = datastore.get(object_id)
-        self.set_form_fields(jobject)
+        if object_id == uid:
+            jobject = datastore.get(object_id)
+            self.set_form_fields(jobject)
         
     def datastore_deleted_cb(self,  uid):
-        self.load_journal_table()
-        object_id = self.selected_journal_entry.object_id
-        try:
-            jobject = datastore.get(object_id)
-        except:
-            if not self.selected_path is None:
-                self.selection_journal.select_path(self.selected_path)
-            else:
-                self.title_entry.set_text('')
-                description_textbuffer = self.description_textview.get_buffer()
-                description_textbuffer.set_text('')
-                tags_textbuffer = self.tags_textview.get_buffer()
-                tags_textbuffer.set_text('')
-                self.btn_save.props.sensitive = False
-                self.btn_delete.props.sensitive = False
-                self.image.clear()
-                self.image.show()
+        save_path = self.selected_path
+        iter = self.ls_journal.get_iter_first()
+        for row in self.ls_journal:
+            jobject = row[COLUMN_JOBJECT]
+            if jobject.object_id == uid:
+                self.ls_journal.remove(iter)
+                break
+            iter = self.ls_journal.iter_next(iter)
+            
+        if not save_path is None:
+            self.selection_journal.select_path(save_path)
+        else:
+            self.title_entry.set_text('')
+            description_textbuffer = self.description_textview.get_buffer()
+            description_textbuffer.set_text('')
+            tags_textbuffer = self.tags_textview.get_buffer()
+            tags_textbuffer.set_text('')
+            self.btn_save.props.sensitive = False
+            self.btn_delete.props.sensitive = False
+            self.image.clear()
+            self.image.show()
         
     def update_entry(self):
         needs_update = False
