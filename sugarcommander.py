@@ -231,22 +231,25 @@ class SugarCommander(activity.Activity):
 
         self.selected_journal_entry = None
 
-    def update_preview_cb(self,  file_chooser, preview):
+    def update_preview_cb(self, file_chooser, preview):
         filename = file_chooser.get_preview_filename()
-        file_mimetype = mime.get_for_file(filename)
-        if file_mimetype.startswith('image/'):
-            pixbuf = gtk.gdk.pixbuf_new_from_file_at_size(filename, 
+        try:
+            file_mimetype = mime.get_for_file(filename)
+            if file_mimetype.startswith('image/'):
+                pixbuf = gtk.gdk.pixbuf_new_from_file_at_size(filename, 
                                                           style.zoom(320), style.zoom(240))
-            preview.set_from_pixbuf(pixbuf)
-            have_preview = True
-        elif file_mimetype  == 'application/x-cbz':
-            fname = self.extract_image(filename)
-            pixbuf = gtk.gdk.pixbuf_new_from_file_at_size(fname, 
+                preview.set_from_pixbuf(pixbuf)
+                have_preview = True
+            elif file_mimetype  == 'application/x-cbz':
+                fname = self.extract_image(filename)
+                pixbuf = gtk.gdk.pixbuf_new_from_file_at_size(fname, 
                                                           style.zoom(320), style.zoom(240))
-            preview.set_from_pixbuf(pixbuf)
-            have_preview = True
-            os.remove(fname)
-        else:
+                preview.set_from_pixbuf(pixbuf)
+                have_preview = True
+                os.remove(fname)
+            else:
+                have_preview = False
+        except:
             have_preview = False
         file_chooser.set_preview_widget_active(have_preview)
         return
@@ -500,10 +503,17 @@ class SugarCommander(activity.Activity):
         zf = zipfile.ZipFile(filename, 'r')
         image_files = zf.namelist()
         image_files.sort()
+        file_to_extract = image_files[0]
+        extract_new_filename = self.make_new_filename(file_to_extract)
+        if extract_new_filename is None or extract_new_filename == '':
+            # skip over directory name if the images are in a subdirectory.
+            file_to_extract = image_files[1]
+            extract_new_filename = self.make_new_filename(file_to_extract)
+            
         if len(image_files) > 0:
-            if self.save_extracted_file(zf, image_files[0]):
+            if self.save_extracted_file(zf, file_to_extract):
                 fname = os.path.join(self.get_activity_root(), 'instance',  
-                                     self.make_new_filename(image_files[0]))
+                                     extract_new_filename)
                 return fname
 
     def save_extracted_file(self, zipfile, filename):
