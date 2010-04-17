@@ -30,8 +30,8 @@ import gobject
 import dbus
 
 COLUMN_TITLE = 0
-COLUMN_MIME = 1
-COLUMN_SIZE = 2
+COLUMN_SIZE = 1
+COLUMN_MIME = 2
 COLUMN_JOBJECT = 3
 
 DS_DBUS_SERVICE = 'org.laptop.sugar.DataStore'
@@ -53,8 +53,8 @@ class SugarCommander(activity.Activity):
         canvas.show()
         
         self.ls_journal = gtk.ListStore(gobject.TYPE_STRING, 
-                gobject.TYPE_STRING,  
                 gobject.TYPE_UINT64, 
+                gobject.TYPE_STRING,  
                 gobject.TYPE_PYOBJECT)
         self.tv_journal = gtk.TreeView(self.ls_journal)
         self.tv_journal.set_rules_hint(True)
@@ -71,21 +71,21 @@ class SugarCommander(activity.Activity):
         self.col_journal.set_sort_column_id(COLUMN_TITLE)
         self.tv_journal.append_column(self.col_journal)
         
-        mime_renderer = gtk.CellRendererText()
-        mime_renderer.set_property('width', 150)
-        self.col_mime = gtk.TreeViewColumn(_('MIME Type'), mime_renderer, 
-                                           text=COLUMN_MIME)
-        self.col_mime.set_sort_column_id(COLUMN_MIME)
-        self.tv_journal.append_column(self.col_mime)
-        
         size_renderer = gtk.CellRendererText()
-        size_renderer.set_property('width', 50)
+        size_renderer.set_property('width', 100)
         size_renderer.set_property('alignment', pango.ALIGN_RIGHT)
-        size_renderer.set_property('xalign', 1.0)
+        size_renderer.set_property('xalign', 0.8)
         self.col_size = gtk.TreeViewColumn(_('Size (KB)'), size_renderer, 
                                            text=COLUMN_SIZE)
         self.col_size.set_sort_column_id(COLUMN_SIZE)
         self.tv_journal.append_column(self.col_size)
+        
+        mime_renderer = gtk.CellRendererText()
+        mime_renderer.set_property('width', 200)
+        self.col_mime = gtk.TreeViewColumn(_('MIME Type'), mime_renderer, 
+                                           text=COLUMN_MIME)
+        self.col_mime.set_sort_column_id(COLUMN_MIME)
+        self.tv_journal.append_column(self.col_mime)
         
         self.list_scroller_journal = gtk.ScrolledWindow(
                         hadjustment=None, vadjustment=None)
