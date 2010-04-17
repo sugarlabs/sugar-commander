@@ -266,11 +266,11 @@ class SugarCommander(activity.Activity):
         for row in self.ls_journal:
             jobject = row[COLUMN_JOBJECT]
             if jobject.object_id == uid:
+                print 'update journal table entry!'
                 title = jobject.metadata['title']
                 self.ls_journal.set(iter, COLUMN_TITLE, title)
                 mime = jobject.metadata['mime_type']
                 self.ls_journal.set(iter, COLUMN_MIME, mime)
-                break
             iter = self.ls_journal.iter_next(iter)
         object_id = self.selected_journal_entry.object_id
         if object_id == uid:
