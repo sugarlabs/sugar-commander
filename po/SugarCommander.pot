@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-24 18:52-0500\n"
+"POT-Creation-Date: 2010-04-17 11:58-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,47 +20,52 @@ msgstr ""
 msgid "Sugar Commander"
 msgstr ""
 
-#: sugarcommander.py:58 sugarcommander.py:102
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:69
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:136
 msgid "Title"
 msgstr ""
 
-#: sugarcommander.py:62
-msgid "MIME"
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:76
+msgid "MIME Type"
 msgstr ""
 
-#: sugarcommander.py:74
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:85
+msgid "Size (KB)"
+msgstr ""
+
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:100
 msgid "Journal"
 msgstr ""
 
-#: sugarcommander.py:86
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:113
 msgid "Save"
 msgstr ""
 
-#: sugarcommander.py:92
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:121
 msgid "Delete"
 msgstr ""
 
-#: sugarcommander.py:113
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:151
 msgid "Description"
 msgstr ""
 
-#: sugarcommander.py:126
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:169
 msgid "Tags"
 msgstr ""
 
-#: sugarcommander.py:160
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:211
 msgid "Copy File To The Journal"
 msgstr ""
 
-#: sugarcommander.py:164
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:219
 msgid "Files"
 msgstr ""
 
-#: sugarcommander.py:345
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:505
 msgid "Success"
 msgstr ""
 
-#: sugarcommander.py:345
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:505
 #, python-format
 msgid "%s added to Journal."
 msgstr ""

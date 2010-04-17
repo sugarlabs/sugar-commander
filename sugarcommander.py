@@ -31,7 +31,8 @@ import dbus
 
 COLUMN_TITLE = 0
 COLUMN_MIME = 1
-COLUMN_JOBJECT = 2
+COLUMN_SIZE = 2
+COLUMN_JOBJECT = 3
 
 DS_DBUS_SERVICE = 'org.laptop.sugar.DataStore'
 DS_DBUS_INTERFACE = 'org.laptop.sugar.DataStore'
@@ -52,7 +53,8 @@ class SugarCommander(activity.Activity):
         canvas.show()
         
         self.ls_journal = gtk.ListStore(gobject.TYPE_STRING, 
-                gobject.TYPE_STRING,
+                gobject.TYPE_STRING,  
+                gobject.TYPE_UINT64, 
                 gobject.TYPE_PYOBJECT)
         self.tv_journal = gtk.TreeView(self.ls_journal)
         self.tv_journal.set_rules_hint(True)
@@ -70,11 +72,20 @@ class SugarCommander(activity.Activity):
         self.tv_journal.append_column(self.col_journal)
         
         mime_renderer = gtk.CellRendererText()
-        mime_renderer.set_property('width', 500)
-        self.col_mime = gtk.TreeViewColumn(_('MIME'), mime_renderer, 
+        mime_renderer.set_property('width', 150)
+        self.col_mime = gtk.TreeViewColumn(_('MIME Type'), mime_renderer, 
                                            text=COLUMN_MIME)
         self.col_mime.set_sort_column_id(COLUMN_MIME)
         self.tv_journal.append_column(self.col_mime)
+        
+        size_renderer = gtk.CellRendererText()
+        size_renderer.set_property('width', 50)
+        size_renderer.set_property('alignment', pango.ALIGN_RIGHT)
+        size_renderer.set_property('xalign', 1.0)
+        self.col_size = gtk.TreeViewColumn(_('Size (KB)'), size_renderer, 
+                                           text=COLUMN_SIZE)
+        self.col_size.set_sort_column_id(COLUMN_SIZE)
+        self.tv_journal.append_column(self.col_size)
         
         self.list_scroller_journal = gtk.ScrolledWindow(
                         hadjustment=None, vadjustment=None)
@@ -271,6 +282,8 @@ class SugarCommander(activity.Activity):
         mime = new_jobject.metadata['mime_type']
         self.ls_journal.set(iter, COLUMN_MIME, mime)
         self.ls_journal.set(iter, COLUMN_JOBJECT, new_jobject)
+        size = self.get_size(new_jobject) / 1024
+        self.ls_journal.set(iter, COLUMN_SIZE, size)
         
     def datastore_updated_cb(self,  uid):
         new_jobject = datastore.get(uid)
@@ -282,6 +295,8 @@ class SugarCommander(activity.Activity):
                 self.ls_journal.set(iter, COLUMN_TITLE, title)
                 mime = jobject.metadata['mime_type']
                 self.ls_journal.set(iter, COLUMN_MIME, mime)
+                size = self.get_size(jobject) / 1024
+                self.ls_journal.set(iter, COLUMN_SIZE, size)
             iter = self.ls_journal.iter_next(iter)
         object_id = self.selected_journal_entry.object_id
         if object_id == uid:
@@ -445,14 +460,22 @@ class SugarCommander(activity.Activity):
             mime = ds_objects[i].metadata['mime_type']
             self.ls_journal.set(iter, COLUMN_MIME, mime)
             self.ls_journal.set(iter, COLUMN_JOBJECT, ds_objects[i])
-            if not self.selected_journal_entry is None and \
-                self.selected_journal_entry.object_id == ds_objects[i].object_id:
-                self.selection_journal.select_iter(iter)
+            size = self.get_size(ds_objects[i]) / 1024
+            self.ls_journal.set(iter, COLUMN_SIZE, size)
 
         self.ls_journal.set_sort_column_id(COLUMN_TITLE,  gtk.SORT_ASCENDING)
         v_adjustment = self.list_scroller_journal.get_vadjustment()
         v_adjustment.value = 0
         return ds_objects[0]
+
+    def get_size(self, jobject):
+        """Return the file size for a Journal object."""
+        logging.debug('get_file_size %r', jobject.object_id)
+        path = jobject.get_file_path()
+        if not path:
+            return 0
+
+        return os.stat(path).st_size
 
     def create_journal_entry(self,  widget,  data=None):
         filename = self._filechooser.get_filename()
