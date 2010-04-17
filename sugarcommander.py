@@ -54,11 +54,11 @@ class SugarCommander(activity.Activity):
         self.ls_journal = gtk.ListStore(gobject.TYPE_STRING, 
                 gobject.TYPE_STRING,
                 gobject.TYPE_PYOBJECT)
-        tv_journal = gtk.TreeView(self.ls_journal)
-        tv_journal.set_rules_hint(True)
-        tv_journal.set_search_column(COLUMN_TITLE)
-        self.selection_journal = tv_journal.get_selection()
-        self.selection_journal.set_mode(gtk.SELECTION_BROWSE)
+        self.tv_journal = gtk.TreeView(self.ls_journal)
+        self.tv_journal.set_rules_hint(True)
+        self.tv_journal.set_search_column(COLUMN_TITLE)
+        self.selection_journal = self.tv_journal.get_selection()
+        self.selection_journal.set_mode(gtk.SELECTION_SINGLE)
         self.selection_journal.connect("changed", self.selection_journal_cb)
         renderer = gtk.CellRendererText()
         renderer.set_property('wrap-mode', gtk.WRAP_WORD)
@@ -67,18 +67,20 @@ class SugarCommander(activity.Activity):
         self.col_journal = gtk.TreeViewColumn(_('Title'), renderer, 
                                               text=COLUMN_TITLE)
         self.col_journal.set_sort_column_id(COLUMN_TITLE)
-        tv_journal.append_column(self.col_journal)
+        self.tv_journal.append_column(self.col_journal)
         
-        self.col_mime = gtk.TreeViewColumn(_('MIME'), renderer, 
+        mime_renderer = gtk.CellRendererText()
+        mime_renderer.set_property('width', 500)
+        self.col_mime = gtk.TreeViewColumn(_('MIME'), mime_renderer, 
                                            text=COLUMN_MIME)
         self.col_mime.set_sort_column_id(COLUMN_MIME)
-        tv_journal.append_column(self.col_mime)
+        self.tv_journal.append_column(self.col_mime)
         
         self.list_scroller_journal = gtk.ScrolledWindow(
                         hadjustment=None, vadjustment=None)
         self.list_scroller_journal.set_policy(
                     gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
-        self.list_scroller_journal.add(tv_journal)
+        self.list_scroller_journal.add(self.tv_journal)
         
         label_attributes = pango.AttrList()
         label_attributes.insert(pango.AttrSize(14000, 0, -1))
@@ -87,7 +89,7 @@ class SugarCommander(activity.Activity):
         tab1_label = gtk.Label(_("Journal"))
         tab1_label.set_attributes(label_attributes)
         tab1_label.show()
-        tv_journal.show()
+        self.tv_journal.show()
         self.list_scroller_journal.show()
         
         column_table = gtk.Table(rows=1,  columns=2,  homogeneous = False)
@@ -229,22 +231,25 @@ class SugarCommander(activity.Activity):
 
         self.selected_journal_entry = None
 
-    def update_preview_cb(self,  file_chooser, preview):
+    def update_preview_cb(self, file_chooser, preview):
         filename = file_chooser.get_preview_filename()
-        file_mimetype = mime.get_for_file(filename)
-        if file_mimetype.startswith('image/'):
-            pixbuf = gtk.gdk.pixbuf_new_from_file_at_size(filename, 
+        try:
+            file_mimetype = mime.get_for_file(filename)
+            if file_mimetype.startswith('image/'):
+                pixbuf = gtk.gdk.pixbuf_new_from_file_at_size(filename, 
                                                           style.zoom(320), style.zoom(240))
-            preview.set_from_pixbuf(pixbuf)
-            have_preview = True
-        elif file_mimetype  == 'application/x-cbz':
-            fname = self.extract_image(filename)
-            pixbuf = gtk.gdk.pixbuf_new_from_file_at_size(fname, 
+                preview.set_from_pixbuf(pixbuf)
+                have_preview = True
+            elif file_mimetype  == 'application/x-cbz':
+                fname = self.extract_image(filename)
+                pixbuf = gtk.gdk.pixbuf_new_from_file_at_size(fname, 
                                                           style.zoom(320), style.zoom(240))
-            preview.set_from_pixbuf(pixbuf)
-            have_preview = True
-            os.remove(fname)
-        else:
+                preview.set_from_pixbuf(pixbuf)
+                have_preview = True
+                os.remove(fname)
+            else:
+                have_preview = False
+        except:
             have_preview = False
         file_chooser.set_preview_widget_active(have_preview)
         return
@@ -259,14 +264,20 @@ class SugarCommander(activity.Activity):
         datastore.delete(self.selected_journal_entry.object_id)
 
     def datastore_created_cb(self, uid):
-        self.load_journal_table()
+        new_jobject = datastore.get(uid)
+        iter = self.ls_journal.append()
+        title = new_jobject.metadata['title']
+        self.ls_journal.set(iter, COLUMN_TITLE, title)
+        mime = new_jobject.metadata['mime_type']
+        self.ls_journal.set(iter, COLUMN_MIME, mime)
+        self.ls_journal.set(iter, COLUMN_JOBJECT, new_jobject)
         
     def datastore_updated_cb(self,  uid):
+        new_jobject = datastore.get(uid)
         iter = self.ls_journal.get_iter_first()
         for row in self.ls_journal:
             jobject = row[COLUMN_JOBJECT]
             if jobject.object_id == uid:
-                print 'update journal table entry!'
                 title = jobject.metadata['title']
                 self.ls_journal.set(iter, COLUMN_TITLE, title)
                 mime = jobject.metadata['mime_type']
@@ -274,8 +285,7 @@ class SugarCommander(activity.Activity):
             iter = self.ls_journal.iter_next(iter)
         object_id = self.selected_journal_entry.object_id
         if object_id == uid:
-            jobject = datastore.get(object_id)
-            self.set_form_fields(jobject)
+            self.set_form_fields(new_jobject)
         
     def datastore_deleted_cb(self,  uid):
         save_path = self.selected_path
@@ -287,9 +297,10 @@ class SugarCommander(activity.Activity):
                 break
             iter = self.ls_journal.iter_next(iter)
             
-        if not save_path is None:
+        try:
             self.selection_journal.select_path(save_path)
-        else:
+            self.tv_journal.grab_focus()
+        except:
             self.title_entry.set_text('')
             description_textbuffer = self.description_textview.get_buffer()
             description_textbuffer.set_text('')
@@ -493,10 +504,17 @@ class SugarCommander(activity.Activity):
         zf = zipfile.ZipFile(filename, 'r')
         image_files = zf.namelist()
         image_files.sort()
+        file_to_extract = image_files[0]
+        extract_new_filename = self.make_new_filename(file_to_extract)
+        if extract_new_filename is None or extract_new_filename == '':
+            # skip over directory name if the images are in a subdirectory.
+            file_to_extract = image_files[1]
+            extract_new_filename = self.make_new_filename(file_to_extract)
+            
         if len(image_files) > 0:
-            if self.save_extracted_file(zf, image_files[0]):
+            if self.save_extracted_file(zf, file_to_extract):
                 fname = os.path.join(self.get_activity_root(), 'instance',  
-                                     self.make_new_filename(image_files[0]))
+                                     extract_new_filename)
                 return fname
 
     def save_extracted_file(self, zipfile, filename):
