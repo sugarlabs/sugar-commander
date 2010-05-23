@@ -466,7 +466,6 @@ class SugarCommander(activity.Activity):
         self.ls_journal.set_sort_column_id(COLUMN_TITLE,  gtk.SORT_ASCENDING)
         v_adjustment = self.list_scroller_journal.get_vadjustment()
         v_adjustment.value = 0
-        return ds_objects[0]
 
     def get_size(self, jobject):
         """Return the file size for a Journal object."""
