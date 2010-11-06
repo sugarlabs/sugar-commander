@@ -17,8 +17,10 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 import logging
 import os
+import time
 import gtk
 import pango
+import pygame
 import zipfile
 from sugar import mime
 from sugar.activity import activity
@@ -33,6 +35,9 @@ COLUMN_TITLE = 0
 COLUMN_SIZE = 1
 COLUMN_MIME = 2
 COLUMN_JOBJECT = 3
+
+ARBITRARY_LARGE_HEIGHT = 10000
+JPEG_QUALITY = 90
 
 DS_DBUS_SERVICE = 'org.laptop.sugar.DataStore'
 DS_DBUS_INTERFACE = 'org.laptop.sugar.DataStore'
@@ -110,10 +115,28 @@ class SugarCommander(activity.Activity):
         image_table.attach(self.image, 0, 2, 0, 1, xoptions=gtk.FILL|gtk.SHRINK, 
                            yoptions=gtk.FILL|gtk.SHRINK, xpadding=10, ypadding=10)
 
+        self.dimension_label = gtk.Label("")
+        image_table.attach(self.dimension_label,  0, 2, 1, 2,  xoptions=gtk.SHRINK,
+                             yoptions=gtk.SHRINK,  xpadding=10,  ypadding=10)
+
+        self.btn_resize = gtk.Button(_("Resize To Width"))
+        self.btn_resize.connect('button_press_event',  
+                              self.resize_button_press_event_cb)
+        image_table.attach(self.btn_resize,  0, 1, 2, 3,  xoptions=gtk.SHRINK,
+                             yoptions=gtk.SHRINK,  xpadding=10,  ypadding=10)
+
+        self.resize_width_entry = gtk.Entry(max=4)
+        image_table.attach(self.resize_width_entry, 1, 2, 2, 3, 
+                           xoptions=gtk.SHRINK, 
+                           yoptions=gtk.SHRINK, xpadding=10, ypadding=10)
+        self.resize_width_entry.set_text('600')
+        self.resize_width_entry.connect('key_press_event', 
+                                    self.resize_key_press_event_cb)
+
         self.btn_save = gtk.Button(_("Save"))
         self.btn_save.connect('button_press_event',  
                               self.save_button_press_event_cb)
-        image_table.attach(self.btn_save,  0, 1, 1, 2,  xoptions=gtk.SHRINK,
+        image_table.attach(self.btn_save,  0, 1, 3, 4,  xoptions=gtk.SHRINK,
                              yoptions=gtk.SHRINK,  xpadding=10,  ypadding=10)
         self.btn_save.props.sensitive = False
         self.btn_save.show()
@@ -121,7 +144,7 @@ class SugarCommander(activity.Activity):
         self.btn_delete = gtk.Button(_("Delete"))
         self.btn_delete.connect('button_press_event',  
                                 self.delete_button_press_event_cb)
-        image_table.attach(self.btn_delete,  1, 2, 1, 2,  xoptions=gtk.SHRINK,
+        image_table.attach(self.btn_delete,  1, 2, 3, 4,  xoptions=gtk.SHRINK,
                             yoptions=gtk.SHRINK,  xpadding=10,  ypadding=10)
         self.btn_delete.props.sensitive = False
         self.btn_delete.show()
@@ -198,6 +221,8 @@ class SugarCommander(activity.Activity):
                             xpadding=10,  ypadding=10)
         image_table.show()
         column_table.show()
+        self.btn_resize.hide()
+        self.resize_width_entry.hide()
 
         vbox = gtk.VBox(homogeneous=True,  spacing=5)
         vbox.pack_start(column_table)
@@ -223,6 +248,9 @@ class SugarCommander(activity.Activity):
 
         self.set_canvas(canvas)
         self.show_all()
+        self.btn_resize.hide()
+        self.resize_width_entry.hide()
+        self.dimension_label.hide()
         
         toolbox = activity.ActivityToolbox(self)
         activity_toolbar = toolbox.get_activity_toolbar()
@@ -268,6 +296,40 @@ class SugarCommander(activity.Activity):
     def key_press_event_cb(self, entry, event):
         self.btn_save.props.sensitive = True
 
+    def resize_key_press_event_cb(self, entry, event):
+        keyname = gtk.gdk.keyval_name(event.keyval)
+        if ((keyname < '0' or keyname > '9') and keyname != 'BackSpace'
+            and keyname != 'Left' and keyname != 'Right'
+            and keyname != 'KP_Left' and keyname != 'KP_Right'
+            and keyname != 'Delete' and keyname != 'End'
+            and keyname != 'KP_End' and keyname != 'Home'
+            and keyname != 'KP_Home'):
+            return True
+        else:
+            return False
+
+    def resize_button_press_event_cb(self, entry, event):
+        jobject = self.selected_journal_entry
+        filename = jobject.get_file_path()
+        resize_to_width = int(self.resize_width_entry.get_text())
+        tempfile = os.path.join(self.get_activity_root(), 'instance',
+                            'tmp%i' % time.time())
+        try:
+            scaled_pixbuf = gtk.gdk.pixbuf_new_from_file_at_size(filename, resize_to_width, ARBITRARY_LARGE_HEIGHT)
+            scaled_pixbuf.save(tempfile, "jpeg", {"quality":"%d" % JPEG_QUALITY})
+        except:
+            print 'File could not be converted'
+
+        jobject.file_path = tempfile
+        jobject.metadata['mime_type'] = 'image/jpeg'
+        im = pygame.image.load(tempfile)
+        image_width, image_height = im.get_size()
+        self.dimension_label.set_text(str(image_width) + "x" + str(image_height))
+        self.dimension_label.show()
+        datastore.write(jobject, update_mtime=False,
+                        reply_handler=self.datastore_write_cb,
+                        error_handler=self.datastore_write_error_cb)
+        
     def save_button_press_event_cb(self, entry, event):
         self.update_entry()
 
@@ -380,6 +442,18 @@ class SugarCommander(activity.Activity):
             jobject = datastore.get(jobject.object_id)
             self.selected_journal_entry = jobject
             self.set_form_fields(jobject)
+            if jobject.metadata['mime_type'] .startswith('image/'):
+                self.btn_resize.show()
+                self.resize_width_entry.show()
+                filename = jobject.get_file_path()
+                im = pygame.image.load(filename)
+                image_width, image_height = im.get_size()
+                self.dimension_label.set_text(str(image_width) + "x" + str(image_height))
+                self.dimension_label.show()
+            else:
+                self.btn_resize.hide()
+                self.resize_width_entry.hide()
+                self.dimension_label.hide()
             self.selected_path = model.get_path(iter)
 
     def set_form_fields(self, jobject):
