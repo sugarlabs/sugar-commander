@@ -149,10 +149,6 @@ class SugarCommander(activity.Activity):
         self.btn_delete.props.sensitive = False
         self.btn_delete.show()
 
-        column_table.attach(image_table,  0, 1, 0, 1,  
-                            xoptions=gtk.FILL|gtk.SHRINK,
-                              yoptions=gtk.SHRINK,  xpadding=10,  ypadding=10)
-
         entry_table = gtk.Table(rows=3, columns=2, 
                                 homogeneous=False)
 
@@ -209,16 +205,28 @@ class SugarCommander(activity.Activity):
         
         entry_table.show()
 
+        scroller_image = gtk.ScrolledWindow(
+                                                 hadjustment=None, vadjustment=None)
+        scroller_image.set_policy(gtk.POLICY_NEVER, gtk.POLICY_AUTOMATIC)
+        scroller_image.add_with_viewport(image_table)
+        scroller_image.show()
+        
         self.scroller_entry = gtk.ScrolledWindow(
                                                  hadjustment=None, vadjustment=None)
         self.scroller_entry.set_policy(gtk.POLICY_NEVER, gtk.POLICY_AUTOMATIC)
         self.scroller_entry.add_with_viewport(entry_table)
         self.scroller_entry.show()
         
+        column_table.attach(scroller_image,  0, 1, 0, 1,  
+                            xoptions=gtk.FILL|gtk.EXPAND|gtk.SHRINK,  
+                            yoptions=gtk.FILL|gtk.EXPAND|gtk.SHRINK, 
+                            xpadding=10,  ypadding=10)
+
         column_table.attach(self.scroller_entry,  1, 2, 0, 1,  
                             xoptions=gtk.FILL|gtk.EXPAND|gtk.SHRINK,  
                             yoptions=gtk.FILL|gtk.EXPAND|gtk.SHRINK, 
                             xpadding=10,  ypadding=10)
+                            
         image_table.show()
         column_table.show()
         self.btn_resize.hide()
