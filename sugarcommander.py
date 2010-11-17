@@ -37,7 +37,7 @@ COLUMN_MIME = 2
 COLUMN_JOBJECT = 3
 
 ARBITRARY_LARGE_HEIGHT = 10000
-JPEG_QUALITY = 90
+JPEG_QUALITY = 80
 
 DS_DBUS_SERVICE = 'org.laptop.sugar.DataStore'
 DS_DBUS_INTERFACE = 'org.laptop.sugar.DataStore'
@@ -311,7 +311,7 @@ class SugarCommander(activity.Activity):
             and keyname != 'KP_Left' and keyname != 'KP_Right'
             and keyname != 'Delete' and keyname != 'End'
             and keyname != 'KP_End' and keyname != 'Home'
-            and keyname != 'KP_Home'):
+            and keyname != 'KP_Home' and keyname != 'KP_Delete'):
             return True
         else:
             return False
@@ -319,7 +319,12 @@ class SugarCommander(activity.Activity):
     def resize_button_press_event_cb(self, entry, event):
         jobject = self.selected_journal_entry
         filename = jobject.get_file_path()
+        im = pygame.image.load(filename)
+        image_width, image_height = im.get_size()
         resize_to_width = int(self.resize_width_entry.get_text())
+        if (image_width < resize_to_width):
+            self.alert(_('Error'),  _('Image cannot be made larger, only smaller.')) 
+            return
         tempfile = os.path.join(self.get_activity_root(), 'instance',
                             'tmp%i' % time.time())
         try:
@@ -327,6 +332,7 @@ class SugarCommander(activity.Activity):
             scaled_pixbuf.save(tempfile, "jpeg", {"quality":"%d" % JPEG_QUALITY})
         except:
             print 'File could not be converted'
+            return
 
         jobject.file_path = tempfile
         jobject.metadata['mime_type'] = 'image/jpeg'
