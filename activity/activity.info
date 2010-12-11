@@ -4,5 +4,5 @@ service_name = org.laptop.sugar.SugarCommander
 icon = scommander
 exec = sugar-activity sugarcommander.SugarCommander
 show_launcher = yes
-activity_version = 6
+activity_version = 7
 license = GPLv2+

@@ -490,7 +490,8 @@ class SugarCommander(activity.Activity):
         if jobject.metadata.has_key('preview'):
             preview = jobject.metadata['preview']
             if preview is None or preview == '' or preview == 'None':
-                if jobject.metadata['mime_type'] .startswith('image/'):
+                if jobject.metadata['mime_type'] .startswith('image/') and \
+                    jobject.metadata['mime_type'] != 'image/djvu':
                     filename = jobject.get_file_path()
                     self.show_image(filename)
                     return
@@ -500,6 +501,8 @@ class SugarCommander(activity.Activity):
                     self.show_image(fname)
                     os.remove(fname)
                     return
+                self.show_image('xoimage.jpg')
+                return
 
         if jobject.metadata.has_key('preview') and \
                 len(jobject.metadata['preview']) > 4:
@@ -606,7 +609,7 @@ class SugarCommander(activity.Activity):
     def show_image(self, filename):
         "display a resized image in a preview"
         scaled_buf = gtk.gdk.pixbuf_new_from_file_at_size(filename, 
-                                                          style.zoom(320), style.zoom(240))
+                                                          style.zoom(300), style.zoom(225))
         self.image.set_from_pixbuf(scaled_buf)
         self.image.show()
 
