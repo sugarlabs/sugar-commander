@@ -456,7 +456,8 @@ class SugarCommander(activity.Activity):
             jobject = datastore.get(jobject.object_id)
             self.selected_journal_entry = jobject
             self.set_form_fields(jobject)
-            if jobject.metadata['mime_type'] .startswith('image/')  and file_mimetype != 'image/vnd.djvu':
+            if jobject.metadata['mime_type'] .startswith('image/')  \
+                and jobject.metadata['mime_type'] != 'image/vnd.djvu':
                 self.btn_resize.show()
                 self.resize_width_entry.show()
                 filename = jobject.get_file_path()
@@ -577,7 +578,7 @@ class SugarCommander(activity.Activity):
         if not file_mimetype is None:
             journal_entry.metadata['mime_type'] = file_mimetype
         journal_entry.metadata['buddies'] = ''
-        if file_mimetype.startswith('image/'):
+        if file_mimetype.startswith('image/')  and file_mimetype != 'image/vnd.djvu':
             preview = self.create_preview_metadata(filename)
         elif file_mimetype  == 'application/x-cbz':
             fname = self.extract_image(filename)
