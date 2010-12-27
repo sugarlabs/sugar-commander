@@ -282,7 +282,7 @@ class SugarCommander(activity.Activity):
         filename = file_chooser.get_preview_filename()
         try:
             file_mimetype = mime.get_for_file(filename)
-            if file_mimetype.startswith('image/'):
+            if file_mimetype.startswith('image/')  and file_mimetype != 'image/vnd.djvu':
                 pixbuf = gtk.gdk.pixbuf_new_from_file_at_size(filename, 
                                                           style.zoom(320), style.zoom(240))
                 preview.set_from_pixbuf(pixbuf)
@@ -456,7 +456,7 @@ class SugarCommander(activity.Activity):
             jobject = datastore.get(jobject.object_id)
             self.selected_journal_entry = jobject
             self.set_form_fields(jobject)
-            if jobject.metadata['mime_type'] .startswith('image/'):
+            if jobject.metadata['mime_type'] .startswith('image/')  and file_mimetype != 'image/vnd.djvu':
                 self.btn_resize.show()
                 self.resize_width_entry.show()
                 filename = jobject.get_file_path()
@@ -491,7 +491,7 @@ class SugarCommander(activity.Activity):
             preview = jobject.metadata['preview']
             if preview is None or preview == '' or preview == 'None':
                 if jobject.metadata['mime_type'] .startswith('image/') and \
-                    jobject.metadata['mime_type'] != 'image/djvu':
+                    jobject.metadata['mime_type'] != 'image/vnd.djvu':
                     filename = jobject.get_file_path()
                     self.show_image(filename)
                     return
