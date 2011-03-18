@@ -1,0 +1,72 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-04-17 11:58-0500\n"
+"PO-Revision-Date: 2011-03-16 18:43+0200\n"
+"Last-Translator: Carlo Falciola <cfalciola@yahoo.it>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: it\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Pootle 2.0.1\n"
+
+#: activity/activity.info:2
+msgid "Sugar Commander"
+msgstr "Sugar Commander"
+
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:69
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:136
+msgid "Title"
+msgstr "Titolo"
+
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:76
+msgid "MIME Type"
+msgstr "MIME Type"
+
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:85
+msgid "Size (KB)"
+msgstr "Dimensione (KB)"
+
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:100
+msgid "Journal"
+msgstr "Diario"
+
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:113
+msgid "Save"
+msgstr "Salva"
+
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:121
+msgid "Delete"
+msgstr "Cancella"
+
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:151
+msgid "Description"
+msgstr "Descrizione"
+
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:169
+msgid "Tags"
+msgstr "Etichette"
+
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:211
+msgid "Copy File To The Journal"
+msgstr "Copia il File nel Diario"
+
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:219
+msgid "Files"
+msgstr "File"
+
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:505
+msgid "Success"
+msgstr "Successo"
+
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:505
+#, python-format
+msgid "%s added to Journal."
+msgstr "%s inserito nel Diario."
