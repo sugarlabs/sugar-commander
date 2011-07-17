@@ -6,9 +6,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-04-17 11:58-0500\n"
-"PO-Revision-Date: 2011-02-21 10:16+0200\n"
-"Last-Translator: Stefan <stefan@unterhauser.name>\n"
+"POT-Creation-Date: 2011-03-25 00:31-0400\n"
+"PO-Revision-Date: 2011-07-18 00:13+0200\n"
+"Last-Translator: Markus <m.slg@gmx.de>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -22,52 +22,63 @@ msgstr ""
 msgid "Sugar Commander"
 msgstr "Sugar Befehlshaber"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:69
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:136
+#: sugarcommander.py:74 sugarcommander.py:155
 msgid "Title"
 msgstr "Titel"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:76
-msgid "MIME Type"
-msgstr "MIME Typ"
-
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:85
+#: sugarcommander.py:83
 msgid "Size (KB)"
 msgstr "Größe (KB)"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:100
+#: sugarcommander.py:90
+msgid "MIME Type"
+msgstr "MIME Typ"
+
+#: sugarcommander.py:105
 msgid "Journal"
 msgstr "Tagebuch"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:113
+#: sugarcommander.py:122
+msgid "Resize To Width"
+msgstr "Breite einpassen"
+
+#: sugarcommander.py:136
 msgid "Save"
 msgstr "Speichern"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:121
+#: sugarcommander.py:144
 msgid "Delete"
 msgstr "Löschen"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:151
+#: sugarcommander.py:170
 msgid "Description"
-msgstr "Darstellung"
+msgstr "Beschreibung"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:169
+#: sugarcommander.py:188
 msgid "Tags"
 msgstr "Etikett"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:211
+#: sugarcommander.py:244
 msgid "Copy File To The Journal"
 msgstr "Kopiere Datei in das Tagebuch"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:219
+#: sugarcommander.py:252
 msgid "Files"
 msgstr "Dateien"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:505
+#: sugarcommander.py:326
+msgid "Error"
+msgstr "Fehler"
+
+#: sugarcommander.py:326
+msgid "Image cannot be made larger, only smaller."
+msgstr "Das Bild lässt sich nicht vergrößern, nur verkleinern."
+
+#: sugarcommander.py:596
 msgid "Success"
 msgstr "Erfolg"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:505
+#: sugarcommander.py:596
 #, python-format
 msgid "%s added to Journal."
 msgstr "%s ist dem Tagebuch hinzugefügt"
