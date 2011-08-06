@@ -48,9 +48,11 @@ _logger = logging.getLogger('sugar-commander')
 class SugarCommander(activity.Activity):
     def __init__(self, handle, create_jobject=True):
         "The entry point to the Activity"
-        activity.Activity.__init__(self, handle,  False)
+        activity.Activity.__init__(self, handle)
         self.selected_journal_entry = None
         self.selected_path = None
+        self.update_log_entries = ''
+        self.close_requested = False
         
         canvas = gtk.Notebook()
         canvas.props.show_border = True
@@ -343,6 +345,8 @@ class SugarCommander(activity.Activity):
         datastore.write(jobject, update_mtime=False,
                         reply_handler=self.datastore_write_cb,
                         error_handler=self.datastore_write_error_cb)
+        title = jobject.metadata.get('title', None)
+        self.update_log_entries += '\n' + _('Entry %s resized.') % title
         
     def save_button_press_event_cb(self, entry, event):
         self.update_entry()
@@ -384,10 +388,13 @@ class SugarCommander(activity.Activity):
         for row in self.ls_journal:
             jobject = row[COLUMN_JOBJECT]
             if jobject.object_id == uid:
+                title = jobject.metadata.get('title', None)
+                self.update_log_entries += '\n' + _('Entry %s deleted.') % title
                 self.ls_journal.remove(iter)
                 break
             iter = self.ls_journal.iter_next(iter)
             
+
         try:
             self.selection_journal.select_path(save_path)
             self.tv_journal.grab_focus()
@@ -415,18 +422,21 @@ class SugarCommander(activity.Activity):
         if old_title != self.title_entry.props.text:
             jobject.metadata['title'] = self.title_entry.props.text
             jobject.metadata['title_set_by_user'] = '1'
+            self.update_log_entries += '\n' + _('Entry title changed to %s') % self.title_entry.props.text
             needs_update = True
 
         old_tags = jobject.metadata.get('tags', None)
         new_tags = self.tags_textview.props.buffer.props.text
         if old_tags != new_tags:
             jobject.metadata['tags'] = new_tags
+            self.update_log_entries += '\n' + _('Entry %s tags updated.') % self.title_entry.props.text
             needs_update = True
 
         old_description = jobject.metadata.get('description', None)
         new_description = self.description_textview.props.buffer.props.text
         if old_description != new_description:
             jobject.metadata['description'] = new_description
+            self.update_log_entries += '\n' + _('Entry %s description updated.') % self.title_entry.props.text
             needs_update = True
 
         if needs_update:
@@ -443,7 +453,18 @@ class SugarCommander(activity.Activity):
 
     def close(self,  skip_save=False):
         "Override the close method so we don't try to create a Journal entry."
-        activity.Activity.close(self,  True)
+        activity.Activity.close(self,  False)
+
+    def write_file(self, filename):
+        "Save meta data for the file."
+        if self.close_requested:
+            old_description = self.metadata.get('description', None)
+            new_description = old_description + self.update_log_entries
+            self.metadata['description'] = new_description
+
+    def can_close(self):
+        self.close_requested = True
+        return True
 
     def selection_journal_cb(self, selection):
         self.btn_delete.props.sensitive = True
@@ -593,6 +614,7 @@ class SugarCommander(activity.Activity):
             
         journal_entry.file_path = filename
         datastore.write(journal_entry)
+        self.update_log_entries += '\n' + _('File %s copied to the Journal.') % filename
         self.alert(_('Success'),  _('%s added to Journal.') 
                     % self.make_new_filename(filename))
    
