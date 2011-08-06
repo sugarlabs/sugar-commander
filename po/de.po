@@ -1,0 +1,84 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-03-25 00:31-0400\n"
+"PO-Revision-Date: 2011-07-18 00:13+0200\n"
+"Last-Translator: Markus <m.slg@gmx.de>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Pootle 2.0.1\n"
+
+#: activity/activity.info:2
+#, fuzzy
+msgid "Sugar Commander"
+msgstr "Sugar Befehlshaber"
+
+#: sugarcommander.py:74 sugarcommander.py:155
+msgid "Title"
+msgstr "Titel"
+
+#: sugarcommander.py:83
+msgid "Size (KB)"
+msgstr "Größe (KB)"
+
+#: sugarcommander.py:90
+msgid "MIME Type"
+msgstr "MIME Typ"
+
+#: sugarcommander.py:105
+msgid "Journal"
+msgstr "Tagebuch"
+
+#: sugarcommander.py:122
+msgid "Resize To Width"
+msgstr "Breite einpassen"
+
+#: sugarcommander.py:136
+msgid "Save"
+msgstr "Speichern"
+
+#: sugarcommander.py:144
+msgid "Delete"
+msgstr "Löschen"
+
+#: sugarcommander.py:170
+msgid "Description"
+msgstr "Beschreibung"
+
+#: sugarcommander.py:188
+msgid "Tags"
+msgstr "Etikett"
+
+#: sugarcommander.py:244
+msgid "Copy File To The Journal"
+msgstr "Kopiere Datei in das Tagebuch"
+
+#: sugarcommander.py:252
+msgid "Files"
+msgstr "Dateien"
+
+#: sugarcommander.py:326
+msgid "Error"
+msgstr "Fehler"
+
+#: sugarcommander.py:326
+msgid "Image cannot be made larger, only smaller."
+msgstr "Das Bild lässt sich nicht vergrößern, nur verkleinern."
+
+#: sugarcommander.py:596
+msgid "Success"
+msgstr "Erfolg"
+
+#: sugarcommander.py:596
+#, python-format
+msgid "%s added to Journal."
+msgstr "%s ist dem Tagebuch hinzugefügt"

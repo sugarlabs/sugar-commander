@@ -1,0 +1,72 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-04-17 11:58-0500\n"
+"PO-Revision-Date: 2011-03-08 07:03+0200\n"
+"Last-Translator: Rafael Ortiz <rafael@laptop.org>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Pootle 2.0.1\n"
+
+#: activity/activity.info:2
+msgid "Sugar Commander"
+msgstr ""
+
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:69
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:136
+msgid "Title"
+msgstr "Titulo "
+
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:76
+msgid "MIME Type"
+msgstr "Tipo MIME"
+
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:85
+msgid "Size (KB)"
+msgstr "Tamaño (KB)"
+
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:100
+msgid "Journal"
+msgstr "Diario"
+
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:113
+msgid "Save"
+msgstr "Grabar"
+
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:121
+msgid "Delete"
+msgstr "Borrar"
+
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:151
+msgid "Description"
+msgstr "Descripcion"
+
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:169
+msgid "Tags"
+msgstr "Etiquetas"
+
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:211
+msgid "Copy File To The Journal"
+msgstr "Copiar archivo a el diario."
+
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:219
+msgid "Files"
+msgstr "Archivos"
+
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:505
+msgid "Success"
+msgstr "Exito"
+
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:505
+#, python-format
+msgid "%s added to Journal."
+msgstr ""
