@@ -457,16 +457,17 @@ class SugarCommander(activity.Activity):
 
     def write_file(self, filename):
         "Save meta data for the file."
-        if self.close_requested:
-            old_description = self.metadata.get('description', 'Sugar Commander log:')
-            new_description = old_description + self.update_log_entries
-            self.metadata['description'] = new_description
-            self.metadata['mime_type'] = 'text/plain'
-            f = open(filename, 'w')
-            try:
-                f.write(new_description)
-            finally:
-                f.close()
+        # if self.close_requested:
+        old_description = self.metadata.get('description', 'Sugar Commander log:')
+        new_description = old_description + self.update_log_entries
+        self.metadata['description'] = new_description
+        self.metadata['mime_type'] = 'text/plain'
+        f = open(filename, 'w')
+        try:
+            f.write(new_description)
+        finally:
+            f.close()
+        self.update_log_entries = ''
 
     def can_close(self):
         self.close_requested = True
