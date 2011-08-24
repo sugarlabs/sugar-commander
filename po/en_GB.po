@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-25 00:31-0400\n"
-"PO-Revision-Date: 2011-06-03 08:21+0200\n"
+"POT-Creation-Date: 2011-08-06 15:46-0500\n"
+"PO-Revision-Date: 2011-08-07 16:19+0200\n"
 "Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: en_GB\n"
@@ -21,63 +21,94 @@ msgstr ""
 msgid "Sugar Commander"
 msgstr "Sugar Commander"
 
-#: sugarcommander.py:74 sugarcommander.py:155
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:76
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:157
 msgid "Title"
 msgstr "Title"
 
-#: sugarcommander.py:83
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:85
 msgid "Size (KB)"
 msgstr "Size (KB)"
 
-#: sugarcommander.py:90
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:92
 msgid "MIME Type"
 msgstr "MIME Type"
 
-#: sugarcommander.py:105
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:107
 msgid "Journal"
 msgstr "Journal"
 
-#: sugarcommander.py:122
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:124
 msgid "Resize To Width"
 msgstr "Resize To Width"
 
-#: sugarcommander.py:136
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:138
 msgid "Save"
 msgstr "Save"
 
-#: sugarcommander.py:144
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:146
 msgid "Delete"
 msgstr "Delete"
 
-#: sugarcommander.py:170
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:172
 msgid "Description"
 msgstr "Description"
 
-#: sugarcommander.py:188
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:190
 msgid "Tags"
 msgstr "Tags"
 
-#: sugarcommander.py:244
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:246
 msgid "Copy File To The Journal"
 msgstr "Copy File To The Journal"
 
-#: sugarcommander.py:252
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:254
 msgid "Files"
 msgstr "Files"
 
-#: sugarcommander.py:326
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:328
 msgid "Error"
 msgstr "Error"
 
-#: sugarcommander.py:326
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:328
 msgid "Image cannot be made larger, only smaller."
 msgstr "Image cannot be made larger, only smaller."
 
-#: sugarcommander.py:596
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:349
+#, python-format
+msgid "Entry %s resized."
+msgstr "Entry %s resized."
+
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:392
+#, python-format
+msgid "Entry %s deleted."
+msgstr "Entry %s deleted."
+
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:425
+#, python-format
+msgid "Entry title changed to %s"
+msgstr "Entry title changed to %s"
+
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:432
+#, python-format
+msgid "Entry %s tags updated."
+msgstr "Entry %s tags updated."
+
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:439
+#, python-format
+msgid "Entry %s description updated."
+msgstr "Entry %s description updated."
+
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:617
+#, python-format
+msgid "File %s copied to the Journal."
+msgstr "File %s copied to the Journal."
+
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:618
 msgid "Success"
 msgstr "Success"
 
-#: sugarcommander.py:596
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:618
 #, python-format
 msgid "%s added to Journal."
 msgstr "%s added to Journal."
