@@ -6,9 +6,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-04-17 11:58-0500\n"
-"PO-Revision-Date: 2011-02-27 11:10+0200\n"
-"Last-Translator: John Sarlis <sarlis@sch.gr>\n"
+"POT-Creation-Date: 2011-08-06 15:46-0500\n"
+"PO-Revision-Date: 2011-08-07 15:58+0200\n"
+"Last-Translator: Yannis <kiolalis@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
@@ -21,52 +21,94 @@ msgstr ""
 msgid "Sugar Commander"
 msgstr "Διατάχτης του Sugar"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:69
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:136
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:76
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:157
 msgid "Title"
 msgstr "Τίτλος"
-
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:76
-msgid "MIME Type"
-msgstr "Τύποι MIME"
 
 #: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:85
 msgid "Size (KB)"
 msgstr "Μέγεθος (KB)"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:100
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:92
+msgid "MIME Type"
+msgstr "Τύποι MIME"
+
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:107
 msgid "Journal"
 msgstr "Ημερολόγιο"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:113
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:124
+msgid "Resize To Width"
+msgstr "Αλλαγή μεγέθους κατά πλάτος"
+
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:138
 msgid "Save"
 msgstr "Αποθήκευση"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:121
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:146
 msgid "Delete"
 msgstr "Διαγραφή"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:151
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:172
 msgid "Description"
 msgstr "Περιγραφή"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:169
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:190
 msgid "Tags"
 msgstr "Σύνδεσμοι"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:211
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:246
 msgid "Copy File To The Journal"
 msgstr "Αντιγραφή Αρχείου στο Ημερολόγιο"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:219
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:254
 msgid "Files"
 msgstr "Αρχεία"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:505
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:328
+msgid "Error"
+msgstr "Σφάλμα"
+
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:328
+msgid "Image cannot be made larger, only smaller."
+msgstr "Η εικόνα δεν μπορεί να γίνει μεγαλύτερη, μόνο μικρότερη."
+
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:349
+#, python-format
+msgid "Entry %s resized."
+msgstr "Η καταχώρηση %s άλλαξε μέγεθος"
+
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:392
+#, python-format
+msgid "Entry %s deleted."
+msgstr "Η καταχώρηση %s διαγράφηκε"
+
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:425
+#, python-format
+msgid "Entry title changed to %s"
+msgstr "Ο τίτλος της καταχώρησης άλλαξε σε %s "
+
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:432
+#, python-format
+msgid "Entry %s tags updated."
+msgstr "Οι ετικέτες της καταχώρησης %s ενημερώθηκαν"
+
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:439
+#, python-format
+msgid "Entry %s description updated."
+msgstr "Η περιγραφή της καταχώρησης %s ενημερώθηκε"
+
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:617
+#, python-format
+msgid "File %s copied to the Journal."
+msgstr "Το αρχείο %s αντιγράφηκε στο Ημερολόγιο"
+
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:618
 msgid "Success"
 msgstr "Επιτυχής"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:505
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:618
 #, python-format
 msgid "%s added to Journal."
 msgstr "Το %s προστέθηκε στο Ημερολόγιο."
