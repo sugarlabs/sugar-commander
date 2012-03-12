@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-08-06 15:46-0500\n"
-"PO-Revision-Date: 2012-02-29 00:02+0200\n"
-"Last-Translator: Chris <cjl@laptop.org>\n"
+"PO-Revision-Date: 2012-03-12 11:20+0200\n"
+"Last-Translator: Meechai <malaku38@hotmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: th\n"
 "MIME-Version: 1.0\n"
@@ -19,16 +19,16 @@ msgstr ""
 
 #: activity/activity.info:2
 msgid "Sugar Commander"
-msgstr "ผู้สั่งการSugar"
+msgstr "Sugar Commander"
 
 #: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:76
 #: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:157
 msgid "Title"
-msgstr "ตำแหน่ง"
+msgstr "ชื่อเรื่อง"
 
 #: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:85
 msgid "Size (KB)"
-msgstr "ขนาด(KB)"
+msgstr "ขนาด (KB)"
 
 #: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:92
 msgid "MIME Type"
@@ -60,11 +60,11 @@ msgstr "ป้ายกำกับ"
 
 #: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:246
 msgid "Copy File To The Journal"
-msgstr "คัดลอกแฟ้มไปที่บันทึก"
+msgstr "คัดลอกไฟล์ไปที่บันทึกประจำวัน"
 
 #: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:254
 msgid "Files"
-msgstr "แฟ้ม"
+msgstr "ไฟล์"
 
 #: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:328
 msgid "Error"
@@ -72,37 +72,37 @@ msgstr "ข้อผิดพลาด"
 
 #: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:328
 msgid "Image cannot be made larger, only smaller."
-msgstr "รูปภาพไม่สามารถทำให้มีขนาดใหญ่ขึ้นแค่เพียงทำให้มีขนาดเล็กลงกว่าเดิม"
+msgstr "ไม่สามารถขยายภาพให้ใหญ่ขึ้น, ทำได้เพียงย่อขนาด"
 
 #: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:349
 #, python-format
 msgid "Entry %s resized."
-msgstr "เข้าที่ %s เปลี่ยนขนาด"
+msgstr "รายการ %s ถูกเปลี่ยนขนาด"
 
 #: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:392
 #, python-format
 msgid "Entry %s deleted."
-msgstr "รายการ %s ที่ถูกลบ"
+msgstr "รายการ %s ถูกลบ"
 
 #: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:425
 #, python-format
 msgid "Entry title changed to %s"
-msgstr "ชื่อการเข้ามีการเปลี่ยนแปลงเป็น %s"
+msgstr "ชื่อรายการเปลี่ยนเป็น %s"
 
 #: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:432
 #, python-format
 msgid "Entry %s tags updated."
-msgstr "รายการ %s แท็กอัพเดท"
+msgstr "รายการ %s ถูกปรับปรุงป้ายกำกับ"
 
 #: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:439
 #, python-format
 msgid "Entry %s description updated."
-msgstr "รายการ %s ของรายละเอียดอัพเดท"
+msgstr "รายการ %s ถูกปรับปรุงรายละเอียด"
 
 #: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:617
 #, python-format
 msgid "File %s copied to the Journal."
-msgstr "แฟ้มจำนวน %s ถูกคัดลอกไปยังบันทึก"
+msgstr "ไฟล์จำนวน %s ถูกคัดลอกไปยังบันทึกประจำวัน"
 
 #: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:618
 msgid "Success"
@@ -111,4 +111,4 @@ msgstr "สำเร็จ"
 #: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:618
 #, python-format
 msgid "%s added to Journal."
-msgstr "จำนวน%s ที่เพิ่มไปยังบันทึก"
+msgstr "%s ถูกเพิ่มไปยังบันทึกประจำวัน"
