@@ -7,15 +7,15 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-08-06 15:46-0500\n"
-"PO-Revision-Date: 2011-08-07 15:58+0200\n"
-"Last-Translator: Yannis <kiolalis@gmail.com>\n"
+"PO-Revision-Date: 2011-11-03 03:48+0200\n"
+"Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Pootle 2.0.1\n"
+"X-Generator: Pootle 2.0.5\n"
 
 #: activity/activity.info:2
 msgid "Sugar Commander"
@@ -87,7 +87,7 @@ msgstr "Η καταχώρηση %s διαγράφηκε"
 #: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:425
 #, python-format
 msgid "Entry title changed to %s"
-msgstr "Ο τίτλος της καταχώρησης άλλαξε σε %s "
+msgstr "Ο τίτλος της καταχώρησης άλλαξε σε %s"
 
 #: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:432
 #, python-format

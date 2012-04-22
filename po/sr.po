@@ -2,70 +2,114 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-04-17 11:58-0500\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2011-08-06 15:46-0500\n"
+"PO-Revision-Date: 2012-02-16 07:41+0200\n"
+"Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: sr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Translate Toolkit 1.7.0\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
+"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Pootle 2.0.5\n"
 
 #: activity/activity.info:2
 msgid "Sugar Commander"
-msgstr ""
-
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:69
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:136
-msgid "Title"
-msgstr ""
+msgstr "Шечерни Командир"
 
 #: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:76
-msgid "MIME Type"
-msgstr ""
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:157
+msgid "Title"
+msgstr "Наслов"
 
 #: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:85
 msgid "Size (KB)"
-msgstr ""
+msgstr "Величина (KB)"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:100
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:92
+msgid "MIME Type"
+msgstr "MIME Врста"
+
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:107
 msgid "Journal"
-msgstr ""
+msgstr "Дневник"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:113
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:124
+msgid "Resize To Width"
+msgstr "Промени у величину ширине"
+
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:138
 msgid "Save"
-msgstr ""
+msgstr "Сачувај"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:121
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:146
 msgid "Delete"
-msgstr ""
+msgstr "Обриши"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:151
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:172
 msgid "Description"
-msgstr ""
+msgstr "Опис"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:169
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:190
 msgid "Tags"
-msgstr ""
+msgstr "Етикете"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:211
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:246
 msgid "Copy File To The Journal"
-msgstr ""
+msgstr "Умножи Датотеку у Дневник"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:219
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:254
 msgid "Files"
-msgstr ""
+msgstr "Датотека"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:505
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:328
+msgid "Error"
+msgstr "Грешка"
+
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:328
+msgid "Image cannot be made larger, only smaller."
+msgstr "Слика не може бити направљена већа, само мања."
+
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:349
+#, python-format
+msgid "Entry %s resized."
+msgstr "Упис %s променио величину."
+
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:392
+#, python-format
+msgid "Entry %s deleted."
+msgstr "Упис %s обрисан."
+
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:425
+#, python-format
+msgid "Entry title changed to %s"
+msgstr "Наслов уписа променен на %s"
+
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:432
+#, python-format
+msgid "Entry %s tags updated."
+msgstr "Упис %s ознаке ажуриране."
+
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:439
+#, python-format
+msgid "Entry %s description updated."
+msgstr "Упис %s опис ажуриран."
+
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:617
+#, python-format
+msgid "File %s copied to the Journal."
+msgstr "Датотека %s уножена у Дневник."
+
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:618
 msgid "Success"
-msgstr ""
+msgstr "Успех"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:505
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:618
 #, python-format
 msgid "%s added to Journal."
-msgstr ""
+msgstr "%s додано у Дневник."

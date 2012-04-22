@@ -2,70 +2,113 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-04-17 11:58-0500\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2011-08-06 15:46-0500\n"
+"PO-Revision-Date: 2011-08-10 00:35+0200\n"
+"Last-Translator: Yuan Chao <yuanchao@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Translate Toolkit 1.7.0\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Pootle 2.0.1\n"
 
 #: activity/activity.info:2
 msgid "Sugar Commander"
-msgstr ""
-
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:69
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:136
-msgid "Title"
-msgstr ""
+msgstr "Sugar命令器"
 
 #: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:76
-msgid "MIME Type"
-msgstr ""
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:157
+msgid "Title"
+msgstr "標題"
 
 #: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:85
 msgid "Size (KB)"
-msgstr ""
+msgstr "大小(kb)"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:100
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:92
+msgid "MIME Type"
+msgstr "MINE類型"
+
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:107
 msgid "Journal"
-msgstr ""
+msgstr "日誌"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:113
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:124
+msgid "Resize To Width"
+msgstr "調整寬度大小"
+
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:138
 msgid "Save"
-msgstr ""
+msgstr "存檔"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:121
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:146
 msgid "Delete"
-msgstr ""
+msgstr "删除"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:151
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:172
 msgid "Description"
-msgstr ""
+msgstr "描述"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:169
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:190
 msgid "Tags"
-msgstr ""
+msgstr "標記"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:211
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:246
 msgid "Copy File To The Journal"
-msgstr ""
+msgstr "複製檔案到日誌"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:219
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:254
 msgid "Files"
-msgstr ""
+msgstr "檔案"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:505
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:328
+msgid "Error"
+msgstr "錯誤"
+
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:328
+msgid "Image cannot be made larger, only smaller."
+msgstr "圖片無法放大，只能縮小。"
+
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:349
+#, python-format
+msgid "Entry %s resized."
+msgstr "%s 完成縮放"
+
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:392
+#, python-format
+msgid "Entry %s deleted."
+msgstr "%s 刪除完成"
+
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:425
+#, python-format
+msgid "Entry title changed to %s"
+msgstr "已重新命名為 %s"
+
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:432
+#, python-format
+msgid "Entry %s tags updated."
+msgstr "%s 標記已更新"
+
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:439
+#, python-format
+msgid "Entry %s description updated."
+msgstr "%s 描述已更新"
+
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:617
+#, python-format
+msgid "File %s copied to the Journal."
+msgstr "檔案 %s 已複製到日誌"
+
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:618
 msgid "Success"
-msgstr ""
+msgstr "成功"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:505
+#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:618
 #, python-format
 msgid "%s added to Journal."
-msgstr ""
+msgstr "%s 增加到日誌"
