@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-08-06 15:46-0500\n"
-"PO-Revision-Date: 2011-04-04 11:41+0200\n"
+"PO-Revision-Date: 2012-05-22 00:26+0200\n"
 "Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: id\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Pootle 2.0.1\n"
+"X-Generator: Pootle 2.0.5\n"
 
 #: activity/activity.info:2
 msgid "Sugar Commander"
@@ -23,20 +23,24 @@ msgstr ""
 
 #: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:76
 #: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:157
+#, fuzzy
 msgid "Title"
-msgstr ""
+msgstr "Judul"
 
 #: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:85
+#, fuzzy
 msgid "Size (KB)"
-msgstr ""
+msgstr "Ukuran (KB)"
 
 #: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:92
+#, fuzzy
 msgid "MIME Type"
-msgstr ""
+msgstr "Jenis MIME"
 
 #: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:107
+#, fuzzy
 msgid "Journal"
-msgstr ""
+msgstr "Jurnal"
 
 #: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:124
 msgid "Resize To Width"
@@ -47,12 +51,14 @@ msgid "Save"
 msgstr "Simpan"
 
 #: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:146
+#, fuzzy
 msgid "Delete"
-msgstr ""
+msgstr "Hapus"
 
 #: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:172
+#, fuzzy
 msgid "Description"
-msgstr ""
+msgstr "Keterangan"
 
 #: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:190
 msgid "Tags"
@@ -63,12 +69,14 @@ msgid "Copy File To The Journal"
 msgstr ""
 
 #: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:254
+#, fuzzy
 msgid "Files"
-msgstr ""
+msgstr "Berkas"
 
 #: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:328
+#, fuzzy
 msgid "Error"
-msgstr ""
+msgstr "Galat"
 
 #: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:328
 msgid "Image cannot be made larger, only smaller."
