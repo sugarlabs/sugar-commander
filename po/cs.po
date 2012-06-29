@@ -7,32 +7,32 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-08-06 15:46-0500\n"
-"PO-Revision-Date: 2011-03-18 06:15+0200\n"
-"Last-Translator: Chris <cjl@laptop.org>\n"
+"PO-Revision-Date: 2012-06-29 10:21+0200\n"
+"Last-Translator: jui <appukonrad@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Pootle 2.0.1\n"
+"X-Generator: Pootle 2.0.5\n"
 
 #: activity/activity.info:2
 msgid "Sugar Commander"
-msgstr ""
+msgstr "Sugar Commander"
 
 #: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:76
 #: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:157
 msgid "Title"
-msgstr ""
+msgstr "Název"
 
 #: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:85
 msgid "Size (KB)"
-msgstr ""
+msgstr "Velikost (KB)"
 
 #: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:92
 msgid "MIME Type"
-msgstr ""
+msgstr "MIME Typ"
 
 #: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:107
 msgid "Journal"
@@ -40,7 +40,7 @@ msgstr "Deník"
 
 #: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:124
 msgid "Resize To Width"
-msgstr ""
+msgstr "Změnit velikost na šířku"
 
 #: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:138
 msgid "Save"
@@ -56,23 +56,23 @@ msgstr "Popis"
 
 #: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:190
 msgid "Tags"
-msgstr ""
+msgstr "Štítky"
 
 #: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:246
 msgid "Copy File To The Journal"
-msgstr ""
+msgstr "Zkopírujte soubor do deníčku"
 
 #: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:254
 msgid "Files"
-msgstr ""
+msgstr "Soubory"
 
 #: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:328
 msgid "Error"
-msgstr ""
+msgstr "Chyba"
 
 #: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:328
 msgid "Image cannot be made larger, only smaller."
-msgstr ""
+msgstr "Obrázek nemůže být větší, jen menší."
 
 #: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:349
 #, python-format
