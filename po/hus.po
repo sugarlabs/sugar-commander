@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-08-06 15:46-0500\n"
-"PO-Revision-Date: 2012-03-02 05:14+0200\n"
-"Last-Translator: Chris <cjl@laptop.org>\n"
+"PO-Revision-Date: 2012-07-11 00:07+0200\n"
+"Last-Translator: ing.arturo.lara <ing.arturo.lara@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: hus\n"
 "MIME-Version: 1.0\n"
@@ -58,7 +58,7 @@ msgstr "Alwa' ólnom"
 
 #: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:190
 msgid "Tags"
-msgstr "úwbijilábchik"
+msgstr "Úwbijilábchik"
 
 #: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:246
 msgid "Copy File To The Journal"
@@ -85,7 +85,7 @@ msgstr "In otseltal an %s u jalk'unal in puwél."
 #: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:392
 #, python-format
 msgid "Entry %s deleted."
-msgstr "ótseltal an %s pakudhits."
+msgstr "Ótseltal an %s pakudhits."
 
 #: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:425
 #, python-format
