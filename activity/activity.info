@@ -1,8 +1,9 @@
 [Activity]
 name = Sugar Commander
-service_name = org.laptop.sugar.SugarCommander
+bundle_id = org.laptop.sugar.SugarCommander
 icon = scommander
 exec = sugar-activity sugarcommander.SugarCommander
 show_launcher = yes
-activity_version = 8
+activity_version = 9
 license = GPLv2+
+summary = Move files from your SD card or thumb drives to the Journal, clean up the Journal, and more!
