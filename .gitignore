@@ -3,4 +3,5 @@
 *.e4p
 *.pyc
 dist/
+locale
 
