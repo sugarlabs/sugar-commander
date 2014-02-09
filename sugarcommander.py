@@ -1,6 +1,6 @@
 # SugarCommander.py
 
-# Copyright (C) 2010 James D. Simmons <nicestep@gmail.com>
+# Copyright (C) 2014 James D. Simmons <nicestep@gmail.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,17 +18,22 @@
 import logging
 import os
 import time
-import gtk
-import pango
+from sugar3.activity import activity
+from gi.repository import Gtk
+from gi.repository import Gdk
+from gi.repository import Pango
+from sugar3.activity import widgets
+from sugar3.graphics.toolbarbox import ToolbarBox
+from sugar3.activity.widgets import ActivityToolbarButton
+from sugar3.activity.widgets import StopButton
+from sugar3 import mime
+from sugar.datastore import datastore
+from sugar3.graphics.alert import NotifyAlert
+from sugar3.graphics import style
+from gettext import gettext as _
 import pygame
 import zipfile
-from sugar import mime
-from sugar.activity import activity
-from sugar.datastore import datastore
-from sugar.graphics.alert import NotifyAlert
-from sugar.graphics import style
-from gettext import gettext as _
-import gobject
+from gi.repository import GObject
 import dbus
 
 COLUMN_TITLE = 0
@@ -54,152 +59,136 @@ class SugarCommander(activity.Activity):
         self.update_log_entries = ''
         self.close_requested = False
         
-        canvas = gtk.Notebook()
+        canvas = Gtk.Notebook()
         canvas.props.show_border = True
         canvas.props.show_tabs = True
         canvas.show()
         
-        self.ls_journal = gtk.ListStore(gobject.TYPE_STRING, 
-                gobject.TYPE_UINT64, 
-                gobject.TYPE_STRING,  
-                gobject.TYPE_PYOBJECT)
-        self.tv_journal = gtk.TreeView(self.ls_journal)
+        self.ls_journal = Gtk.ListStore(str,  GObject.TYPE_UINT64,  str,  GObject.TYPE_PYOBJECT)
+        self.tv_journal = Gtk.TreeView(self.ls_journal)
         self.tv_journal.set_rules_hint(True)
         self.tv_journal.set_search_column(COLUMN_TITLE)
         self.selection_journal = self.tv_journal.get_selection()
-        self.selection_journal.set_mode(gtk.SELECTION_SINGLE)
+        self.selection_journal.set_mode(Gtk.SelectionMode.SINGLE)
         self.selection_journal.connect("changed", self.selection_journal_cb)
-        renderer = gtk.CellRendererText()
-        renderer.set_property('wrap-mode', gtk.WRAP_WORD)
+        renderer = Gtk.CellRendererText()
+        renderer.set_property('wrap-mode', Pango.WrapMode.WORD)
         renderer.set_property('wrap-width', 500)
         renderer.set_property('width', 500)
-        self.col_journal = gtk.TreeViewColumn(_('Title'), renderer, 
+        self.col_journal = Gtk.TreeViewColumn(_('Title'), renderer, 
                                               text=COLUMN_TITLE)
         self.col_journal.set_sort_column_id(COLUMN_TITLE)
         self.tv_journal.append_column(self.col_journal)
         
-        size_renderer = gtk.CellRendererText()
+        size_renderer = Gtk.CellRendererText()
         size_renderer.set_property('width', 100)
-        size_renderer.set_property('alignment', pango.ALIGN_RIGHT)
+        size_renderer.set_property('alignment', Pango.Alignment.RIGHT)
         size_renderer.set_property('xalign', 0.8)
-        self.col_size = gtk.TreeViewColumn(_('Size (KB)'), size_renderer, 
+        self.col_size = Gtk.TreeViewColumn(_('Size (KB)'), size_renderer, 
                                            text=COLUMN_SIZE)
         self.col_size.set_sort_column_id(COLUMN_SIZE)
         self.tv_journal.append_column(self.col_size)
         
-        mime_renderer = gtk.CellRendererText()
+        mime_renderer = Gtk.CellRendererText()
         mime_renderer.set_property('width', 200)
-        self.col_mime = gtk.TreeViewColumn(_('MIME Type'), mime_renderer, 
+        self.col_mime = Gtk.TreeViewColumn(_('MIME Type'), mime_renderer, 
                                            text=COLUMN_MIME)
         self.col_mime.set_sort_column_id(COLUMN_MIME)
         self.tv_journal.append_column(self.col_mime)
         
-        self.list_scroller_journal = gtk.ScrolledWindow(
+        self.list_scroller_journal = Gtk.ScrolledWindow(
                         hadjustment=None, vadjustment=None)
         self.list_scroller_journal.set_policy(
-                    gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
+                    Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
         self.list_scroller_journal.add(self.tv_journal)
         
-        label_attributes = pango.AttrList()
-        label_attributes.insert(pango.AttrSize(14000, 0, -1))
-        label_attributes.insert(pango.AttrForeground(65535, 65535, 65535, 0, -1))
+        #label_attributes = Pango.AttrList()
+        #label_attributes.change(Pango.AttrSize(14000, 0, -1))
+        #label_attributes.change(Pango.AttrForeground(65535, 65535, 65535, 0, -1))
 
-        tab1_label = gtk.Label(_("Journal"))
-        tab1_label.set_attributes(label_attributes)
+        tab1_label = Gtk.Label(_("Journal"))
+        tab1_label.set_markup("<span foreground='#FFF'" \
+                        " size='14000'></span>")
+        # tab1_label.set_attributes(label_attributes)
         tab1_label.show()
         self.tv_journal.show()
         self.list_scroller_journal.show()
         
-        column_table = gtk.Table(rows=1,  columns=2,  homogeneous = False)
+        column_table = Gtk.Table(rows=1,  columns=2,  homogeneous = False)
         
-        image_table = gtk.Table(rows=2,  columns=2,  homogeneous=False)
-        self.image = gtk.Image()
-        image_table.attach(self.image, 0, 2, 0, 1, xoptions=gtk.FILL|gtk.SHRINK, 
-                           yoptions=gtk.FILL|gtk.SHRINK, xpadding=10, ypadding=10)
+        image_table = Gtk.Table(rows=2,  columns=2,  homogeneous=False)
+        self.image = Gtk.Image()
+        #image_table.attach(self.image, 0, 2, 0, 1, xoptions=Gtk.FILL|Gtk.SHRINK, 
+        #                   yoptions=Gtk.FILL|Gtk.SHRINK, xpadding=10, ypadding=10)
+        image_table.attach(self.image, 0, 2, 0, 1)
 
-        self.dimension_label = gtk.Label("")
-        image_table.attach(self.dimension_label,  0, 2, 1, 2,  xoptions=gtk.SHRINK,
-                             yoptions=gtk.SHRINK,  xpadding=10,  ypadding=10)
+        self.dimension_label = Gtk.Label("")
+        image_table.attach(self.dimension_label,  0, 2, 1, 2)
 
-        self.btn_resize = gtk.Button(_("Resize To Width"))
+        self.btn_resize = Gtk.Button(_("Resize To Width"))
         self.btn_resize.connect('button_press_event',  
                               self.resize_button_press_event_cb)
-        image_table.attach(self.btn_resize,  0, 1, 2, 3,  xoptions=gtk.SHRINK,
-                             yoptions=gtk.SHRINK,  xpadding=10,  ypadding=10)
+        #image_table.attach(self.btn_resize,  0, 1, 2, 3,  xoptions=Gtk.SHRINK,
+        #                     yoptions=Gtk.SHRINK,  xpadding=10,  ypadding=10)
+        image_table.attach(self.btn_resize,  0, 1, 2, 3)
 
-        self.resize_width_entry = gtk.Entry(max=4)
-        image_table.attach(self.resize_width_entry, 1, 2, 2, 3, 
-                           xoptions=gtk.SHRINK, 
-                           yoptions=gtk.SHRINK, xpadding=10, ypadding=10)
+        self.resize_width_entry = Gtk.Entry()
+        self.resize_width_entry.set_max_length(4)
+        image_table.attach(self.resize_width_entry, 1, 2, 2, 3)
         self.resize_width_entry.set_text('600')
         self.resize_width_entry.connect('key_press_event', 
                                     self.resize_key_press_event_cb)
 
-        self.btn_save = gtk.Button(_("Save"))
+        self.btn_save = Gtk.Button(_("Save"))
         self.btn_save.connect('button_press_event',  
                               self.save_button_press_event_cb)
-        image_table.attach(self.btn_save,  0, 1, 3, 4,  xoptions=gtk.SHRINK,
-                             yoptions=gtk.SHRINK,  xpadding=10,  ypadding=10)
+        image_table.attach(self.btn_save,  0, 1, 3, 4)
         self.btn_save.props.sensitive = False
         self.btn_save.show()
 
-        self.btn_delete = gtk.Button(_("Delete"))
+        self.btn_delete = Gtk.Button(_("Delete"))
         self.btn_delete.connect('button_press_event',  
                                 self.delete_button_press_event_cb)
-        image_table.attach(self.btn_delete,  1, 2, 3, 4,  xoptions=gtk.SHRINK,
-                            yoptions=gtk.SHRINK,  xpadding=10,  ypadding=10)
+        image_table.attach(self.btn_delete,  1, 2, 3, 4)
         self.btn_delete.props.sensitive = False
         self.btn_delete.show()
 
-        entry_table = gtk.Table(rows=3, columns=2, 
+        entry_table = Gtk.Table(rows=3, columns=2, 
                                 homogeneous=False)
 
-        title_label = gtk.Label(_("Title"))
-        entry_table.attach(title_label, 0, 1, 0, 1, 
-                           xoptions=gtk.SHRINK, 
-                           yoptions=gtk.SHRINK, 
-                           xpadding=10, ypadding=10)
+        title_label = Gtk.Label(_("Title"))
+        entry_table.attach(title_label, 0, 1, 0, 1)
         title_label.show()
       
-        self.title_entry = gtk.Entry(max=0)
-        entry_table.attach(self.title_entry, 1, 2, 0, 1, 
-                           xoptions=gtk.FILL|gtk.SHRINK, 
-                           yoptions=gtk.SHRINK, xpadding=10, ypadding=10)
+        self.title_entry = Gtk.Entry()
+        entry_table.attach(self.title_entry, 1, 2, 0, 1)
         self.title_entry.connect('key_press_event',  
                                  self.key_press_event_cb)
         self.title_entry.show()
     
-        description_label = gtk.Label(_("Description"))
-        entry_table.attach(description_label, 0, 1, 1, 2, 
-                           xoptions=gtk.SHRINK, 
-                           yoptions=gtk.SHRINK, 
-                           xpadding=10, ypadding=10)
+        description_label = Gtk.Label(_("Description"))
+        entry_table.attach(description_label, 0, 1, 1, 2)
         description_label.show()
         
-        self.description_textview = gtk.TextView()
-        self.description_textview.set_wrap_mode(gtk.WRAP_WORD)
-        entry_table.attach(self.description_textview, 1, 2, 1, 2, 
-                           xoptions=gtk.EXPAND|gtk.FILL|gtk.SHRINK, 
-                           yoptions=gtk.EXPAND|gtk.FILL|gtk.SHRINK, 
-                           xpadding=10, ypadding=10)
+        self.description_textview = Gtk.TextView()
+        self.description_textview.set_wrap_mode(Pango.WrapMode.WORD)
+        entry_table.attach(self.description_textview, 1, 2, 1, 2)
         self.description_textview.props.accepts_tab = False
         self.description_textview.connect('key_press_event', 
                                           self.key_press_event_cb)
         self.description_textview.show()
 
-        tags_label = gtk.Label(_("Tags"))
-        entry_table.attach(tags_label, 0, 1, 2, 3, 
-                           xoptions=gtk.SHRINK, 
-                           yoptions=gtk.SHRINK, 
-                           xpadding=10, ypadding=10)
+        tags_label = Gtk.Label(_("Tags"))
+        entry_table.attach(tags_label, 0, 1, 2, 3)
         tags_label.show()
         
-        self.tags_textview = gtk.TextView()
-        self.tags_textview.set_wrap_mode(gtk.WRAP_WORD)
-        entry_table.attach(self.tags_textview, 1, 2, 2, 3, 
-                           xoptions=gtk.FILL, 
-                           yoptions=gtk.EXPAND|gtk.FILL, 
-                           xpadding=10, ypadding=10)
+        self.tags_textview = Gtk.TextView()
+        self.tags_textview.set_wrap_mode(Pango.WrapMode.WORD)
+        #entry_table.attach(self.tags_textview, 1, 2, 2, 3, 
+        #                   xoptions=Gtk.FILL, 
+        #                   yoptions=Gtk.EXPAND|Gtk.FILL, 
+        #                   xpadding=10, ypadding=10)
+        entry_table.attach(self.tags_textview, 1, 2, 2, 3)
         self.tags_textview.props.accepts_tab = False
         self.tags_textview.connect('key_press_event', 
                                     self.key_press_event_cb)
@@ -207,52 +196,56 @@ class SugarCommander(activity.Activity):
         
         entry_table.show()
 
-        scroller_image = gtk.ScrolledWindow(
-                                                 hadjustment=None, vadjustment=None)
-        scroller_image.set_policy(gtk.POLICY_NEVER, gtk.POLICY_AUTOMATIC)
+        scroller_image = Gtk.ScrolledWindow(
+                                                hadjustment=None, vadjustment=None)
+        scroller_image.set_hexpand(False)
+        scroller_image.set_vexpand(True)
+        # scroller_image.set_policy(Gtk.POLICY_NEVER, Gtk.POLICY_AUTOMATIC)
         scroller_image.add_with_viewport(image_table)
         scroller_image.show()
         
-        self.scroller_entry = gtk.ScrolledWindow(
-                                                 hadjustment=None, vadjustment=None)
-        self.scroller_entry.set_policy(gtk.POLICY_NEVER, gtk.POLICY_AUTOMATIC)
+        self.scroller_entry = Gtk.ScrolledWindow(
+                                                hadjustment=None, vadjustment=None)
+        self.scroller_entry.set_hexpand(False)
+        self.scroller_entry.set_vexpand(True)
+        # self.scroller_entry.set_policy(Gtk.POLICY_NEVER, Gtk.POLICY_AUTOMATIC)
         self.scroller_entry.add_with_viewport(entry_table)
         self.scroller_entry.show()
         
-        column_table.attach(scroller_image,  0, 1, 0, 1,  
-                            xoptions=gtk.FILL|gtk.EXPAND|gtk.SHRINK,  
-                            yoptions=gtk.FILL|gtk.EXPAND|gtk.SHRINK, 
-                            xpadding=10,  ypadding=10)
+        column_table.attach(scroller_image,  0, 1, 0, 1)
 
-        column_table.attach(self.scroller_entry,  1, 2, 0, 1,  
-                            xoptions=gtk.FILL|gtk.EXPAND|gtk.SHRINK,  
-                            yoptions=gtk.FILL|gtk.EXPAND|gtk.SHRINK, 
-                            xpadding=10,  ypadding=10)
+        #column_table.attach(self.scroller_entry,  1, 2, 0, 1,  
+        #                    xoptions=Gtk.FILL|Gtk.EXPAND|Gtk.SHRINK,  
+        #                    yoptions=Gtk.FILL|Gtk.EXPAND|Gtk.SHRINK, 
+        #                    xpadding=10,  ypadding=10)
+        column_table.attach(self.scroller_entry,  1, 2, 0, 1)
                             
         image_table.show()
         column_table.show()
         self.btn_resize.hide()
         self.resize_width_entry.hide()
 
-        vbox = gtk.VBox(homogeneous=True,  spacing=5)
-        vbox.pack_start(column_table)
-        vbox.pack_end(self.list_scroller_journal)
+        vbox = Gtk.VBox(homogeneous=True,  spacing=5)
+        vbox.pack_start(column_table,  expand=True, fill=True, padding=0)
+        vbox.pack_end(self.list_scroller_journal,  expand=True, fill=True, padding=0)
 
         canvas.append_page(vbox,  tab1_label)
  
-        self._filechooser = gtk.FileChooserWidget(
-            action=gtk.FILE_CHOOSER_ACTION_OPEN, backend=None)
+        self._filechooser = Gtk.FileChooserWidget(
+            action=Gtk.FileChooserAction.OPEN)
         self._filechooser.set_current_folder("/media")
-        self.copy_button = gtk.Button(_("Copy File To The Journal"))
+        self.copy_button = Gtk.Button(_("Copy File To The Journal"))
         self.copy_button.connect('clicked',  self.create_journal_entry)
         self.copy_button.show()
         self._filechooser.set_extra_widget(self.copy_button)
-        preview = gtk.Image()
+        preview = Gtk.Image()
         self._filechooser.set_preview_widget(preview)
         self._filechooser.connect("update-preview", 
                                   self.update_preview_cb, preview)
-        tab2_label = gtk.Label(_("Files"))
-        tab2_label.set_attributes(label_attributes)
+        tab2_label = Gtk.Label(_("Files"))
+        # tab2_label.set_attributes(label_attributes)
+        tab2_label.set_markup("<span foreground='#FFF'" \
+                        " size='14000'></span>")
         tab2_label.show()
         canvas.append_page(self._filechooser,  tab2_label)
 
@@ -262,12 +255,16 @@ class SugarCommander(activity.Activity):
         self.resize_width_entry.hide()
         self.dimension_label.hide()
         
-        toolbox = activity.ActivityToolbox(self)
-        activity_toolbar = toolbox.get_activity_toolbar()
-        activity_toolbar.keep.props.visible = False
-        activity_toolbar.share.props.visible = False
-        self.set_toolbox(toolbox)
-        toolbox.show()
+        toolbar_box = ToolbarBox()
+        activity_button = ActivityToolbarButton(self)
+        toolbar_box.toolbar.insert(activity_button, 0)
+        activity_button.show()
+        # toolbox = activity.ActivityToolbox(self)
+        # activity_toolbar = toolbox.get_activity_toolbar()
+        # activity_toolbar.keep.props.visible = False
+        # activity_toolbar.share.props.visible = False
+        # self.set_toolbox(toolbox)
+        # toolbox.show()
 
         self.load_journal_table()
 
@@ -285,13 +282,13 @@ class SugarCommander(activity.Activity):
         try:
             file_mimetype = mime.get_for_file(filename)
             if file_mimetype.startswith('image/')  and file_mimetype != 'image/vnd.djvu':
-                pixbuf = gtk.gdk.pixbuf_new_from_file_at_size(filename, 
+                pixbuf = Gtk.gdk.pixbuf_new_from_file_at_size(filename, 
                                                           style.zoom(320), style.zoom(240))
                 preview.set_from_pixbuf(pixbuf)
                 have_preview = True
             elif file_mimetype  == 'application/x-cbz':
                 fname = self.extract_image(filename)
-                pixbuf = gtk.gdk.pixbuf_new_from_file_at_size(fname, 
+                pixbuf = Gtk.gdk.pixbuf_new_from_file_at_size(fname, 
                                                           style.zoom(320), style.zoom(240))
                 preview.set_from_pixbuf(pixbuf)
                 have_preview = True
@@ -307,7 +304,7 @@ class SugarCommander(activity.Activity):
         self.btn_save.props.sensitive = True
 
     def resize_key_press_event_cb(self, entry, event):
-        keyname = gtk.gdk.keyval_name(event.keyval)
+        keyname = Gtk.gdk.keyval_name(event.keyval)
         if ((keyname < '0' or keyname > '9') and keyname != 'BackSpace'
             and keyname != 'Left' and keyname != 'Right'
             and keyname != 'KP_Left' and keyname != 'KP_Right'
@@ -330,7 +327,7 @@ class SugarCommander(activity.Activity):
         tempfile = os.path.join(self.get_activity_root(), 'instance',
                             'tmp%i' % time.time())
         try:
-            scaled_pixbuf = gtk.gdk.pixbuf_new_from_file_at_size(filename, resize_to_width, ARBITRARY_LARGE_HEIGHT)
+            scaled_pixbuf = Gtk.gdk.pixbuf_new_from_file_at_size(filename, resize_to_width, ARBITRARY_LARGE_HEIGHT)
             scaled_pixbuf.save(tempfile, "jpeg", {"quality":"%d" % JPEG_QUALITY})
         except:
             print 'File could not be converted'
@@ -542,7 +539,7 @@ class SugarCommander(activity.Activity):
                 import base64
                 preview_data = base64.b64decode(jobject.metadata['preview'])
 
-            loader = gtk.gdk.PixbufLoader()
+            loader = Gtk.gdk.PixbufLoader()
             loader.write(preview_data)
             scaled_buf = loader.get_pixbuf()
             loader.close()
@@ -583,7 +580,7 @@ class SugarCommander(activity.Activity):
             size = self.get_size(ds_objects[i]) / 1024
             self.ls_journal.set(iter, COLUMN_SIZE, size)
 
-        self.ls_journal.set_sort_column_id(COLUMN_TITLE,  gtk.SORT_ASCENDING)
+        self.ls_journal.set_sort_column_id(COLUMN_TITLE,  Gtk.SORT_ASCENDING)
         v_adjustment = self.list_scroller_journal.get_vadjustment()
         v_adjustment.value = 0
 
@@ -638,7 +635,7 @@ class SugarCommander(activity.Activity):
 
     def show_image(self, filename):
         "display a resized image in a preview"
-        scaled_buf = gtk.gdk.pixbuf_new_from_file_at_size(filename, 
+        scaled_buf = Gtk.gdk.pixbuf_new_from_file_at_size(filename, 
                                                           style.zoom(300), style.zoom(225))
         self.image.set_from_pixbuf(scaled_buf)
         self.image.show()
@@ -692,7 +689,7 @@ class SugarCommander(activity.Activity):
         if not file_mimetype.startswith('image/'):
             return ''
             
-        scaled_pixbuf = gtk.gdk.pixbuf_new_from_file_at_size(filename,
+        scaled_pixbuf = Gtk.gdk.pixbuf_new_from_file_at_size(filename,
                                                               style.zoom(320), style.zoom(240))
         preview_data = []
 
