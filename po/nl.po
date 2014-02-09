@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-08-06 15:46-0500\n"
-"PO-Revision-Date: 2011-11-04 22:27+0200\n"
+"POT-Creation-Date: 2013-03-04 00:32-0500\n"
+"PO-Revision-Date: 2013-03-11 23:19+0200\n"
 "Last-Translator: whe <heppew@yahoo.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: nl\n"
@@ -17,98 +17,106 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.0.5\n"
 
-#: activity/activity.info:2
+#. TRANS: "name" option from activity.info file
 msgid "Sugar Commander"
 msgstr "Sugar Commander"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:76
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:157
+#. TRANS: "summary" option from activity.info file
+#. TRANS: "description" option from activity.info file
+msgid ""
+"Move files from your SD card or thumb drives to the Journal, clean up the "
+"Journal, and more!"
+msgstr ""
+"Verplaats bestanden van je SD kaart of stick naar Logboek, schoon Logboek en "
+"meer!"
+
+#: sugarcommander.py:76 sugarcommander.py:157
 msgid "Title"
 msgstr "Titel"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:85
+#: sugarcommander.py:85
 msgid "Size (KB)"
 msgstr "Grootte (KB)"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:92
+#: sugarcommander.py:92
 msgid "MIME Type"
 msgstr "MIME Type"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:107
+#: sugarcommander.py:107
 msgid "Journal"
 msgstr "Logboek"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:124
+#: sugarcommander.py:124
 msgid "Resize To Width"
 msgstr "Verander Grootte Naar Breedte"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:138
+#: sugarcommander.py:138
 msgid "Save"
 msgstr "Opslaan"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:146
+#: sugarcommander.py:146
 msgid "Delete"
 msgstr "Verwijderen"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:172
+#: sugarcommander.py:172
 msgid "Description"
 msgstr "Beschrijving"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:190
+#: sugarcommander.py:190
 msgid "Tags"
 msgstr "Labels"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:246
+#: sugarcommander.py:246
 msgid "Copy File To The Journal"
 msgstr "Kopieer bestand naar het logboek"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:254
+#: sugarcommander.py:254
 msgid "Files"
 msgstr "Bestanden"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:328
+#: sugarcommander.py:328
 msgid "Error"
 msgstr "Fout"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:328
+#: sugarcommander.py:328
 msgid "Image cannot be made larger, only smaller."
 msgstr "Afbeelding kan niet groter worden, alleen maar kleiner."
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:349
+#: sugarcommander.py:349
 #, python-format
 msgid "Entry %s resized."
 msgstr "Entry %s veranderd."
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:392
+#: sugarcommander.py:392
 #, python-format
 msgid "Entry %s deleted."
 msgstr "Entry %s verwijderd."
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:425
+#: sugarcommander.py:425
 #, python-format
 msgid "Entry title changed to %s"
 msgstr "Entry titel gewijzigd in %s"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:432
+#: sugarcommander.py:432
 #, python-format
 msgid "Entry %s tags updated."
 msgstr "Entry %s tags bijgewerkt."
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:439
+#: sugarcommander.py:439
 #, python-format
 msgid "Entry %s description updated."
 msgstr "Entry %s beschrijving bijgewerkt."
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:617
+#: sugarcommander.py:624
 #, python-format
 msgid "File %s copied to the Journal."
 msgstr "Bestand %s gekopieerd naar het Dagboek."
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:618
+#: sugarcommander.py:625
 msgid "Success"
 msgstr "Succes"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:618
+#: sugarcommander.py:625
 #, python-format
 msgid "%s added to Journal."
 msgstr "%s aan Logboek toegevoegd."

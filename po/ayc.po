@@ -7,10 +7,10 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-03-04 00:32-0500\n"
-"PO-Revision-Date: 2013-03-09 22:09+0200\n"
-"Last-Translator: Chris <cjl@laptop.org>\n"
+"PO-Revision-Date: 2013-06-22 21:56+0200\n"
+"Last-Translator: EdgarQuispeChambi <quispedgar@yahoo.es>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: en\n"
+"Language: ayc\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -19,7 +19,7 @@ msgstr ""
 
 #. TRANS: "name" option from activity.info file
 msgid "Sugar Commander"
-msgstr "Sugar Commander"
+msgstr "Sugar commander wakichata"
 
 #. TRANS: "summary" option from activity.info file
 #. TRANS: "description" option from activity.info file
@@ -27,96 +27,104 @@ msgid ""
 "Move files from your SD card or thumb drives to the Journal, clean up the "
 "Journal, and more!"
 msgstr ""
-"Move files from your SD card or thumb drives to the Journal, clean up the "
-"Journal, and more!"
+"¡SD wakichatanaka imañata imatanaka apsma jani ukaxa USB wakichatanaka "
+"imañata sapa uru luräwinaka imañaru, sapa uru luräwinaka imaña q'umachma, "
+"juk'ampinakampi!"
 
+#  "Título"
 #: sugarcommander.py:76 sugarcommander.py:157
 msgid "Title"
-msgstr "Title"
+msgstr "Suti"
 
+#  "Tamaño (KB)"
 #: sugarcommander.py:85
 msgid "Size (KB)"
-msgstr "Size (KB)"
+msgstr "Taña (KB)"
 
 #: sugarcommander.py:92
 msgid "MIME Type"
-msgstr "MIME Type"
+msgstr "Tipo MIME wakichata"
 
+#  "Diario"
 #: sugarcommander.py:107
 msgid "Journal"
-msgstr "Journal"
+msgstr "Sapüru luräwi"
 
 #: sugarcommander.py:124
 msgid "Resize To Width"
-msgstr "Resize To Width"
+msgstr "lankhu taña chiqachaña"
 
+#  "Guardar"
 #: sugarcommander.py:138
 msgid "Save"
-msgstr "Save"
+msgstr "Imaña"
 
+#  "Borrar"
 #: sugarcommander.py:146
 msgid "Delete"
-msgstr "Delete"
+msgstr "Chhaqtayaña"
 
+#  "Descripción"
 #: sugarcommander.py:172
 msgid "Description"
-msgstr "Description"
+msgstr "Yatiyaña"
 
 #: sugarcommander.py:190
 msgid "Tags"
-msgstr "Tags"
+msgstr "Sutinchanaka"
 
 #: sugarcommander.py:246
 msgid "Copy File To The Journal"
-msgstr "Copy File To The Journal"
+msgstr "Sapa uru luräwiru imaña wakichataru apaqma"
 
 #: sugarcommander.py:254
 msgid "Files"
-msgstr "Files"
+msgstr "Imata wakichatanaka"
 
+#  "Error"
 #: sugarcommander.py:328
 msgid "Error"
-msgstr "Error"
+msgstr "Pantjata"
 
 #: sugarcommander.py:328
 msgid "Image cannot be made larger, only smaller."
-msgstr "Image cannot be made larger, only smaller."
+msgstr "Uñjasïwi jisk'aptayaña wakisiwa"
 
 #: sugarcommander.py:349
 #, python-format
 msgid "Entry %s resized."
-msgstr "Entry %s resized."
+msgstr "Mantañana %s taña mayjt'iwa."
 
 #: sugarcommander.py:392
 #, python-format
 msgid "Entry %s deleted."
-msgstr "Entry %s deleted."
+msgstr "Mantaña %s chhaqtayatawa."
 
 #: sugarcommander.py:425
 #, python-format
 msgid "Entry title changed to %s"
-msgstr "Entry title changed to %s"
+msgstr "Mantañana p'iqinchäwi suti mayjt'atawa %s"
 
 #: sugarcommander.py:432
 #, python-format
 msgid "Entry %s tags updated."
-msgstr "Entry %s tags updated."
+msgstr "Mantaña sutinchäwinaka %s machaqachata."
 
 #: sugarcommander.py:439
 #, python-format
 msgid "Entry %s description updated."
-msgstr "Entry %s description updated."
+msgstr "Mantaña wakichata qhananchaña %s machaqachata."
 
 #: sugarcommander.py:624
 #, python-format
 msgid "File %s copied to the Journal."
-msgstr "File %s copied to the Journal."
+msgstr "Imata wakichata %s sapa uru luräwiru apaqatawa."
 
 #: sugarcommander.py:625
 msgid "Success"
-msgstr "Success"
+msgstr "Walt'äwi"
 
 #: sugarcommander.py:625
 #, python-format
 msgid "%s added to Journal."
-msgstr "%s added to Journal."
+msgstr "%s sapa uru luräwiru yapxatatawa."

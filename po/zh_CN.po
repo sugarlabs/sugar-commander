@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-08-06 15:46-0500\n"
-"PO-Revision-Date: 2011-12-14 17:28+0200\n"
+"POT-Creation-Date: 2013-03-04 00:32-0500\n"
+"PO-Revision-Date: 2013-03-09 09:43+0200\n"
 "Last-Translator: lite <litekok@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: zh_CN\n"
@@ -17,98 +17,104 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.0.5\n"
 
-#: activity/activity.info:2
+#. TRANS: "name" option from activity.info file
 msgid "Sugar Commander"
 msgstr "Sugar指挥官"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:76
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:157
+#. TRANS: "summary" option from activity.info file
+#. TRANS: "description" option from activity.info file
+msgid ""
+"Move files from your SD card or thumb drives to the Journal, clean up the "
+"Journal, and more!"
+msgstr "从你的 SD 卡或者闪盘移动文件到日志，清除日志及更多功能!"
+
+#: sugarcommander.py:76 sugarcommander.py:157
 msgid "Title"
 msgstr "标题"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:85
+#: sugarcommander.py:85
 msgid "Size (KB)"
 msgstr "大小（KB）"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:92
+#: sugarcommander.py:92
 msgid "MIME Type"
 msgstr "MIME类型"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:107
+#: sugarcommander.py:107
 msgid "Journal"
 msgstr "日志"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:124
+#: sugarcommander.py:124
 msgid "Resize To Width"
 msgstr "按宽度调整大小"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:138
+#: sugarcommander.py:138
 msgid "Save"
 msgstr "保存"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:146
+#: sugarcommander.py:146
 msgid "Delete"
 msgstr "删除"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:172
+#: sugarcommander.py:172
 msgid "Description"
 msgstr "描述"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:190
+#: sugarcommander.py:190
 msgid "Tags"
 msgstr "标签"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:246
+#: sugarcommander.py:246
 msgid "Copy File To The Journal"
 msgstr "复制文件到日志"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:254
+#: sugarcommander.py:254
 msgid "Files"
 msgstr "文件"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:328
+#: sugarcommander.py:328
 msgid "Error"
 msgstr "错误"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:328
+#: sugarcommander.py:328
 msgid "Image cannot be made larger, only smaller."
 msgstr "图片不能变大，只有变小。"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:349
+#: sugarcommander.py:349
 #, python-format
 msgid "Entry %s resized."
 msgstr "条目%s的大小已调整。"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:392
+#: sugarcommander.py:392
 #, python-format
 msgid "Entry %s deleted."
 msgstr "条目%s已删除。"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:425
+#: sugarcommander.py:425
 #, python-format
 msgid "Entry title changed to %s"
 msgstr "条目标题变成%s"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:432
+#: sugarcommander.py:432
 #, python-format
 msgid "Entry %s tags updated."
 msgstr "条目%s标签已更新。"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:439
+#: sugarcommander.py:439
 #, python-format
 msgid "Entry %s description updated."
 msgstr "条目%s描述已更新。"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:617
+#: sugarcommander.py:624
 #, python-format
 msgid "File %s copied to the Journal."
 msgstr "文件%s已复制到日志。"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:618
+#: sugarcommander.py:625
 msgid "Success"
 msgstr "成功"
 
-#: /home/jim/olpc/sugar-commander/mainline/sugarcommander.py:618
+#: sugarcommander.py:625
 #, python-format
 msgid "%s added to Journal."
 msgstr "%s已加入到日志。"
