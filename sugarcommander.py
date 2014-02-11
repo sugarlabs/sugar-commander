@@ -19,13 +19,15 @@ import logging
 import os
 import time
 from sugar3.activity import activity
+from sugar3.activity.widgets import ActivityToolbar, StopButton
 from gi.repository import Gtk
 from gi.repository import Gdk
+from gi.repository import cairo
 from gi.repository import Pango
+from gi.repository import PangoCairo
+from gi.repository import GdkPixbuf
 from sugar3.activity import widgets
 from sugar3.graphics.toolbarbox import ToolbarBox
-from sugar3.activity.widgets import ActivityToolbarButton
-from sugar3.activity.widgets import StopButton
 from sugar3 import mime
 from sugar.datastore import datastore
 from sugar3.graphics.alert import NotifyAlert
@@ -102,14 +104,9 @@ class SugarCommander(activity.Activity):
                     Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
         self.list_scroller_journal.add(self.tv_journal)
         
-        #label_attributes = Pango.AttrList()
-        #label_attributes.change(Pango.AttrSize(14000, 0, -1))
-        #label_attributes.change(Pango.AttrForeground(65535, 65535, 65535, 0, -1))
-
-        tab1_label = Gtk.Label(_("Journal"))
+        tab1_label = Gtk.Label()
         tab1_label.set_markup("<span foreground='#FFF'" \
-                        " size='14000'></span>")
-        # tab1_label.set_attributes(label_attributes)
+                        " size='14000'>" +_("Journal") + "</span>")
         tab1_label.show()
         self.tv_journal.show()
         self.list_scroller_journal.show()
@@ -242,10 +239,9 @@ class SugarCommander(activity.Activity):
         self._filechooser.set_preview_widget(preview)
         self._filechooser.connect("update-preview", 
                                   self.update_preview_cb, preview)
-        tab2_label = Gtk.Label(_("Files"))
-        # tab2_label.set_attributes(label_attributes)
+        tab2_label = Gtk.Label()
         tab2_label.set_markup("<span foreground='#FFF'" \
-                        " size='14000'></span>")
+                        " size='14000'>" + _("Files")  + "</span>")
         tab2_label.show()
         canvas.append_page(self._filechooser,  tab2_label)
 
@@ -255,10 +251,14 @@ class SugarCommander(activity.Activity):
         self.resize_width_entry.hide()
         self.dimension_label.hide()
         
-        toolbar_box = ToolbarBox()
-        activity_button = ActivityToolbarButton(self)
-        toolbar_box.toolbar.insert(activity_button, 0)
-        activity_button.show()
+        toolbox = ActivityToolbar(self)
+
+        stop_button = StopButton(self)
+        stop_button.show()
+        toolbox.insert(stop_button, -1)
+
+        self.set_toolbar_box(toolbox)
+        toolbox.show()
         # toolbox = activity.ActivityToolbox(self)
         # activity_toolbar = toolbox.get_activity_toolbar()
         # activity_toolbar.keep.props.visible = False
@@ -282,13 +282,13 @@ class SugarCommander(activity.Activity):
         try:
             file_mimetype = mime.get_for_file(filename)
             if file_mimetype.startswith('image/')  and file_mimetype != 'image/vnd.djvu':
-                pixbuf = Gtk.gdk.pixbuf_new_from_file_at_size(filename, 
+                pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(filename, 
                                                           style.zoom(320), style.zoom(240))
                 preview.set_from_pixbuf(pixbuf)
                 have_preview = True
             elif file_mimetype  == 'application/x-cbz':
                 fname = self.extract_image(filename)
-                pixbuf = Gtk.gdk.pixbuf_new_from_file_at_size(fname, 
+                pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(fname, 
                                                           style.zoom(320), style.zoom(240))
                 preview.set_from_pixbuf(pixbuf)
                 have_preview = True
@@ -304,7 +304,7 @@ class SugarCommander(activity.Activity):
         self.btn_save.props.sensitive = True
 
     def resize_key_press_event_cb(self, entry, event):
-        keyname = Gtk.gdk.keyval_name(event.keyval)
+        keyname = Gtk.Gdk.keyval_name(event.keyval)
         if ((keyname < '0' or keyname > '9') and keyname != 'BackSpace'
             and keyname != 'Left' and keyname != 'Right'
             and keyname != 'KP_Left' and keyname != 'KP_Right'
@@ -327,7 +327,7 @@ class SugarCommander(activity.Activity):
         tempfile = os.path.join(self.get_activity_root(), 'instance',
                             'tmp%i' % time.time())
         try:
-            scaled_pixbuf = Gtk.gdk.pixbuf_new_from_file_at_size(filename, resize_to_width, ARBITRARY_LARGE_HEIGHT)
+            scaled_pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(filename, resize_to_width, ARBITRARY_LARGE_HEIGHT)
             scaled_pixbuf.save(tempfile, "jpeg", {"quality":"%d" % JPEG_QUALITY})
         except:
             print 'File could not be converted'
@@ -539,7 +539,7 @@ class SugarCommander(activity.Activity):
                 import base64
                 preview_data = base64.b64decode(jobject.metadata['preview'])
 
-            loader = Gtk.gdk.PixbufLoader()
+            loader = GdkPixbuf.PixbufLoader()
             loader.write(preview_data)
             scaled_buf = loader.get_pixbuf()
             loader.close()
@@ -580,7 +580,6 @@ class SugarCommander(activity.Activity):
             size = self.get_size(ds_objects[i]) / 1024
             self.ls_journal.set(iter, COLUMN_SIZE, size)
 
-        self.ls_journal.set_sort_column_id(COLUMN_TITLE,  Gtk.SORT_ASCENDING)
         v_adjustment = self.list_scroller_journal.get_vadjustment()
         v_adjustment.value = 0
 
@@ -635,7 +634,7 @@ class SugarCommander(activity.Activity):
 
     def show_image(self, filename):
         "display a resized image in a preview"
-        scaled_buf = Gtk.gdk.pixbuf_new_from_file_at_size(filename, 
+        scaled_buf = GdkPixbuf.Pixbuf.new_from_file_at_size(filename, 
                                                           style.zoom(300), style.zoom(225))
         self.image.set_from_pixbuf(scaled_buf)
         self.image.show()
@@ -689,15 +688,11 @@ class SugarCommander(activity.Activity):
         if not file_mimetype.startswith('image/'):
             return ''
             
-        scaled_pixbuf = Gtk.gdk.pixbuf_new_from_file_at_size(filename,
+        scaled_pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(filename,
                                                               style.zoom(320), style.zoom(240))
         preview_data = []
 
-        def save_func(buf, data):
-            data.append(buf)
-
-        scaled_pixbuf.save_to_callback(save_func, 'png', 
-                                       user_data=preview_data)
+        succes, preview_data = scaled_pixbuf.save_to_bufferv('png', [], [])
         preview_data = ''.join(preview_data)
 
         return preview_data
