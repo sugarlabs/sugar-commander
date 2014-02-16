@@ -29,7 +29,7 @@ from gi.repository import GdkPixbuf
 from sugar3.activity import widgets
 from sugar3.graphics.toolbarbox import ToolbarBox
 from sugar3 import mime
-from sugar.datastore import datastore
+from sugar3.datastore import datastore
 from sugar3.graphics.alert import NotifyAlert
 from sugar3.graphics import style
 from gettext import gettext as _
@@ -488,12 +488,12 @@ class SugarCommander(activity.Activity):
     def set_form_fields(self, jobject):
         self.title_entry.set_text(jobject.metadata['title'])
         description_textbuffer = self.description_textview.get_buffer()
-        if jobject.metadata.has_key('description'):
+        if 'description' in jobject.metadata:
             description_textbuffer.set_text(jobject.metadata['description'])
         else:
             description_textbuffer.set_text('')
         tags_textbuffer = self.tags_textview.get_buffer()
-        if jobject.metadata.has_key('tags'):
+        if 'tags' in jobject.metadata:
             tags_textbuffer.set_text(jobject.metadata['tags'])
         else:
             tags_textbuffer.set_text('')
@@ -502,7 +502,7 @@ class SugarCommander(activity.Activity):
     def create_preview(self,  object_id):
         jobject = datastore.get(object_id)
         
-        if jobject.metadata.has_key('preview'):
+        if 'preview' in jobject.metadata:
             preview = jobject.metadata['preview']
             if preview is None or preview == '' or preview == 'None':
                 if jobject.metadata['mime_type'] .startswith('image/') and \
@@ -519,7 +519,7 @@ class SugarCommander(activity.Activity):
                 self.show_image('xoimage.jpg')
                 return
 
-        if jobject.metadata.has_key('preview') and \
+        if 'preview' in jobject.metadata and \
                 len(jobject.metadata['preview']) > 4:
             
             if jobject.metadata['preview'][1:4] == 'PNG':
@@ -541,20 +541,7 @@ class SugarCommander(activity.Activity):
     def load_journal_table(self):
         self.btn_save.props.sensitive = False
         self.btn_delete.props.sensitive = False
-        ds_mounts = datastore.mounts()
-        mountpoint_id = None
-        if len(ds_mounts) == 1 and ds_mounts[0]['id'] == 1:
-               pass
-        else:
-            for mountpoint in ds_mounts:
-                id = mountpoint['id'] 
-                uri = mountpoint['uri']
-                if uri.startswith('/home'):
-                    mountpoint_id = id
-
         query = {}
-        if mountpoint_id is not None:
-            query['mountpoints'] = [ mountpoint_id ]
         ds_objects, num_objects = datastore.find(query, properties=['uid', 
             'title',  'mime_type'])
 
