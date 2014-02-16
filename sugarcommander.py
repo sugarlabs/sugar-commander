@@ -111,22 +111,15 @@ class SugarCommander(activity.Activity):
         self.tv_journal.show()
         self.list_scroller_journal.show()
         
-        column_table = Gtk.Table(rows=1,  columns=2,  homogeneous = False)
+        column_table = Gtk.Table(2,  2,  False)
+        column_table.set_col_spacings(10)
+        column_table.set_row_spacings(10)
         
-        image_table = Gtk.Table(rows=2,  columns=2,  homogeneous=False)
-        self.image = Gtk.Image()
-        #image_table.attach(self.image, 0, 2, 0, 1, xoptions=Gtk.FILL|Gtk.SHRINK, 
-        #                   yoptions=Gtk.FILL|Gtk.SHRINK, xpadding=10, ypadding=10)
-        image_table.attach(self.image, 0, 2, 0, 1)
-
-        self.dimension_label = Gtk.Label("")
-        image_table.attach(self.dimension_label,  0, 2, 1, 2)
-
+        image_table = Gtk.Table(2,  2,  False)
+        
         self.btn_resize = Gtk.Button(_("Resize To Width"))
         self.btn_resize.connect('button_press_event',  
                               self.resize_button_press_event_cb)
-        #image_table.attach(self.btn_resize,  0, 1, 2, 3,  xoptions=Gtk.SHRINK,
-        #                     yoptions=Gtk.SHRINK,  xpadding=10,  ypadding=10)
         image_table.attach(self.btn_resize,  0, 1, 2, 3)
 
         self.resize_width_entry = Gtk.Entry()
@@ -150,8 +143,17 @@ class SugarCommander(activity.Activity):
         self.btn_delete.props.sensitive = False
         self.btn_delete.show()
 
-        entry_table = Gtk.Table(rows=3, columns=2, 
-                                homogeneous=False)
+        self.image = Gtk.Image()
+        image_table.set_col_spacings(10)
+        image_table.set_row_spacings(10)
+        image_table.attach(self.image, 0, 2, 0, 1)
+
+        self.dimension_label = Gtk.Label("")
+        image_table.attach(self.dimension_label,  0, 2, 1, 2)
+
+        entry_table = Gtk.Table(2,  2,  False)
+        entry_table.set_col_spacings(10)
+        entry_table.set_row_spacings(10)
 
         title_label = Gtk.Label(_("Title"))
         entry_table.attach(title_label, 0, 1, 0, 1)
@@ -181,10 +183,6 @@ class SugarCommander(activity.Activity):
         
         self.tags_textview = Gtk.TextView()
         self.tags_textview.set_wrap_mode(Pango.WrapMode.WORD)
-        #entry_table.attach(self.tags_textview, 1, 2, 2, 3, 
-        #                   xoptions=Gtk.FILL, 
-        #                   yoptions=Gtk.EXPAND|Gtk.FILL, 
-        #                   xpadding=10, ypadding=10)
         entry_table.attach(self.tags_textview, 1, 2, 2, 3)
         self.tags_textview.props.accepts_tab = False
         self.tags_textview.connect('key_press_event', 
@@ -197,7 +195,6 @@ class SugarCommander(activity.Activity):
                                                 hadjustment=None, vadjustment=None)
         scroller_image.set_hexpand(False)
         scroller_image.set_vexpand(True)
-        # scroller_image.set_policy(Gtk.POLICY_NEVER, Gtk.POLICY_AUTOMATIC)
         scroller_image.add_with_viewport(image_table)
         scroller_image.show()
         
@@ -205,16 +202,11 @@ class SugarCommander(activity.Activity):
                                                 hadjustment=None, vadjustment=None)
         self.scroller_entry.set_hexpand(False)
         self.scroller_entry.set_vexpand(True)
-        # self.scroller_entry.set_policy(Gtk.POLICY_NEVER, Gtk.POLICY_AUTOMATIC)
         self.scroller_entry.add_with_viewport(entry_table)
         self.scroller_entry.show()
         
         column_table.attach(scroller_image,  0, 1, 0, 1)
 
-        #column_table.attach(self.scroller_entry,  1, 2, 0, 1,  
-        #                    xoptions=Gtk.FILL|Gtk.EXPAND|Gtk.SHRINK,  
-        #                    yoptions=Gtk.FILL|Gtk.EXPAND|Gtk.SHRINK, 
-        #                    xpadding=10,  ypadding=10)
         column_table.attach(self.scroller_entry,  1, 2, 0, 1)
                             
         image_table.show()
@@ -259,12 +251,6 @@ class SugarCommander(activity.Activity):
 
         self.set_toolbar_box(toolbox)
         toolbox.show()
-        # toolbox = activity.ActivityToolbox(self)
-        # activity_toolbar = toolbox.get_activity_toolbar()
-        # activity_toolbar.keep.props.visible = False
-        # activity_toolbar.share.props.visible = False
-        # self.set_toolbox(toolbox)
-        # toolbox.show()
 
         self.load_journal_table()
 
@@ -452,9 +438,12 @@ class SugarCommander(activity.Activity):
         "Override the close method so we don't try to create a Journal entry."
         activity.Activity.close(self,  False)
 
+    def read_file(self, file_path):
+        """Load a file from the datastore on activity start"""
+        _logger.debug('sugarcommander.read_file: %s', file_path)
+   
     def write_file(self, filename):
         "Save meta data for the file."
-        # if self.close_requested:
         old_description = self.metadata.get('description', 'Sugar Commander log:')
         new_description = old_description + self.update_log_entries
         self.metadata['description'] = new_description
