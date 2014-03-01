@@ -521,13 +521,7 @@ class SugarCommander(activity.Activity):
 
         if 'preview' in jobject.metadata and \
                 len(jobject.metadata['preview']) > 4:
-            
-            if jobject.metadata['preview'][1:4] == 'PNG':
-                preview_data = jobject.metadata['preview']
-            else:
-                import base64
-                preview_data = base64.b64decode(jobject.metadata['preview'])
-
+            preview_data = jobject.metadata['preview']
             loader = GdkPixbuf.PixbufLoader()
             loader.write(preview_data)
             scaled_buf = loader.get_pixbuf()
