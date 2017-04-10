@@ -7,15 +7,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-03-04 00:32-0500\n"
-"PO-Revision-Date: 2012-03-02 17:48+0200\n"
-"Last-Translator: rafaelcor <rafael.cordano@gmail.com>\n"
+"PO-Revision-Date: 2016-03-16 15:09+0000\n"
+"Last-Translator: Carlo <cfalciola@yahoo.it>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Pootle 2.0.5\n"
+"X-Generator: Pootle 2.5.1.1\n"
+"X-POOTLE-MTIME: 1458140977.000000\n"
 
 #. TRANS: "name" option from activity.info file
 msgid "Sugar Commander"
@@ -27,6 +28,8 @@ msgid ""
 "Move files from your SD card or thumb drives to the Journal, clean up the "
 "Journal, and more!"
 msgstr ""
+"Sposta i tuoi file dalla scheda SD o dalla chiavetta USB al Journal, "
+"ripulisci il Journal e altro ancora!"
 
 #: sugarcommander.py:76 sugarcommander.py:157
 msgid "Title"
@@ -46,7 +49,7 @@ msgstr "Diario"
 
 #: sugarcommander.py:124
 msgid "Resize To Width"
-msgstr ""
+msgstr "Adatta alla larghezza"
 
 #: sugarcommander.py:138
 msgid "Save"
@@ -78,37 +81,37 @@ msgstr "Errore"
 
 #: sugarcommander.py:328
 msgid "Image cannot be made larger, only smaller."
-msgstr ""
+msgstr "L'immagine non può esere ingrandita, ma solo rimpicciolita."
 
 #: sugarcommander.py:349
 #, python-format
 msgid "Entry %s resized."
-msgstr ""
+msgstr "Oggetto %s ridimensionato."
 
 #: sugarcommander.py:392
 #, python-format
 msgid "Entry %s deleted."
-msgstr ""
+msgstr "Oggetto %s cancellato."
 
 #: sugarcommander.py:425
 #, python-format
 msgid "Entry title changed to %s"
-msgstr ""
+msgstr "Nome dell'oggetto modificato in %s"
 
 #: sugarcommander.py:432
 #, python-format
 msgid "Entry %s tags updated."
-msgstr ""
+msgstr "Tag dell'oggetto %s aggiornate."
 
 #: sugarcommander.py:439
 #, python-format
 msgid "Entry %s description updated."
-msgstr ""
+msgstr "Descrizione dell'oggetto %s aggiornata."
 
 #: sugarcommander.py:624
 #, python-format
 msgid "File %s copied to the Journal."
-msgstr ""
+msgstr "File %s copiato nel Journal."
 
 #: sugarcommander.py:625
 msgid "Success"
