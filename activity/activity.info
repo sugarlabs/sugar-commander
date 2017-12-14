@@ -7,3 +7,4 @@ show_launcher = yes
 activity_version = 10
 license = GPLv2+
 summary = Move files from your SD card or thumb drives to the Journal, clean up the Journal, and more!
+repository = https://github.com/sugarlabs/sugar-commander.git
