@@ -316,7 +316,7 @@ class SugarCommander(activity.Activity):
             scaled_pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(filename, resize_to_width, ARBITRARY_LARGE_HEIGHT)
             scaled_pixbuf.save(tempfile, "jpeg", {"quality":"%d" % JPEG_QUALITY})
         except:
-            print 'File could not be converted'
+            print('File could not be converted')
             return
 
         jobject.file_path = tempfile
@@ -540,7 +540,7 @@ class SugarCommander(activity.Activity):
             'title',  'mime_type'])
 
         self.ls_journal.clear()
-        for i in xrange (0, num_objects, 1):
+        for i in range (0, num_objects, 1):
             iter = self.ls_journal.append()
             title = ds_objects[i].metadata['title']
             self.ls_journal.set(iter, COLUMN_TITLE, title)
@@ -630,10 +630,10 @@ class SugarCommander(activity.Activity):
         "Extract the file to a temp directory for viewing"
         try:
             filebytes = zipfile.read(filename)
-        except zipfile.BadZipfile, err:
-            print 'Error opening the zip file: %s' % (err)
+        except zipfile.BadZipfile as err:
+            print('Error opening the zip file: %s' % (err))
             return False
-        except KeyError,  err:
+        except KeyError as  err:
             self.alert('Key Error', 'Zipfile key not found: '  
                         + str(filename))
             return
