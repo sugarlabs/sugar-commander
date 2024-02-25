@@ -438,6 +438,9 @@ class SugarCommander(activity.Activity):
         "Override the close method so we don't try to create a Journal entry."
         activity.Activity.close(self,  False)
 
+    def save(self):
+        pass
+
     def read_file(self, file_path):
         """Load a file from the datastore on activity start"""
         _logger.debug('sugarcommander.read_file: %s', file_path)
@@ -662,7 +665,7 @@ class SugarCommander(activity.Activity):
                                                               style.zoom(320), style.zoom(240))
         preview_data = []
 
-        succes, preview_data = scaled_pixbuf.save_to_bufferv('png', [], [])
-        preview_data = ''.join(preview_data)
+        success, preview_data = scaled_pixbuf.save_to_bufferv('png', [], [])
+        str_preview_data = bytes(preview_data) 
 
         return preview_data
