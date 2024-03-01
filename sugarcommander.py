@@ -434,13 +434,6 @@ class SugarCommander(activity.Activity):
     def datastore_write_error_cb(self, error):
         logging.error('sugarcommander.datastore_write_error_cb: %r' % error)
 
-    def close(self,  skip_save=False):
-        "Override the close method so we don't try to create a Journal entry."
-        activity.Activity.close(self,  False)
-
-    def save(self):
-        pass
-
     def read_file(self, file_path):
         """Load a file from the datastore on activity start"""
         _logger.debug('sugarcommander.read_file: %s', file_path)
