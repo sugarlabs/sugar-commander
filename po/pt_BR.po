@@ -2,23 +2,26 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-03-04 00:32-0500\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2019-03-09 01:28+0000\n"
+"Last-Translator: Paulo Francisco <slomp@ufrgs.br>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Translate Toolkit 1.7.0\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Pootle 2.5.1.1\n"
+"X-POOTLE-MTIME: 1552094880.000000\n"
 
+# Not sure if it was to be translated...
 #. TRANS: "name" option from activity.info file
 msgid "Sugar Commander"
-msgstr ""
+msgstr "Comandante Sugar"
 
 #. TRANS: "summary" option from activity.info file
 #. TRANS: "description" option from activity.info file
@@ -26,94 +29,97 @@ msgid ""
 "Move files from your SD card or thumb drives to the Journal, clean up the "
 "Journal, and more!"
 msgstr ""
+"Mova os arquivos do seu cartão SD ou USB para o Diário, limpe o Diário, e "
+"mais!"
 
 #: sugarcommander.py:76 sugarcommander.py:157
 msgid "Title"
-msgstr ""
+msgstr "Título"
 
 #: sugarcommander.py:85
 msgid "Size (KB)"
-msgstr ""
+msgstr "Tamanho (KB)"
 
 #: sugarcommander.py:92
 msgid "MIME Type"
-msgstr ""
+msgstr "Tipo MIME"
 
+# Needs context. It's that the name of a folder? Or a random word?
 #: sugarcommander.py:107
 msgid "Journal"
-msgstr ""
+msgstr "Diário"
 
 #: sugarcommander.py:124
 msgid "Resize To Width"
-msgstr ""
+msgstr "Redimensione a Largura"
 
 #: sugarcommander.py:138
 msgid "Save"
-msgstr ""
+msgstr "Salvar"
 
 #: sugarcommander.py:146
 msgid "Delete"
-msgstr ""
+msgstr "Excluir"
 
 #: sugarcommander.py:172
 msgid "Description"
-msgstr ""
+msgstr "Descrição"
 
 #: sugarcommander.py:190
 msgid "Tags"
-msgstr ""
+msgstr "Etiquetas"
 
 #: sugarcommander.py:246
 msgid "Copy File To The Journal"
-msgstr ""
+msgstr "Copiar arquivo para o Diário"
 
 #: sugarcommander.py:254
 msgid "Files"
-msgstr ""
+msgstr "Arquivos"
 
 #: sugarcommander.py:328
 msgid "Error"
-msgstr ""
+msgstr "Erro"
 
 #: sugarcommander.py:328
 msgid "Image cannot be made larger, only smaller."
-msgstr ""
+msgstr "Imagem só pode ser diminuída."
 
 #: sugarcommander.py:349
 #, python-format
 msgid "Entry %s resized."
-msgstr ""
+msgstr "Entrada %s redimensionada."
 
 #: sugarcommander.py:392
 #, python-format
 msgid "Entry %s deleted."
-msgstr ""
+msgstr "Entrada %s excluída."
 
 #: sugarcommander.py:425
 #, python-format
 msgid "Entry title changed to %s"
-msgstr ""
+msgstr "Título da entrada modificado para %s"
 
 #: sugarcommander.py:432
 #, python-format
 msgid "Entry %s tags updated."
-msgstr ""
+msgstr "Entrada %s de etiquetas atualizada."
 
 #: sugarcommander.py:439
 #, python-format
 msgid "Entry %s description updated."
-msgstr ""
+msgstr "Descrção da entrada %s atualizada."
 
 #: sugarcommander.py:624
 #, python-format
 msgid "File %s copied to the Journal."
-msgstr ""
+msgstr "Arquivo %s copiado para o Diário."
 
 #: sugarcommander.py:625
 msgid "Success"
-msgstr ""
+msgstr "Sucesso"
 
 #: sugarcommander.py:625
 #, python-format
 msgid "%s added to Journal."
-msgstr ""
+msgstr "%s adicionado ao Diário."

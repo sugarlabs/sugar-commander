@@ -7,19 +7,20 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-03-04 00:32-0500\n"
-"PO-Revision-Date: 2011-02-26 15:18+0200\n"
-"Last-Translator: Chris <cjl@laptop.org>\n"
+"PO-Revision-Date: 2017-03-31 11:40+0000\n"
+"Last-Translator: Anders <anders.jonsson@norsjovallen.se>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Pootle 2.0.1\n"
+"X-Generator: Pootle 2.5.1.1\n"
+"X-POOTLE-MTIME: 1490960429.000000\n"
 
 #. TRANS: "name" option from activity.info file
 msgid "Sugar Commander"
-msgstr ""
+msgstr "Sugar Commander"
 
 #. TRANS: "summary" option from activity.info file
 #. TRANS: "description" option from activity.info file
@@ -27,18 +28,20 @@ msgid ""
 "Move files from your SD card or thumb drives to the Journal, clean up the "
 "Journal, and more!"
 msgstr ""
+"Flytta filer från dina SD-kort eller USB-minnen till dagboken, rensa "
+"dagboken med mera!"
 
 #: sugarcommander.py:76 sugarcommander.py:157
 msgid "Title"
-msgstr ""
+msgstr "Titel"
 
 #: sugarcommander.py:85
 msgid "Size (KB)"
-msgstr ""
+msgstr "Storlek (KB)"
 
 #: sugarcommander.py:92
 msgid "MIME Type"
-msgstr ""
+msgstr "MIME-typ"
 
 #: sugarcommander.py:107
 msgid "Journal"
@@ -46,7 +49,7 @@ msgstr "Dagbok"
 
 #: sugarcommander.py:124
 msgid "Resize To Width"
-msgstr ""
+msgstr "Byt storlek till bredd"
 
 #: sugarcommander.py:138
 msgid "Save"
@@ -66,7 +69,7 @@ msgstr "Taggar"
 
 #: sugarcommander.py:246
 msgid "Copy File To The Journal"
-msgstr ""
+msgstr "Kopiera fil till dagboken"
 
 #: sugarcommander.py:254
 msgid "Files"
@@ -74,47 +77,47 @@ msgstr "Filer"
 
 #: sugarcommander.py:328
 msgid "Error"
-msgstr ""
+msgstr "Fel"
 
 #: sugarcommander.py:328
 msgid "Image cannot be made larger, only smaller."
-msgstr ""
+msgstr "Bild kan inte göras större, bara mindre."
 
 #: sugarcommander.py:349
 #, python-format
 msgid "Entry %s resized."
-msgstr ""
+msgstr "Storlek ändrad för inlägget %s."
 
 #: sugarcommander.py:392
 #, python-format
 msgid "Entry %s deleted."
-msgstr ""
+msgstr "Inlägget %s borttaget."
 
 #: sugarcommander.py:425
 #, python-format
 msgid "Entry title changed to %s"
-msgstr ""
+msgstr "Inläggstitel ändrad till %s"
 
 #: sugarcommander.py:432
 #, python-format
 msgid "Entry %s tags updated."
-msgstr ""
+msgstr "Taggar uppdaterade för inlägget %s."
 
 #: sugarcommander.py:439
 #, python-format
 msgid "Entry %s description updated."
-msgstr ""
+msgstr "Beskrivning uppdaterad för inlägget %s."
 
 #: sugarcommander.py:624
 #, python-format
 msgid "File %s copied to the Journal."
-msgstr ""
+msgstr "Filen %s kopierad till dagboken."
 
 #: sugarcommander.py:625
 msgid "Success"
-msgstr ""
+msgstr "Lyckades"
 
 #: sugarcommander.py:625
 #, python-format
 msgid "%s added to Journal."
-msgstr ""
+msgstr "%s tillagd till dagbok."
