@@ -8,13 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-16 11:43+1100\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2026-04-01 08:02+0000\n"
+"Last-Translator: NF <rkavt@smartprojects.ge>\n"
+"Language-Team: Georgian <http://weblate.sugarlabs.org/projects/"
+"sugar-activities/sugar-commander/ka/>\n"
 "Language: ka\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.4.2\n"
 
 #: activity/activity.info:2
 msgid "Sugar Commander"
@@ -72,7 +75,7 @@ msgstr ""
 
 #: sugarcommander.py:311
 msgid "Error"
-msgstr ""
+msgstr "შეცდომა"
 
 #: sugarcommander.py:311
 msgid "Image cannot be made larger, only smaller."
@@ -110,7 +113,7 @@ msgstr ""
 
 #: sugarcommander.py:587
 msgid "Success"
-msgstr ""
+msgstr "წარმატება"
 
 #: sugarcommander.py:587
 #, python-format
