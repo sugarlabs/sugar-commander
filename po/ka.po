@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-16 11:43+1100\n"
-"PO-Revision-Date: 2026-05-19 11:33+0000\n"
+"PO-Revision-Date: 2026-06-15 04:31+0000\n"
 "Last-Translator: NF <rkavt@smartprojects.ge>\n"
 "Language-Team: Georgian <http://weblate.sugarlabs.org/projects/"
 "sugar-activities/sugar-commander/ka/>\n"
@@ -31,7 +31,7 @@ msgstr ""
 
 #: sugarcommander.py:80 sugarcommander.py:158
 msgid "Title"
-msgstr ""
+msgstr "სათაური"
 
 #: sugarcommander.py:89
 msgid "Size (KB)"
