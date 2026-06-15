@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-16 11:43+1100\n"
-"PO-Revision-Date: 2026-06-15 04:31+0000\n"
+"PO-Revision-Date: 2026-06-15 07:48+0000\n"
 "Last-Translator: NF <rkavt@smartprojects.ge>\n"
 "Language-Team: Georgian <http://weblate.sugarlabs.org/projects/"
 "sugar-activities/sugar-commander/ka/>\n"
@@ -43,7 +43,7 @@ msgstr ""
 
 #: sugarcommander.py:109
 msgid "Journal"
-msgstr ""
+msgstr "ჟურნალი"
 
 #: sugarcommander.py:120
 msgid "Resize To Width"
@@ -55,7 +55,7 @@ msgstr "შენახვა"
 
 #: sugarcommander.py:139
 msgid "Delete"
-msgstr ""
+msgstr "წაშლა"
 
 #: sugarcommander.py:168
 msgid "Description"
@@ -63,7 +63,7 @@ msgstr "აღწერა"
 
 #: sugarcommander.py:180
 msgid "Tags"
-msgstr ""
+msgstr "ჭდეები"
 
 #: sugarcommander.py:226
 msgid "Copy File To The Journal"
@@ -71,7 +71,7 @@ msgstr ""
 
 #: sugarcommander.py:236
 msgid "Files"
-msgstr ""
+msgstr "ფაილები"
 
 #: sugarcommander.py:311
 msgid "Error"
